@@ -78,6 +78,19 @@ td,th{padding:8px 6px;border-bottom:1px solid var(--line);text-align:right}
 .circle-row input[type=text]{flex:1;min-width:120px;padding:6px 10px}
 .circle-row select{width:auto;padding:6px 8px}
 .circle-row .cnt{font-size:12px;color:var(--muted);white-space:nowrap}
+/* invite + guest */
+.invite-card{background:linear-gradient(135deg,#fff8ee,#f6ead6);border-color:#e6cfa8}
+.tools{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.tools .btn{padding:8px 12px;font-size:14px}
+.tools .btn.live{background:#b24040;color:#fff}
+#gText{min-height:220px;font-size:18px;line-height:1.7}
+.example{background:var(--soft);border-radius:12px;padding:10px 14px;margin:10px 0;font-size:15px}
+.qchips .chip{cursor:pointer;background:#fff;color:var(--ink);border:1px solid var(--line);font-size:13px;padding:6px 12px}
+.big-btn{width:100%;padding:16px;font-size:18px;margin-top:6px}
+.guest-hero h2{font-size:28px;color:var(--accent)}
+.guest-hero p{font-size:17px;line-height:1.7}
+body.guest header nav{display:none}
+.rec-timer{font-variant-numeric:tabular-nums;color:var(--muted);font-size:14px}
 @media print{
   header,nav,.noprint{display:none!important}
   body{background:#fff}
@@ -150,6 +163,19 @@ td,th{padding:8px 6px;border-bottom:1px solid var(--line);text-align:right}
 
 <!-- ===== READ ===== -->
 <section class="view" id="v-read">
+  <div class="card invite-card noprint">
+    <h2>📨 הזמן מישהו לכתוב לספר</h2>
+    <p class="muted">שולחים קישור בוואטסאפ. מי שמקבל פותח דף כתיבה פשוט, עם הקלדה, הכתבה בקול, הקלטה והקראה בקול, ושולח לך את הזיכרון בחזרה. אתה מחליט מה נכנס לספר.</p>
+    <div class="row">
+      <div><label>למי</label><input id="iName" placeholder="סבתא רותי"></div>
+      <div><label>הטלפון שלו/ה</label><input id="iPhone" inputmode="tel" placeholder="052..."></div>
+    </div>
+    <label>זיכרון קטן שלך עליו/ה, בכמה מילים (לא חובה, אבל עוזר להתחיל)</label>
+    <input id="iExample" placeholder="ארוחות שישי אצלך בחיפה">
+    <label>נושא או שאלה מיוחדת (לא חובה)</label>
+    <input id="iQuestion" placeholder="איך היה כשנולדתי?">
+    <button class="btn" style="margin-top:12px" onclick="sendInvite()">שלח הזמנה בוואטסאפ</button>
+  </div>
   <div class="card noprint">
     <div class="row">
       <select id="readFilter" onchange="renderBook()"></select>
@@ -160,6 +186,53 @@ td,th{padding:8px 6px;border-bottom:1px solid var(--line);text-align:right}
     </div>
   </div>
   <div id="book"></div>
+</section>
+
+<!-- ===== GUEST (invited writer) ===== -->
+<section class="view" id="v-guest">
+  <div class="card guest-hero">
+    <h2 id="gHello">היי 👋</h2>
+    <p id="gIntro"></p>
+    <div class="example" id="gExample" hidden></div>
+    <div class="example" id="gQuestion" hidden></div>
+    <button class="btn sec small" onclick="speakInvite()">🔊 הקרא לי את ההזמנה</button>
+  </div>
+  <div class="card">
+    <label>על מה הזיכרון? (כותרת, לא חובה)</label>
+    <input id="gTitle" placeholder="למשל: הטיול לאילת">
+    <label>מתי זה היה? (לא חובה)</label>
+    <input id="gWhen" placeholder="שנה, עונה, או בערך">
+    <label>מאיפה להתחיל? לחיצה מוסיפה לטקסט</label>
+    <div class="qchips" id="gChips"></div>
+    <label>הזיכרון שלך</label>
+    <div class="tools">
+      <button class="btn sec" id="dictBtn" onclick="toggleDictation()">🎤 הכתבה בקול</button>
+      <button class="btn sec" onclick="speakText()">🔊 הקרא לי מה שכתבתי</button>
+      <button class="btn sec" onclick="undoText()">↶ בטל</button>
+      <button class="btn sec" onclick="fontSize(2)">A+</button>
+      <button class="btn sec" onclick="fontSize(-2)">A−</button>
+      <button class="btn sec" onclick="clearText()">נקה</button>
+    </div>
+    <div class="muted" id="dictStatus"></div>
+    <textarea id="gText" placeholder="אפשר לכתוב, או ללחוץ על 'הכתבה בקול' ולדבר. גם כמה מילים זה מצוין, ולא צריך לכתוב יפה."></textarea>
+  </div>
+  <div class="card">
+    <h3>מעדיפים לספר בקול?</h3>
+    <p class="muted">אפשר להקליט את הסיפור, לשמוע אותו, ולהקליט מחדש אם רוצים.</p>
+    <div class="tools">
+      <button class="btn sec" id="gRecBtn" onclick="guestRec()">⏺ התחל הקלטה</button>
+      <span class="rec-timer" id="gRecTime"></span>
+    </div>
+    <div id="gAudioBox"></div>
+  </div>
+  <button class="btn big-btn" id="gSendBtn" onclick="guestSend()">שלח</button>
+  <p class="muted" style="text-align:center">הזיכרון נשלח בוואטסאפ. אין צורך להירשם לשום דבר.</p>
+  <div class="card" id="gThanks" hidden style="text-align:center">
+    <h2>תודה! 💛</h2>
+    <p id="gThanksText"></p>
+    <button class="btn sec" onclick="guestAnother()">רוצה לשלוח עוד זיכרון</button>
+    <p class="muted" style="margin-top:14px">רוצה ספר משלך? <a id="gOwnLink" href="#">פתח ספר חיים משלך</a></p>
+  </div>
 </section>
 
 <!-- ===== CONTROL ===== -->
@@ -199,6 +272,7 @@ td,th{padding:8px 6px;border-bottom:1px solid var(--line);text-align:right}
     <div class="row">
       <div><label>שם הספר</label><input id="sTitle"></div>
       <div><label>של מי הספר</label><input id="sOwner" placeholder="בועז"></div>
+      <div><label>הטלפון שלי (לשם יחזרו הזיכרונות)</label><input id="sPhone" inputmode="tel" placeholder="050..."></div>
     </div>
     <button class="btn small" style="margin-top:10px" onclick="saveSettings()">שמור</button>
   </div>
@@ -225,6 +299,17 @@ td,th{padding:8px 6px;border-bottom:1px solid var(--line);text-align:right}
   <div class="row" style="margin-top:12px"><button class="btn sec" onclick="closeModals()">סגור</button></div>
 </div></div>
 <div class="modal" id="mStory"><div class="card" id="mStoryBody"></div></div>
+<div class="modal" id="mImport"><div class="card">
+  <h3>📬 התקבל זיכרון חדש</h3>
+  <div id="impBody"></div>
+  <label>לאיזה מעגל?</label>
+  <select id="impCircle"></select>
+  <div class="row" style="margin-top:12px">
+    <button class="btn" onclick="importAdd(false)">הוסף לספר</button>
+    <button class="btn sec" onclick="importAdd(true)">ערוך לפני שמוסיפים</button>
+    <button class="btn sec" onclick="closeImport()">לא עכשיו</button>
+  </div>
+</div></div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -407,8 +492,9 @@ function composeMsg(){
 ['rName','rExample'].forEach(i=>document.getElementById(i).oninput=composeMsg);
 function sendWhatsapp(){
   const n=document.getElementById('rName').value.trim();if(!n){toast('כתוב שם');return;}
-  let ph=document.getElementById('rPhone').value.replace(/\D/g,'');if(ph.startsWith('0'))ph='972'+ph.slice(1);
-  const msg=document.getElementById('rMsg').value;
+  if(!ensureOwner())return;
+  const ph=normPhone(document.getElementById('rPhone').value);
+  const msg=document.getElementById('rMsg').value+'\n\nאפשר לכתוב או להקליט כאן:\n'+inviteLink(n,document.getElementById('rExample').value.trim(),'');
   D.requests.push({id:id(),name:n,phone:ph,sent:Date.now(),done:false});save();renderControl();
   window.open(`https://wa.me/${ph}?text=${encodeURIComponent(msg)}`,'_blank');
 }
@@ -418,7 +504,7 @@ function renderControl(){
     <td><span class="status ${r.done?'s-done':'s-wait'}">${r.done?'התקבל':'ממתין'}</span></td>
     <td><button class="btn small sec" onclick="toggleReq('${r.id}')">${r.done?'סמן ממתין':'התקבל ✓'}</button> <button class="btn small sec" onclick="remind('${r.id}')">תזכורת</button> <button class="btn small danger" onclick="delReq('${r.id}')">✕</button></td></tr>`).join(''):'<tr><td colspan="4" class="muted">עדיין לא נשלחו בקשות</td></tr>';
   document.getElementById('printCircles').innerHTML=D.circles.map(c=>`<label style="display:inline-flex;align-items:center;gap:6px;margin:4px 10px 4px 0;font-size:15px;color:var(--ink)"><input type="checkbox" class="pc" value="${c.id}" checked style="width:auto">${c.name}</label>`).join('');
-  document.getElementById('sTitle').value=D.title;document.getElementById('sOwner').value=D.owner;
+  document.getElementById('sTitle').value=D.title;document.getElementById('sOwner').value=D.owner;document.getElementById('sPhone').value=D.phone||'';
 }
 function toggleReq(rid){const r=D.requests.find(x=>x.id===rid);r.done=!r.done;save();renderControl();}
 function delReq(rid){D.requests=D.requests.filter(x=>x.id!==rid);save();renderControl();}
@@ -437,10 +523,149 @@ function printSelected(){
 }
 function exportJson(){const a=document.createElement('a');a.href='data:application/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(D));a.download='sefer-hachaim-backup.json';a.click();}
 function importJson(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{D=JSON.parse(r.result);save();toast('הספר שוחזר');show('map');}catch(e){toast('קובץ לא תקין');}};r.readAsText(f);}
-function saveSettings(){D.title=document.getElementById('sTitle').value.trim()||'ספר החיים';D.owner=document.getElementById('sOwner').value.trim();save();applyTitle();toast('נשמר');}
+function saveSettings(){D.title=document.getElementById('sTitle').value.trim()||'ספר החיים';D.owner=document.getElementById('sOwner').value.trim();D.phone=document.getElementById('sPhone').value.trim();save();applyTitle();toast('נשמר');}
 function applyTitle(){document.getElementById('bookTitle').childNodes[0].textContent=D.title;document.getElementById('bookOwner').textContent=D.owner?'הסיפורים של '+D.owner+', מצטברים לאורך השנים':'הסיפורים שלי, מצטברים לאורך השנים';}
 
+/* ---------- invite links ---------- */
+function enc(o){return btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}
+function dec(t){t=t.replace(/-/g,'+').replace(/_/g,'/');while(t.length%4)t+='=';return JSON.parse(decodeURIComponent(escape(atob(t))));}
+function baseUrl(){return location.origin+location.pathname;}
+function normPhone(v){let ph=(v||'').replace(/\D/g,'');if(ph.startsWith('0'))ph='972'+ph.slice(1);return ph;}
+function ensureOwner(){
+  if(!D.owner){const o=prompt('איך לחתום את ההזמנה? (השם שלך)','');if(!o)return false;D.owner=o.trim();save();applyTitle();}
+  if(!D.phone){const ph=prompt('לאיזה מספר וואטסאפ יחזרו הזיכרונות? (המספר שלך)','');if(!ph)return false;D.phone=ph.trim();save();}
+  return true;
+}
+function inviteLink(name,example,question){return baseUrl()+'?invite='+enc({o:D.owner,op:normPhone(D.phone),n:name,e:example,q:question,t:D.title});}
+function sendInvite(){
+  const n=document.getElementById('iName').value.trim();if(!n){toast('למי שולחים?');return;}
+  if(!ensureOwner())return;
+  const ph=normPhone(document.getElementById('iPhone').value);
+  const ex=document.getElementById('iExample').value.trim(),q=document.getElementById('iQuestion').value.trim();
+  const msg=`היי ${n},
+התחלתי לאסוף סיפורים לספר החיים שלי, ויהיה לי כיף אם תוסיף/י זיכרון או שניים שיש לך ממני${ex?` (אני למשל זוכר: ${ex})`:''}.
+אפשר לכתוב, להקליט, או פשוט לדבר והטלפון יקליד. אפילו כמה מילים זה מצוין:
+${inviteLink(n,ex,q)}
+תודה! ${D.owner}`;
+  D.requests.push({id:id(),name:n,phone:ph,sent:Date.now(),done:false});save();
+  window.open(`https://wa.me/${ph}?text=${encodeURIComponent(msg)}`,'_blank');
+  toast('ההזמנה נפתחה בוואטסאפ ונרשמה במעקב');
+}
+
+/* ---------- guest mode ---------- */
+let G=null,gHist=[],gFont=18,recog=null,dictOn=false,gRec=null,gChunks=[],gAudio=null,gTimer=null;
+function startGuest(inv){
+  G=inv;document.body.classList.add('guest');
+  document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id==='v-guest'));
+  document.getElementById('bookTitle').childNodes[0].textContent=inv.t||'ספר החיים';
+  document.getElementById('bookOwner').textContent='הספר של '+(inv.o||'');
+  document.getElementById('gHello').textContent=`היי ${inv.n||''} 👋`;
+  document.getElementById('gIntro').textContent=`${inv.o||'חבר'} אוסף/ת סיפורים לספר החיים שלו/ה, ויהיה לו/ה כיף לקבל ממך זיכרון. משהו קטן, מצחיק, מרגש, או סתם רגע שנשאר לך בראש.`;
+  if(inv.e){const e=document.getElementById('gExample');e.hidden=false;e.textContent=`${inv.o} נזכר/ת למשל: «${inv.e}»`;}
+  if(inv.q){const e=document.getElementById('gQuestion');e.hidden=false;e.textContent=`שאלה מיוחדת: ${inv.q}`;}
+  document.getElementById('gSendBtn').textContent='שלח ל'+(inv.o||'בעל הספר');
+  document.getElementById('gOwnLink').href=baseUrl();
+  const qs=['איך הכרנו','רגע שצחקנו ממנו','משהו שלמדתי ממך','מקום שהיינו בו יחד','מה הרשים אותי בך','סיפור שאף אחד לא יודע'];
+  if(inv.q)qs.unshift(inv.q);
+  document.getElementById('gChips').innerHTML=qs.map(q=>`<span class="chip" onclick="insertPrompt(this.textContent)">${q}</span>`).join('');
+  const ta=document.getElementById('gText');
+  try{const d=localStorage.getItem('guestDraft_'+inv.n);if(d)ta.value=d;}catch(e){}
+  ta.addEventListener('input',()=>{pushHist();try{localStorage.setItem('guestDraft_'+inv.n,ta.value);}catch(e){}});
+  gHist=[ta.value];
+}
+function pushHist(){const v=document.getElementById('gText').value;if(gHist[gHist.length-1]!==v){gHist.push(v);if(gHist.length>200)gHist.shift();}}
+function undoText(){if(gHist.length<2){toast('אין מה לבטל');return;}gHist.pop();const ta=document.getElementById('gText');ta.value=gHist[gHist.length-1];ta.dispatchEvent(new Event('input'));}
+function clearText(){const ta=document.getElementById('gText');if(!ta.value)return;if(!confirm('לנקות את כל הטקסט?'))return;ta.value='';pushHist();ta.dispatchEvent(new Event('input'));}
+function fontSize(d){gFont=Math.max(14,Math.min(30,gFont+d));document.getElementById('gText').style.fontSize=gFont+'px';}
+function insertPrompt(q){const ta=document.getElementById('gText');const pre=ta.value&&!ta.value.endsWith('\n')?'\n\n':'';ta.value+=pre+q+': ';pushHist();ta.focus();ta.setSelectionRange(ta.value.length,ta.value.length);ta.dispatchEvent(new Event('input'));}
+function heVoice(){const vs=speechSynthesis.getVoices();return vs.find(v=>/^he|^iw/i.test(v.lang));}
+function speak(t){
+  if(!('speechSynthesis' in window)){toast('הקראה לא נתמכת בדפדפן הזה');return;}
+  if(speechSynthesis.speaking){speechSynthesis.cancel();return;}
+  if(!t.trim()){toast('אין עדיין מה להקריא');return;}
+  const u=new SpeechSynthesisUtterance(t);u.lang='he-IL';const v=heVoice();if(v)u.voice=v;u.rate=.95;speechSynthesis.speak(u);
+}
+function speakInvite(){speak([document.getElementById('gHello').textContent,document.getElementById('gIntro').textContent,document.getElementById('gExample').hidden?'':document.getElementById('gExample').textContent,document.getElementById('gQuestion').hidden?'':document.getElementById('gQuestion').textContent].join('. '));}
+function speakText(){speak(document.getElementById('gText').value);}
+function toggleDictation(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition,btn=document.getElementById('dictBtn'),st=document.getElementById('dictStatus');
+  if(!SR){st.textContent='ההכתבה לא נתמכת בדפדפן הזה. אפשר ללחוץ על המיקרופון שבמקלדת של הטלפון ולדבר.';return;}
+  if(dictOn){recog.stop();return;}
+  recog=new SR();recog.lang='he-IL';recog.continuous=true;recog.interimResults=true;
+  const ta=document.getElementById('gText');let base=ta.value;
+  recog.onresult=e=>{let fin='',tmp='';for(let i=e.resultIndex;i<e.results.length;i++){const r=e.results[i];if(r.isFinal)fin+=r[0].transcript;else tmp+=r[0].transcript;}
+    if(fin){base=(base&&!/\s$/.test(base)?base+' ':base)+fin.trim();ta.value=base;pushHist();ta.dispatchEvent(new Event('input'));}
+    else ta.value=(base&&!/\s$/.test(base)?base+' ':base)+tmp;};
+  recog.onstart=()=>{dictOn=true;btn.classList.add('live');btn.textContent='⏹ עצור הכתבה';st.textContent='מקשיב... דבר/י בחופשיות';};
+  recog.onend=()=>{dictOn=false;btn.classList.remove('live');btn.textContent='🎤 הכתבה בקול';st.textContent='';ta.value=base;};
+  recog.onerror=e=>{st.textContent=e.error==='not-allowed'?'צריך לאשר גישה למיקרופון':'ההכתבה נעצרה, אפשר ללחוץ שוב';};
+  base=ta.value;recog.start();
+}
+async function guestRec(){
+  const btn=document.getElementById('gRecBtn'),tm=document.getElementById('gRecTime');
+  if(gRec&&gRec.state==='recording'){gRec.stop();return;}
+  try{const st=await navigator.mediaDevices.getUserMedia({audio:true});
+    gRec=new MediaRecorder(st);gChunks=[];gRec.ondataavailable=e=>gChunks.push(e.data);
+    const t0=Date.now();gTimer=setInterval(()=>{const s=Math.floor((Date.now()-t0)/1000);tm.textContent=Math.floor(s/60)+':'+String(s%60).padStart(2,'0');},500);
+    gRec.onstop=()=>{st.getTracks().forEach(t=>t.stop());clearInterval(gTimer);
+      gAudio=new Blob(gChunks,{type:gRec.mimeType||'audio/webm'});
+      document.getElementById('gAudioBox').innerHTML=`<audio controls src="${URL.createObjectURL(gAudio)}" style="width:100%"></audio><button class="btn small danger" style="margin-top:6px" onclick="delGuestAudio()">מחק הקלטה</button>`;
+      btn.classList.remove('live');btn.textContent='⏺ הקלט מחדש';};
+    gRec.start();btn.classList.add('live');btn.textContent='⏹ עצור הקלטה';
+  }catch(e){toast('אין גישה למיקרופון');}
+}
+function delGuestAudio(){gAudio=null;document.getElementById('gAudioBox').innerHTML='';document.getElementById('gRecTime').textContent='';document.getElementById('gRecBtn').textContent='⏺ התחל הקלטה';}
+async function guestSend(){
+  const ti=document.getElementById('gTitle').value.trim(),w=document.getElementById('gWhen').value.trim(),x=document.getElementById('gText').value.trim();
+  if(!x&&!gAudio){toast('כתוב/י משהו או הקלט/י קודם');return;}
+  const link=baseUrl()+'?import='+enc({f:G.n,ti,w,x});
+  const msg=`${G.o} שלום, זיכרון לספר שלך מ${G.n} 💛${ti?`\n*${ti}*`:''}${w?` (${w})`:''}${x?'\n\n'+(x.length>1500?x.slice(0,1500)+'…':x):''}${gAudio?'\n\n🎙 צירפתי הקלטה קולית.':''}\n\nלהוספה לספר:\n${link}`;
+  if(gAudio){
+    const ext=(gAudio.type.includes('mp4')||gAudio.type.includes('aac'))?'m4a':'webm';
+    const file=new File([gAudio],`זיכרון-מ${G.n}.${ext}`,{type:gAudio.type});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){
+      try{await navigator.share({files:[file],text:msg});guestDone(true);return;}catch(e){if(e.name==='AbortError')return;}
+    }
+    const a=document.createElement('a');a.href=URL.createObjectURL(gAudio);a.download=file.name;a.click();
+    toast('ההקלטה נשמרה בטלפון. צרף/י אותה בוואטסאפ');
+  }
+  window.open(`https://wa.me/${G.op}?text=${encodeURIComponent(msg)}`,'_blank');
+  guestDone(false);
+}
+function guestDone(){try{localStorage.removeItem('guestDraft_'+G.n);}catch(e){}
+  document.getElementById('gThanks').hidden=false;document.getElementById('gThanksText').textContent=`הזיכרון בדרך ל${G.o}. רק לוודא שלחצת "שלח" בוואטסאפ.`;
+  document.getElementById('gThanks').scrollIntoView({behavior:'smooth'});}
+function guestAnother(){['gTitle','gWhen','gText'].forEach(i=>document.getElementById(i).value='');delGuestAudio();gHist=[''];document.getElementById('gThanks').hidden=true;window.scrollTo(0,0);}
+
+/* ---------- import a memory sent back by a guest ---------- */
+let IMP=null;
+function openImport(m){
+  IMP=m;
+  document.getElementById('impBody').innerHTML=`<div class="story"><h3>${esc(m.ti||'(ללא כותרת)')}</h3><div class="meta">מאת ${esc(m.f||'')}${m.w?' · '+esc(m.w):''}</div><p>${esc(m.x||'(הזיכרון נשלח כהקלטה קולית בוואטסאפ)')}</p></div>`;
+  document.getElementById('impCircle').innerHTML=D.circles.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('');
+  document.getElementById('mImport').classList.add('on');
+}
+function closeImport(){document.getElementById('mImport').classList.remove('on');IMP=null;history.replaceState(null,'',baseUrl());}
+function esc(t){return String(t||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function importAdd(edit){
+  const m=IMP,cid=document.getElementById('impCircle').value;
+  let p=D.people.find(x=>x.name===m.f);if(!p&&m.f){p={id:id(),name:m.f,circle:cid};D.people.push(p);}
+  D.requests.forEach(r=>{if(r.name===m.f)r.done=true;});
+  if(edit){save();closeImport();show('write');resetForm();
+    document.getElementById('fTitle').value=m.ti||'';document.getElementById('fWhen').value=m.w||'';document.getElementById('fText').value=m.x||'';
+    document.getElementById('fFrom').value=m.f||'';document.getElementById('fCircle').value=cid;if(p)selPeople.add(p.id);renderPeopleChips();
+    toast('ערוך ולחץ "שמור לספר"');return;}
+  D.stories.push({id:id(),title:m.ti||'(ללא כותרת)',when:m.w||'',circle:cid,text:m.x||'',people:p?[p.id]:[],from:m.f||'',img:null,audio:null,added:Date.now()});
+  save();closeImport();show('map');toast('הזיכרון נוסף לספר');
+}
+
+/* ---------- boot ---------- */
+const QP=new URLSearchParams(location.search);
+if(QP.get('invite')){try{startGuest(dec(QP.get('invite')));}catch(e){applyTitle();renderMap();renderForm();toast('הקישור לא תקין');}}
+else{
 applyTitle();renderMap();renderForm();
+if(QP.get('import')){try{openImport(dec(QP.get('import')));}catch(e){toast('קישור הזיכרון לא תקין');}}
+}
 window.addEventListener('resize',()=>{if(document.getElementById('v-map').classList.contains('on'))renderMap();});
 </script>
 </body>
