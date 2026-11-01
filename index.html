@@ -74,6 +74,10 @@ td,th{padding:8px 6px;border-bottom:1px solid var(--line);text-align:right}
 .modal .card{max-width:520px;width:100%;max-height:90vh;overflow:auto}
 .person-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--line)}
 .person-row i{width:14px;height:14px;border-radius:50%}
+.circle-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.circle-row input[type=text]{flex:1;min-width:120px;padding:6px 10px}
+.circle-row select{width:auto;padding:6px 8px}
+.circle-row .cnt{font-size:12px;color:var(--muted);white-space:nowrap}
 @media print{
   header,nav,.noprint{display:none!important}
   body{background:#fff}
@@ -101,7 +105,7 @@ td,th{padding:8px 6px;border-bottom:1px solid var(--line);text-align:right}
     <p class="muted">תוכן העניינים הגרפי. כל בועה היא מעגל חברתי, וגודלה לפי כמות הסיפורים. לחיצה פותחת את הסיפורים של המעגל.</p>
     <div id="bubbles"></div>
     <div class="row noprint">
-      <button class="btn sec small" onclick="openCircleModal()">+ מעגל חדש</button>
+      <button class="btn sec small" onclick="openCirclesModal()">ניהול מעגלים</button>
       <button class="btn sec small" onclick="openPeopleModal()">האנשים בספר</button>
     </div>
   </div>
@@ -202,11 +206,17 @@ td,th{padding:8px 6px;border-bottom:1px solid var(--line);text-align:right}
 </main>
 
 <!-- modals -->
-<div class="modal" id="mCircle"><div class="card">
-  <h3>מעגל חדש</h3>
-  <label>שם המעגל</label><input id="cName" placeholder="חברים מהתיכון">
-  <label>צבע</label><select id="cColor"></select>
-  <div class="row" style="margin-top:12px"><button class="btn" onclick="addCircle()">הוסף</button><button class="btn sec" onclick="closeModals()">ביטול</button></div>
+<div class="modal" id="mCircles"><div class="card">
+  <h3>המעגלים של הספר</h3>
+  <p class="muted">שינוי שם, צבע, או מחיקה. מחיקת מעגל מעבירה את הסיפורים שלו למעגל אחר לבחירתך.</p>
+  <div id="circlesList"></div>
+  <h3 style="margin-top:16px;font-size:16px">מעגל חדש</h3>
+  <div class="row">
+    <input id="cName" placeholder="חברים מהתיכון">
+    <select id="cColor"></select>
+    <button class="btn small" onclick="addCircle()">הוסף</button>
+  </div>
+  <div class="row" style="margin-top:12px"><button class="btn sec" onclick="closeModals()">סגור</button></div>
 </div></div>
 <div class="modal" id="mPeople"><div class="card">
   <h3>האנשים בספר</h3>
@@ -264,8 +274,40 @@ function renderMap(){
   });
   if(!D.stories.length){const e=document.createElement('div');e.className='empty';e.style.cssText='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none';e.innerHTML='<div><b>הספר עדיין ריק</b>עבור ל"כתיבה" והוסף את הזיכרון הראשון</div>';box.appendChild(e);}
 }
-function openCircleModal(){const s=document.getElementById('cColor');s.innerHTML=COLORS.map((c,i)=>`<option value="${c}">צבע ${i+1}</option>`).join('');document.getElementById('cName').value='';document.getElementById('mCircle').classList.add('on');}
-function addCircle(){const n=document.getElementById('cName').value.trim();if(!n)return;D.circles.push({id:id(),name:n,color:document.getElementById('cColor').value});save();closeModals();renderMap();toast('המעגל נוסף');}
+function colorOpts(sel){return COLORS.map((c,i)=>`<option value="${c}" ${c===sel?'selected':''}>צבע ${i+1}</option>`).join('');}
+function openCirclesModal(){
+  document.getElementById('cColor').innerHTML=colorOpts(COLORS[D.circles.length%COLORS.length]);document.getElementById('cName').value='';
+  renderCirclesList();document.getElementById('mCircles').classList.add('on');
+}
+function renderCirclesList(){
+  document.getElementById('circlesList').innerHTML=D.circles.map(c=>{const n=D.stories.filter(s=>s.circle===c.id).length;
+    return `<div class="circle-row"><i style="width:16px;height:16px;border-radius:50%;background:${col(c.color)}"></i>
+      <input type="text" value="${c.name.replace(/"/g,'&quot;')}" onchange="renameCircle('${c.id}',this.value)">
+      <select onchange="recolorCircle('${c.id}',this.value)">${colorOpts(c.color)}</select>
+      <span class="cnt">${n} סיפורים</span>
+      <button class="btn small danger" onclick="delCircle('${c.id}')">מחק</button></div>`;}).join('')||'<div class="empty">אין מעגלים. הוסף אחד למטה.</div>';
+}
+function addCircle(){const n=document.getElementById('cName').value.trim();if(!n){toast('כתוב שם למעגל');return;}
+  D.circles.push({id:id(),name:n,color:document.getElementById('cColor').value});save();
+  document.getElementById('cName').value='';document.getElementById('cColor').innerHTML=colorOpts(COLORS[D.circles.length%COLORS.length]);
+  renderCirclesList();renderMap();toast('המעגל נוסף');}
+function renameCircle(cid,v){const c=circleOf(cid);v=v.trim();if(!c||!v){renderCirclesList();return;}c.name=v;save();renderMap();}
+function recolorCircle(cid,v){const c=circleOf(cid);if(!c)return;c.color=v;save();renderCirclesList();renderMap();}
+function delCircle(cid){
+  const c=circleOf(cid);if(!c)return;
+  const n=D.stories.filter(s=>s.circle===cid).length;
+  const others=D.circles.filter(x=>x.id!==cid);
+  let target=null;
+  if(n){
+    if(!others.length){alert('זה המעגל היחיד ויש בו סיפורים. הוסף מעגל אחר קודם.');return;}
+    const list=others.map((x,i)=>`${i+1}. ${x.name}`).join('\n');
+    const ans=prompt(`במעגל "${c.name}" יש ${n} סיפורים.\nלאיזה מעגל להעביר אותם? כתוב מספר:\n${list}`,'1');
+    if(ans===null)return;const idx=parseInt(ans)-1;if(!(others[idx])){toast('מספר לא תקין');return;}target=others[idx].id;
+  }else if(!confirm(`למחוק את המעגל "${c.name}"?`))return;
+  if(target){D.stories.forEach(s=>{if(s.circle===cid)s.circle=target;});D.people.forEach(p=>{if(p.circle===cid)p.circle=target;});}
+  else D.people.forEach(p=>{if(p.circle===cid)p.circle=others[0]?others[0].id:null;});
+  D.circles=others;save();renderCirclesList();renderMap();toast('המעגל נמחק');
+}
 function closeModals(){document.querySelectorAll('.modal').forEach(m=>m.classList.remove('on'));}
 document.querySelectorAll('.modal').forEach(m=>m.onclick=e=>{if(e.target===m)closeModals();});
 function openPeopleModal(){
