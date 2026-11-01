@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ספר החיים</title>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;700&family=Heebo:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f1e7; --paper:#fffdf8; --ink:#2b2520; --muted:#7a6f66; --line:#e3d9c8;
+  --accent:#8c4a2f; --accent2:#c9823f; --soft:#f0e6d6;
+  --c1:#d97757;--c2:#5f8a8b;--c3:#b78d3a;--c4:#7c6c9c;--c5:#6a9a5b;--c6:#c25a7c;--c7:#4a7fb5;--c8:#9c7c5a;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Heebo',sans-serif;background:var(--bg);color:var(--ink);font-size:16px}
+h1,h2,h3{font-family:'Frank Ruhl Libre',serif;margin:0}
+header{background:var(--paper);border-bottom:1px solid var(--line);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:0;z-index:10}
+header h1{font-size:22px;color:var(--accent)}
+header h1 span{font-family:'Heebo';font-weight:300;font-size:13px;color:var(--muted);display:block}
+nav{display:flex;gap:4px;background:var(--soft);padding:4px;border-radius:30px;overflow-x:auto;max-width:100%;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+header{flex-wrap:wrap}
+nav button{white-space:nowrap}
+nav button{border:0;background:transparent;padding:8px 14px;border-radius:24px;font-family:inherit;font-size:14px;cursor:pointer;color:var(--muted)}
+nav button.on{background:var(--paper);color:var(--accent);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+main{max-width:900px;margin:0 auto;padding:18px 16px 80px}
+.view{display:none}.view.on{display:block}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}
+.btn{border:0;background:var(--accent);color:#fff;padding:10px 18px;border-radius:24px;font-family:inherit;font-size:15px;cursor:pointer}
+.btn.sec{background:var(--soft);color:var(--accent)}
+.btn.small{padding:6px 12px;font-size:13px}
+.btn.danger{background:#b24040}
+input,textarea,select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-family:inherit;font-size:15px;background:#fff;color:var(--ink)}
+textarea{min-height:120px;resize:vertical}
+label{display:block;font-size:13px;color:var(--muted);margin:10px 0 4px}
+.row{display:flex;gap:10px;flex-wrap:wrap}.row>*{flex:1;min-width:140px}
+.muted{color:var(--muted);font-size:14px}
+.chip{display:inline-block;padding:3px 10px;border-radius:14px;font-size:12px;color:#fff;margin:2px}
+.chip.person{background:var(--soft);color:var(--ink);border:1px solid var(--line);cursor:pointer}
+.chip.person.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.empty{text-align:center;padding:40px 10px;color:var(--muted)}
+.empty b{display:block;font-size:18px;color:var(--ink);margin-bottom:6px}
+
+/* bubbles TOC */
+#bubbles{position:relative;height:420px;margin:10px 0}
+.bubble{position:absolute;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;cursor:pointer;text-align:center;padding:10px;box-shadow:0 6px 18px rgba(0,0,0,.15);transition:transform .2s}
+.bubble:hover{transform:scale(1.06)}
+.bubble b{font-family:'Frank Ruhl Libre',serif;font-size:18px}
+.bubble small{font-size:11px;opacity:.9}
+.teaser{font-size:11px;opacity:.95;margin-top:4px;line-height:1.2}
+
+/* story */
+.story{border-right:4px solid var(--accent2);padding-right:12px;margin-bottom:14px}
+.story h3{font-size:19px;color:var(--accent)}
+.story .meta{font-size:12px;color:var(--muted);margin:3px 0 8px}
+.story p{white-space:pre-wrap;line-height:1.7;margin:0}
+.story img{max-width:100%;border-radius:10px;margin-top:8px}
+.story audio{width:100%;margin-top:8px}
+.story .from{display:inline-block;background:var(--soft);padding:3px 9px;border-radius:10px;font-size:12px;margin-top:6px}
+.people-graph{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+.pg{display:flex;align-items:center;gap:5px;font-size:12px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:2px 8px 2px 3px}
+.pg i{width:18px;height:18px;border-radius:50%;display:inline-block}
+
+/* control center */
+table{width:100%;border-collapse:collapse;font-size:14px}
+td,th{padding:8px 6px;border-bottom:1px solid var(--line);text-align:right}
+.status{padding:2px 8px;border-radius:10px;font-size:12px}
+.s-wait{background:#fde9c8;color:#8a5a00}.s-done{background:#dcefd8;color:#2e6b24}
+.rec{display:flex;align-items:center;gap:10px}
+.rec .dot{width:12px;height:12px;border-radius:50%;background:#b24040;display:none}
+.rec.live .dot{display:block;animation:p 1s infinite}
+@keyframes p{50%{opacity:.3}}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:20px;font-size:14px;opacity:0;transition:.3s;pointer-events:none}
+.toast.on{opacity:1}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.4);display:none;align-items:center;justify-content:center;z-index:20;padding:16px}
+.modal.on{display:flex}
+.modal .card{max-width:520px;width:100%;max-height:90vh;overflow:auto}
+.person-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--line)}
+.person-row i{width:14px;height:14px;border-radius:50%}
+.circle-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.circle-row input[type=text]{flex:1;min-width:120px;padding:6px 10px}
+.circle-row select{width:auto;padding:6px 8px}
+.circle-row .cnt{font-size:12px;color:var(--muted);white-space:nowrap}
+/* invite + guest */
+.invite-card{background:linear-gradient(135deg,#fff8ee,#f6ead6);border-color:#e6cfa8}
+.tools{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.tools .btn{padding:8px 12px;font-size:14px}
+.tools .btn.live{background:#b24040;color:#fff}
+#gText{min-height:220px;font-size:18px;line-height:1.7}
+.example{background:var(--soft);border-radius:12px;padding:10px 14px;margin:10px 0;font-size:15px}
+.qchips .chip{cursor:pointer;background:#fff;color:var(--ink);border:1px solid var(--line);font-size:13px;padding:6px 12px}
+.big-btn{width:100%;padding:16px;font-size:18px;margin-top:6px}
+.guest-hero h2{font-size:28px;color:var(--accent)}
+.guest-hero p{font-size:17px;line-height:1.7}
+body.guest header nav{display:none}
+.rec-timer{font-variant-numeric:tabular-nums;color:var(--muted);font-size:14px}
+/* shared events, guide, welcome */
+.event{border:2px dashed var(--line);border-radius:14px;padding:12px 12px 2px;margin-bottom:14px;background:#fffaf2}
+.ev-badge{display:inline-block;background:var(--accent2);color:#fff;font-size:12px;padding:3px 10px;border-radius:12px;margin-bottom:10px}
+.guide h2{color:var(--accent);margin-bottom:6px}
+.guide h3{color:var(--accent);font-size:19px;margin:18px 0 6px}
+.guide p,.guide li{line-height:1.75;font-size:15.5px}
+.guide ul{padding-right:20px;margin:6px 0}
+.guide .step{background:var(--soft);border-radius:10px;padding:2px 8px;font-size:13px;font-weight:600;color:var(--accent);white-space:nowrap}
+.vision{background:linear-gradient(135deg,#8c4a2f,#c9823f);color:#fff;border:0}
+.vision h3,.vision p{color:#fff}
+.who-chips .chip{cursor:pointer;background:#fff;color:var(--ink);border:2px solid var(--line);font-size:17px;padding:10px 18px;margin:4px}
+.who-chips .chip.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.promo{background:linear-gradient(135deg,#fff8ee,#f6ead6);border-color:#e6cfa8;text-align:center}
+.sel-circle{border-bottom:1px solid var(--line);padding:6px 0}
+.sel-circle>label{font-weight:600;color:var(--ink);font-size:15px}
+.sel-circle .sel-stories{padding-right:24px}
+.sel-circle .sel-stories label{font-size:14px;color:var(--ink);margin:3px 0}
+.chk{display:flex;align-items:center;gap:8px}
+.chk input{width:auto}
+@media print{
+  header,nav,.noprint{display:none!important}
+  body{background:#fff}
+  .card{border:0;box-shadow:none}
+  .story{page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<header>
+  <h1 id="bookTitle">ספר החיים<span id="bookOwner">הסיפורים שלי, מצטברים לאורך השנים</span></h1>
+  <nav>
+    <button class="on" data-v="map">מפה</button>
+    <button data-v="write">כתיבה</button>
+    <button data-v="read">הספר</button>
+    <button data-v="control">מרכז שליטה</button>
+    <button data-v="guide">מדריך</button>
+  </nav>
+</header>
+
+<main>
+<!-- ===== MAP ===== -->
+<section class="view on" id="v-map">
+  <div class="card">
+    <h2>המעגלים של החיים שלי</h2>
+    <p class="muted">תוכן העניינים הגרפי. כל בועה היא מעגל חברתי, וגודלה לפי כמות הסיפורים. לחיצה פותחת את הסיפורים של המעגל.</p>
+    <div id="bubbles"></div>
+    <div class="row noprint">
+      <button class="btn sec small" onclick="openCirclesModal()">ניהול מעגלים</button>
+      <button class="btn sec small" onclick="openPeopleModal()">האנשים בספר</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== WRITE ===== -->
+<section class="view" id="v-write">
+  <div class="card">
+    <h2 id="writeTitle">זיכרון חדש</h2>
+    <p class="muted">גם שלוש מילים זה זיכרון. אפשר להרחיב אחר כך.</p>
+    <label>כותרת</label>
+    <input id="fTitle" placeholder="למשל: הלילה שנרדמנו בשמירה">
+    <div class="row">
+      <div><label>מתי זה היה (שנה או תאריך)</label><input id="fWhen" placeholder="1987 / קיץ 2003"></div>
+      <div><label>מעגל</label><select id="fCircle"></select></div>
+    </div>
+    <label>הסיפור</label>
+    <textarea id="fText" placeholder="ראשי פרקים, אנקדוטה, או ארבעה עמודים. מה שעולה."></textarea>
+    <label>מי מופיע בסיפור</label>
+    <div id="fPeople"></div>
+    <div class="row" style="margin-top:6px">
+      <input id="fNewPerson" placeholder="הוסף אדם חדש ולחץ Enter">
+    </div>
+    <label>הזיכרון הגיע מ... (ריק = שלי)</label>
+    <input id="fFrom" placeholder="למשל: דני, החבר מהצבא">
+    <div class="row" style="margin-top:12px">
+      <div><label>תמונה</label><input type="file" id="fImg" accept="image/*"></div>
+      <div><label>הקלטה</label>
+        <div class="rec" id="recBox"><span class="dot"></span>
+          <button class="btn sec small" id="recBtn" onclick="toggleRec()">🎙 התחל הקלטה</button>
+          <span id="recStatus" class="muted"></span>
+        </div>
+      </div>
+    </div>
+    <div id="fPreview" style="margin-top:10px"></div>
+    <div class="row" style="margin-top:16px">
+      <button class="btn" onclick="saveStory()">שמור לספר</button>
+      <button class="btn sec" onclick="resetForm()">נקה</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== READ ===== -->
+<section class="view" id="v-read">
+  <div class="card invite-card noprint">
+    <h2>📨 הזמן מישהו לכתוב לספר</h2>
+    <p class="muted">שולחים קישור בוואטסאפ. מי שמקבל פותח דף כתיבה פשוט, עם הקלדה, הכתבה בקול, הקלטה והקראה בקול, ושולח לך את הזיכרון בחזרה. אתה מחליט מה נכנס לספר.</p>
+    <div class="row">
+      <div><label>למי</label><input id="iName" placeholder="סבתא רותי"></div>
+      <div><label>הטלפון שלו/ה</label><input id="iPhone" inputmode="tel" placeholder="052..."></div>
+    </div>
+    <label>זיכרון קטן שלך עליו/ה, בכמה מילים (לא חובה, אבל עוזר להתחיל)</label>
+    <input id="iExample" placeholder="ארוחות שישי אצלך בחיפה">
+    <label>נושא או שאלה מיוחדת (לא חובה)</label>
+    <input id="iQuestion" placeholder="איך היה כשנולדתי?">
+    <button class="btn" style="margin-top:12px" onclick="sendInvite()">שלח הזמנה בוואטסאפ</button>
+  </div>
+  <div class="card noprint">
+    <div class="row">
+      <select id="readFilter" onchange="renderBook()"></select>
+      <select id="readSort" onchange="renderBook()">
+        <option value="when">לפי זמן בחיים</option>
+        <option value="added">לפי סדר הוספה</option>
+      </select>
+    </div>
+  </div>
+  <div id="book"></div>
+</section>
+
+<!-- ===== GUEST (invited writer) ===== -->
+<section class="view" id="v-guest">
+  <div class="card guest-hero">
+    <h2 id="gHello">היי 👋</h2>
+    <p id="gIntro"></p>
+    <div class="example" id="gExample" hidden></div>
+    <div class="example" id="gQuestion" hidden></div>
+    <button class="btn sec small" onclick="speakInvite()">🔊 הקרא לי את ההזמנה</button>
+  </div>
+  <div class="card">
+    <label>על מה הזיכרון? (כותרת, לא חובה)</label>
+    <input id="gTitle" placeholder="למשל: הטיול לאילת">
+    <label>מתי זה היה? (לא חובה)</label>
+    <input id="gWhen" placeholder="שנה, עונה, או בערך">
+    <label>מאיפה להתחיל? לחיצה מוסיפה לטקסט</label>
+    <div class="qchips" id="gChips"></div>
+    <label>הזיכרון שלך</label>
+    <div class="tools">
+      <button class="btn sec" id="dictBtn" onclick="toggleDictation()">🎤 הכתבה בקול</button>
+      <button class="btn sec" onclick="speakText()">🔊 הקרא לי מה שכתבתי</button>
+      <button class="btn sec" onclick="undoText()">↶ בטל</button>
+      <button class="btn sec" onclick="fontSize(2)">A+</button>
+      <button class="btn sec" onclick="fontSize(-2)">A−</button>
+      <button class="btn sec" onclick="clearText()">נקה</button>
+    </div>
+    <div class="muted" id="dictStatus"></div>
+    <textarea id="gText" placeholder="אפשר לכתוב, או ללחוץ על 'הכתבה בקול' ולדבר. גם כמה מילים זה מצוין, ולא צריך לכתוב יפה."></textarea>
+  </div>
+  <div class="card">
+    <h3>מעדיפים לספר בקול?</h3>
+    <p class="muted">אפשר להקליט את הסיפור, לשמוע אותו, ולהקליט מחדש אם רוצים.</p>
+    <div class="tools">
+      <button class="btn sec" id="gRecBtn" onclick="guestRec()">⏺ התחל הקלטה</button>
+      <span class="rec-timer" id="gRecTime"></span>
+    </div>
+    <div id="gAudioBox"></div>
+  </div>
+  <button class="btn big-btn" id="gSendBtn" onclick="guestSend()">שלח</button>
+  <p class="muted" style="text-align:center">הזיכרון נשלח בוואטסאפ. אין צורך להירשם לשום דבר.</p>
+  <div class="card promo" style="margin-top:22px">
+    <h3>📖 ומה עם הספר שלך?</h3>
+    <p style="line-height:1.7">גם לך יש סיפורים ששווה לשמור. פתח/י ספר חיים משלך, והזמן/י את החברים לכתוב יחד: כל אירוע שחוויתם נכתב מכמה זוויות, ונשמר בספרים של כל מי שהיה שם.</p>
+    <a class="btn" id="gPromoLink" href="#">פתח/י ספר משלי, בחינם</a>
+  </div>
+  <div class="card" id="gThanks" hidden style="text-align:center">
+    <h2>תודה! 💛</h2>
+    <p id="gThanksText"></p>
+    <button class="btn sec" onclick="guestAnother()">רוצה לשלוח עוד זיכרון</button>
+    <p class="muted" style="margin-top:14px">רוצה ספר משלך? <a id="gOwnLink" href="#">פתח ספר חיים משלך</a></p>
+  </div>
+</section>
+
+<!-- ===== WELCOME (start a book from a group invite) ===== -->
+<section class="view" id="v-welcome">
+  <div class="card guest-hero">
+    <h2 id="wHello">ברוכים הבאים 📖</h2>
+    <p id="wIntro"></p>
+    <div class="example" id="wNote" hidden></div>
+  </div>
+  <div class="card" id="wWhoCard">
+    <h3>מי את/ה?</h3>
+    <div class="who-chips" id="wWho"></div>
+    <label>או כתוב/י את השם שלך</label>
+    <input id="wName" placeholder="השם שלך">
+    <button class="btn big-btn" style="margin-top:14px" onclick="startMyBook()">פתח את הספר שלי</button>
+    <p class="muted" style="text-align:center">הספר נשמר אצלך במכשיר. אין הרשמה ואין תשלום.</p>
+  </div>
+</section>
+
+<!-- ===== GUIDE ===== -->
+<section class="view guide" id="v-guide">
+  <div class="card" id="guideWelcome" hidden style="background:linear-gradient(135deg,#fff8ee,#f6ead6)">
+    <h2>הספר שלך מוכן 🎉</h2>
+    <p>כמה דקות קריאה כאן, ואז ישר לכתיבת הסיפור הראשון.</p>
+  </div>
+  <div class="card">
+    <h2>ספר החיים: איך זה עובד</h2>
+    <p>זה ספר שנכתב לאט, לאורך החיים, ולא בבת אחת. בכל פעם שעולה זיכרון, שטות מהצופים, הרפתקה מהתיכון, משהו שקרה אתמול, מכניסים אותו לספר. ועם השנים הספר מתמלא.</p>
+    <p>הקסם הוא שלא כותבים לבד. החברים שהיו שם כותבים את הזווית שלהם על אותו אירוע, והסיפור נשמר בספרים של כל מי שהיה חלק ממנו.</p>
+
+    <h3>✍️ איך כותבים</h3>
+    <p>לשונית <span class="step">כתיבה</span>: כותרת, מתי זה היה, לאיזה מעגל זה שייך (משפחה, צבא, החבר'ה...), ומי היה שם.</p>
+    <ul>
+      <li><b>אל תחכו לגרסה המושלמת.</b> שלוש מילים מספיקות כדי לא לשכוח. אפשר להרחיב אחר כך.</li>
+      <li><b>הפרטים הקטנים שווים זהב:</b> משפט שמישהו אמר, ריח, השיר שהתנגן ברקע, מה אכלתם.</li>
+      <li><b>תנו לסיפור שם שאתם קוראים לו בחבורה.</b> "הלילה של הטנדר" עדיף על "טיול בכנרת".</li>
+      <li><b>אין כוח לכתוב?</b> מקליטים בקול, או מצרפים תמונה ומוסיפים שורה.</li>
+      <li><b>גם מה שקורה עכשיו נכנס.</b> קרה משהו מצחיק היום? זה הספר.</li>
+    </ul>
+
+    <h3>🫧 המעגלים</h3>
+    <p>לשונית <span class="step">מפה</span> היא תוכן העניינים: כל בועה היא מעגל בחיים שלך, והיא גדלה ככל שמתווספים סיפורים. ב<span class="step">ניהול מעגלים</span> מוסיפים, משנים שם וצבע, ומוחקים.</p>
+
+    <h3>🤝 סיפור אחד, הרבה זוויות</h3>
+    <p>כתבת סיפור שחברים היו בו? פותחים אותו ולוחצים <span class="step">שתף עם מי שהיה שם</span>. אפשר לשלוח לחבר אחד או ישר לקבוצת הוואטסאפ.</p>
+    <p>מי שמקבל לוחץ על הקישור, הסיפור נכנס לספר שלו, והוא כותב את הזווית שלו ומשתף בחזרה. בספר של כל אחד האירוע מופיע עם כל הגרסאות יחד, וכמעט תמיד כל אחד זוכר את זה קצת אחרת. ככה הספרים שלכם מתחברים אחד לשני.</p>
+
+    <h3>💌 מזמינים מישהו לכתוב עליך</h3>
+    <p>בלשונית <span class="step">הספר</span> יש כרטיס הזמנה: שם, טלפון, וזיכרון קטן שלך עליו כדי שיהיה לו קל להתחיל. הוא מקבל דף פשוט שבו אפשר להקליד, להכתיב בקול או להקליט, ושולח לך את הזיכרון בוואטסאפ. אתה מחליט מה נכנס לספר.</p>
+
+    <h3>📣 מזמינים חברים לפתוח ספר</h3>
+    <p>ב<span class="step">מרכז שליטה</span>, בכרטיס "הזמנה לפתוח ספר", כותבים את שם החבורה ואת השמות. כל אחד מקבל קישור, בוחר מי הוא, והספר שלו נפתח עם מעגל החבורה ועם כל החברים בפנים.</p>
+
+    <h3>🎁 משתפים את הספר</h3>
+    <p>ב<span class="step">מרכז שליטה</span> בוחרים בדיוק מה לכלול: מעגלים שלמים או סיפורים בודדים, עם תמונות והקלטות או בלי. אחר כך יוצרים קובץ דיגיטלי שאפשר לשלוח לכל אחד, או PDF להדפסה. מתאים ליום הולדת, לחתונה, או סתם כדי לשמח מישהו.</p>
+
+    <h3>💾 חשוב: לגבות</h3>
+    <p>בשלב הזה הספר שמור רק במכשיר הזה. פעם בחודש לוחצים <span class="step">גיבוי הספר</span> במרכז השליטה ושומרים את הקובץ במקום בטוח, למשל בדרייב או בצ'אט עם עצמך בוואטסאפ. אם מחליפים טלפון, <span class="step">שחזר מגיבוי</span> מחזיר הכול.</p>
+  </div>
+  <div class="card vision">
+    <h3>🎂 לאן זה הולך: יום הולדת 80</h3>
+    <p>תדמיינו את מסיבת יום ההולדת ה-80. במקום שכל אחד ינסה לשחזר מהזיכרון, לכל אחד מכם יש ספר עבה ומלא: הצופים, התיכון, הטיולים, החתונות, הילדים, השטויות שעשיתם בגיל 50. כל אירוע כתוב מכל הזוויות, והספרים שלכם מקושרים זה לזה.</p>
+    <p>כל סיפור שמישהו מכניס מעשיר את הספרים של כולם. ובכל רגע בדרך, ליום הולדת 30, 50 או 80, אפשר לבחור מה לכלול ולשתף גרסה דיגיטלית של הספר.</p>
+    <button class="btn" style="background:#fff;color:var(--accent);margin-top:6px" onclick="show('write')">לכתוב את הסיפור הראשון</button>
+  </div>
+</section>
+
+<!-- ===== CONTROL ===== -->
+<section class="view" id="v-control">
+  <div class="card">
+    <h2>בקשת זיכרון מחבר</h2>
+    <p class="muted">הכלי מנסח הודעה צנועה עם דוגמה קטנה, שתראה לחבר שהרף נמוך.</p>
+    <div class="row">
+      <div><label>שם החבר</label><input id="rName" placeholder="דני"></div>
+      <div><label>טלפון (עם קידומת, למשל 0521234567)</label><input id="rPhone" placeholder="052..."></div>
+    </div>
+    <label>זיכרון קטן שלי עליו, בכמה מילים (הדוגמה)</label>
+    <input id="rExample" placeholder="הפעם שנתקענו עם הטנדר ליד הכנרת">
+    <label>ההודעה שתישלח</label>
+    <textarea id="rMsg"></textarea>
+    <div class="row">
+      <button class="btn sec" onclick="composeMsg()">נסח מחדש</button>
+      <button class="btn" onclick="sendWhatsapp()">שלח בוואטסאפ ורשום במעקב</button>
+    </div>
+  </div>
+  <div class="card">
+    <h2>מעקב בקשות</h2>
+    <table><thead><tr><th>חבר</th><th>נשלח</th><th>סטטוס</th><th></th></tr></thead><tbody id="reqTable"></tbody></table>
+  </div>
+  <div class="card invite-card">
+    <h2>📣 הזמנה לפתוח ספר</h2>
+    <p class="muted">לחבורה או לחבר. כל מי שמקבל בוחר מי הוא, והספר שלו נפתח עם מעגל החבורה ועם כל החברים בפנים, מוכן לסיפורים משותפים.</p>
+    <div class="row">
+      <div><label>שם החבורה או המעגל</label><input id="gName" placeholder="החבר'ה מהצופים"></div>
+    </div>
+    <label>השמות (מופרדים בפסיקים)</label>
+    <input id="gMembers" placeholder="דני, רוני, מיכל">
+    <label>מילה אישית (לא חובה)</label>
+    <textarea id="gNote" style="min-height:70px" placeholder="יאללה, תתחילו מהשטויות של כיתה ט'"></textarea>
+    <div class="row" style="margin-top:10px">
+      <button class="btn" onclick="sendGroupInvite()">שלח בוואטסאפ</button>
+      <button class="btn sec" onclick="copyGroupInvite()">העתק קישור</button>
+    </div>
+  </div>
+  <div class="card">
+    <h2>🎁 שיתוף והדפסה</h2>
+    <p class="muted">בחר מה לכלול: מעגלים שלמים או סיפורים בודדים. אחר כך אפשר ליצור קובץ דיגיטלי לשליחה, או PDF להדפסה.</p>
+    <div id="selTree"></div>
+    <label class="chk" style="margin-top:10px"><input type="checkbox" id="selMedia" checked> לכלול תמונות והקלטות</label>
+    <div class="row" style="margin-top:10px">
+      <button class="btn" onclick="shareDigital()">ספר דיגיטלי לשיתוף</button>
+      <button class="btn sec" onclick="printSelected()">הדפס / PDF</button>
+    </div>
+  </div>
+  <div class="card">
+    <h2>💾 גיבוי</h2>
+    <p class="muted" id="backupInfo">הספר שמור במכשיר הזה בלבד. כדאי לגבות פעם בחודש.</p>
+    <div class="row">
+      <button class="btn" onclick="exportJson()">גיבוי הספר (קובץ)</button>
+      <label class="btn sec" style="text-align:center">שחזר מגיבוי<input type="file" accept=".json" style="display:none" onchange="importJson(this)"></label>
+    </div>
+  </div>
+  <div class="card">
+    <h2>הגדרות הספר</h2>
+    <div class="row">
+      <div><label>שם הספר</label><input id="sTitle"></div>
+      <div><label>של מי הספר</label><input id="sOwner" placeholder="בועז"></div>
+      <div><label>הטלפון שלי (לשם יחזרו הזיכרונות)</label><input id="sPhone" inputmode="tel" placeholder="050..."></div>
+    </div>
+    <button class="btn small" style="margin-top:10px" onclick="saveSettings()">שמור</button>
+  </div>
+</section>
+</main>
+
+<!-- modals -->
+<div class="modal" id="mCircles"><div class="card">
+  <h3>המעגלים של הספר</h3>
+  <p class="muted">שינוי שם, צבע, או מחיקה. מחיקת מעגל מעבירה את הסיפורים שלו למעגל אחר לבחירתך.</p>
+  <div id="circlesList"></div>
+  <h3 style="margin-top:16px;font-size:16px">מעגל חדש</h3>
+  <div class="row">
+    <input id="cName" placeholder="חברים מהתיכון">
+    <select id="cColor"></select>
+    <button class="btn small" onclick="addCircle()">הוסף</button>
+  </div>
+  <div class="row" style="margin-top:12px"><button class="btn sec" onclick="closeModals()">סגור</button></div>
+</div></div>
+<div class="modal" id="mPeople"><div class="card">
+  <h3>האנשים בספר</h3>
+  <p class="muted">לחיצה על שם מראה את כל הסיפורים שהוא מופיע בהם.</p>
+  <div id="peopleList"></div>
+  <div class="row" style="margin-top:12px"><button class="btn sec" onclick="closeModals()">סגור</button></div>
+</div></div>
+<div class="modal" id="mStory"><div class="card" id="mStoryBody"></div></div>
+<div class="modal" id="mImport"><div class="card">
+  <h3>📬 התקבל זיכרון חדש</h3>
+  <div id="impBody"></div>
+  <label>לאיזה מעגל?</label>
+  <select id="impCircle"></select>
+  <div class="row" style="margin-top:12px">
+    <button class="btn" onclick="importAdd(false)">הוסף לספר</button>
+    <button class="btn sec" onclick="importAdd(true)">ערוך לפני שמוסיפים</button>
+    <button class="btn sec" onclick="closeImport()">לא עכשיו</button>
+  </div>
+</div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ---------- data ---------- */
+const KEY='seferHachaim_v1';
+const COLORS=['--c1','--c2','--c3','--c4','--c5','--c6','--c7','--c8'];
+let D=load();
+function load(){
+  try{const d=JSON.parse(localStorage.getItem(KEY));if(d)return d;}catch(e){}
+  return {title:'ספר החיים',owner:'',circles:[
+    {id:id(),name:'משפחה',color:'--c1'},{id:id(),name:'חברי ילדות',color:'--c2'},
+    {id:id(),name:'צבא',color:'--c3'},{id:id(),name:'עבודה',color:'--c4'}],
+    people:[],stories:[],requests:[]};
+}
+function save(){localStorage.setItem(KEY,JSON.stringify(D));}
+function id(){return Math.random().toString(36).slice(2,9);}
+function col(c){return getComputedStyle(document.documentElement).getPropertyValue(c).trim();}
+function toast(t){const e=document.getElementById('toast');e.textContent=t;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),2200);}
+function circleOf(cid){return D.circles.find(c=>c.id===cid);}
+function personOf(pid){return D.people.find(p=>p.id===pid);}
+
+/* ---------- nav ---------- */
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>show(b.dataset.v));
+function show(v){
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
+  document.querySelectorAll('.view').forEach(s=>s.classList.toggle('on',s.id==='v-'+v));
+  if(v==='map')renderMap();if(v==='write')renderForm();if(v==='read')renderBook();if(v==='control')renderControl();
+  window.scrollTo(0,0);
+}
+
+/* ---------- map ---------- */
+function renderMap(){
+  const box=document.getElementById('bubbles');box.innerHTML='';
+  const W=box.clientWidth,H=box.clientHeight,n=D.circles.length;
+  const cx=W/2,cy=H/2,R=Math.min(W,H)/2-70;
+  D.circles.forEach((c,i)=>{
+    const count=D.stories.filter(s=>s.circle===c.id).length;
+    const size=90+Math.min(count,12)*7;
+    const a=(i/n)*Math.PI*2-Math.PI/2;
+    const x=n===1?cx:cx+Math.cos(a)*R, y=n===1?cy:cy+Math.sin(a)*R;
+    const teasers=D.stories.filter(s=>s.circle===c.id).slice(-2).map(s=>'· '+s.title).join('<br>');
+    const b=document.createElement('div');b.className='bubble';
+    b.style.cssText=`width:${size}px;height:${size}px;left:${x-size/2}px;top:${y-size/2}px;background:${col(c.color)}`;
+    b.innerHTML=`<b>${c.name}</b><small>${count} סיפורים</small>${count?`<div class="teaser">${teasers}</div>`:''}`;
+    b.onclick=()=>{document.getElementById('readFilter').value=c.id;show('read');};
+    box.appendChild(b);
+  });
+  if(!D.stories.length){const e=document.createElement('div');e.className='empty';e.style.cssText='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none';e.style.pointerEvents='auto';e.innerHTML='<div><b>הספר עדיין ריק</b>עבור ל"כתיבה" והוסף את הזיכרון הראשון<br><button class="btn sec small" style="margin-top:10px" onclick="show(\'guide\')">איך מתחילים? למדריך</button></div>';box.appendChild(e);}
+}
+function colorOpts(sel){return COLORS.map((c,i)=>`<option value="${c}" ${c===sel?'selected':''}>צבע ${i+1}</option>`).join('');}
+function openCirclesModal(){
+  document.getElementById('cColor').innerHTML=colorOpts(COLORS[D.circles.length%COLORS.length]);document.getElementById('cName').value='';
+  renderCirclesList();document.getElementById('mCircles').classList.add('on');
+}
+function renderCirclesList(){
+  document.getElementById('circlesList').innerHTML=D.circles.map(c=>{const n=D.stories.filter(s=>s.circle===c.id).length;
+    return `<div class="circle-row"><i style="width:16px;height:16px;border-radius:50%;background:${col(c.color)}"></i>
+      <input type="text" value="${c.name.replace(/"/g,'&quot;')}" onchange="renameCircle('${c.id}',this.value)">
+      <select onchange="recolorCircle('${c.id}',this.value)">${colorOpts(c.color)}</select>
+      <span class="cnt">${n} סיפורים</span>
+      <button class="btn small danger" onclick="delCircle('${c.id}')">מחק</button></div>`;}).join('')||'<div class="empty">אין מעגלים. הוסף אחד למטה.</div>';
+}
+function addCircle(){const n=document.getElementById('cName').value.trim();if(!n){toast('כתוב שם למעגל');return;}
+  D.circles.push({id:id(),name:n,color:document.getElementById('cColor').value});save();
+  document.getElementById('cName').value='';document.getElementById('cColor').innerHTML=colorOpts(COLORS[D.circles.length%COLORS.length]);
+  renderCirclesList();renderMap();toast('המעגל נוסף');}
+function renameCircle(cid,v){const c=circleOf(cid);v=v.trim();if(!c||!v){renderCirclesList();return;}c.name=v;save();renderMap();}
+function recolorCircle(cid,v){const c=circleOf(cid);if(!c)return;c.color=v;save();renderCirclesList();renderMap();}
+function delCircle(cid){
+  const c=circleOf(cid);if(!c)return;
+  const n=D.stories.filter(s=>s.circle===cid).length;
+  const others=D.circles.filter(x=>x.id!==cid);
+  let target=null;
+  if(n){
+    if(!others.length){alert('זה המעגל היחיד ויש בו סיפורים. הוסף מעגל אחר קודם.');return;}
+    const list=others.map((x,i)=>`${i+1}. ${x.name}`).join('\n');
+    const ans=prompt(`במעגל "${c.name}" יש ${n} סיפורים.\nלאיזה מעגל להעביר אותם? כתוב מספר:\n${list}`,'1');
+    if(ans===null)return;const idx=parseInt(ans)-1;if(!(others[idx])){toast('מספר לא תקין');return;}target=others[idx].id;
+  }else if(!confirm(`למחוק את המעגל "${c.name}"?`))return;
+  if(target){D.stories.forEach(s=>{if(s.circle===cid)s.circle=target;});D.people.forEach(p=>{if(p.circle===cid)p.circle=target;});}
+  else D.people.forEach(p=>{if(p.circle===cid)p.circle=others[0]?others[0].id:null;});
+  D.circles=others;save();renderCirclesList();renderMap();toast('המעגל נמחק');
+}
+function closeModals(){document.querySelectorAll('.modal').forEach(m=>m.classList.remove('on'));}
+document.querySelectorAll('.modal').forEach(m=>m.onclick=e=>{if(e.target===m)closeModals();});
+function openPeopleModal(){
+  const l=document.getElementById('peopleList');
+  l.innerHTML=D.people.length?D.people.map(p=>{const c=circleOf(p.circle);const n=D.stories.filter(s=>s.people.includes(p.id)).length;
+    return `<div class="person-row"><i style="background:${c?col(c.color):'#999'}"></i><span style="flex:1;cursor:pointer" onclick="showPerson('${p.id}')">${p.name}</span><span class="muted">${n} סיפורים</span><button class="btn small danger" onclick="delPerson('${p.id}')">מחק</button></div>`;}).join(''):'<div class="empty">עדיין אין אנשים. הם נוספים דרך הזיכרונות.</div>';
+  document.getElementById('mPeople').classList.add('on');
+}
+function delPerson(pid){if(!confirm('למחוק את האדם מהספר?'))return;D.people=D.people.filter(p=>p.id!==pid);D.stories.forEach(s=>s.people=s.people.filter(x=>x!==pid));save();openPeopleModal();}
+function showPerson(pid){closeModals();document.getElementById('readFilter').value='p:'+pid;show('read');}
+
+/* ---------- write ---------- */
+let editing=null,formEv=null,media={img:null,audio:null},selPeople=new Set();
+function renderForm(){
+  document.getElementById('fCircle').innerHTML=D.circles.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
+  renderPeopleChips();
+}
+function renderPeopleChips(){
+  document.getElementById('fPeople').innerHTML=D.people.map(p=>`<span class="chip person ${selPeople.has(p.id)?'on':''}" onclick="togglePerson('${p.id}')">${p.name}</span>`).join('')||'<span class="muted">עדיין אין אנשים. הוסף למטה.</span>';
+}
+function togglePerson(pid){selPeople.has(pid)?selPeople.delete(pid):selPeople.add(pid);renderPeopleChips();}
+document.getElementById('fNewPerson').addEventListener('keydown',e=>{
+  if(e.key!=='Enter')return;e.preventDefault();const n=e.target.value.trim();if(!n)return;
+  let p=D.people.find(x=>x.name===n);
+  if(!p){p={id:id(),name:n,circle:document.getElementById('fCircle').value};D.people.push(p);save();}
+  selPeople.add(p.id);e.target.value='';renderPeopleChips();
+});
+document.getElementById('fImg').onchange=e=>{const f=e.target.files[0];if(!f)return;
+  const img=new Image();const r=new FileReader();r.onload=()=>{img.onload=()=>{const c=document.createElement('canvas');const sc=Math.min(1,1000/img.width);c.width=img.width*sc;c.height=img.height*sc;c.getContext('2d').drawImage(img,0,0,c.width,c.height);media.img=c.toDataURL('image/jpeg',.8);preview();};img.src=r.result;};r.readAsDataURL(f);};
+let rec=null,chunks=[];
+async function toggleRec(){
+  const box=document.getElementById('recBox'),btn=document.getElementById('recBtn');
+  if(rec&&rec.state==='recording'){rec.stop();return;}
+  try{const st=await navigator.mediaDevices.getUserMedia({audio:true});
+    rec=new MediaRecorder(st);chunks=[];
+    rec.ondataavailable=e=>chunks.push(e.data);
+    rec.onstop=()=>{st.getTracks().forEach(t=>t.stop());const b=new Blob(chunks,{type:rec.mimeType});const r=new FileReader();r.onload=()=>{media.audio=r.result;preview();};r.readAsDataURL(b);box.classList.remove('live');btn.textContent='🎙 התחל הקלטה';document.getElementById('recStatus').textContent='יש הקלטה';};
+    rec.start();box.classList.add('live');btn.textContent='⏹ עצור';document.getElementById('recStatus').textContent='מקליט...';
+  }catch(e){toast('אין גישה למיקרופון');}
+}
+function preview(){const p=document.getElementById('fPreview');p.innerHTML=(media.img?`<img src="${media.img}" style="max-width:200px;border-radius:8px">`:'')+(media.audio?`<audio controls src="${media.audio}"></audio>`:'');}
+function saveStory(){
+  const title=document.getElementById('fTitle').value.trim(),text=document.getElementById('fText').value.trim();
+  if(!title&&!text&&!media.audio){toast('כתוב לפחות כותרת או כמה מילים');return;}
+  const s={id:editing||id(),title:title||'(ללא כותרת)',when:document.getElementById('fWhen').value.trim(),circle:document.getElementById('fCircle').value,text,people:[...selPeople],from:document.getElementById('fFrom').value.trim(),ev:formEv||(editing&&(D.stories.find(x=>x.id===editing)||{}).ev)||null,img:media.img,audio:media.audio,added:editing?(D.stories.find(x=>x.id===editing)||{}).added||Date.now():Date.now()};
+  if(!s.ev)s.ev=s.id;
+  if(editing)D.stories=D.stories.map(x=>x.id===editing?s:x);else D.stories.push(s);
+  save();resetForm();toast('נשמר בספר');show('map');
+}
+function resetForm(){editing=null;formEv=null;media={img:null,audio:null};selPeople=new Set();['fTitle','fWhen','fText','fFrom','fNewPerson'].forEach(i=>document.getElementById(i).value='');document.getElementById('fImg').value='';document.getElementById('fPreview').innerHTML='';document.getElementById('recStatus').textContent='';document.getElementById('writeTitle').textContent='זיכרון חדש';renderPeopleChips();}
+function editStory(sid){const s=D.stories.find(x=>x.id===sid);if(!s)return;closeModals();show('write');editing=sid;
+  document.getElementById('fTitle').value=s.title;document.getElementById('fWhen').value=s.when;document.getElementById('fCircle').value=s.circle;document.getElementById('fText').value=s.text;document.getElementById('fFrom').value=s.from||'';
+  media={img:s.img,audio:s.audio};selPeople=new Set(s.people);renderPeopleChips();preview();document.getElementById('writeTitle').textContent='עריכת זיכרון';}
+function delStory(sid){if(!confirm('למחוק את הזיכרון?'))return;D.stories=D.stories.filter(x=>x.id!==sid);save();closeModals();renderBook();toast('נמחק');}
+
+/* ---------- read ---------- */
+function storyHtml(s,full){
+  const c=circleOf(s.circle);
+  const ppl=s.people.map(personOf).filter(Boolean).map(p=>{const pc=circleOf(p.circle);return `<span class="pg"><i style="background:${pc?col(pc.color):'#999'}"></i>${p.name}</span>`;}).join('');
+  return `<div class="story" style="border-color:${c?col(c.color):'#999'}">
+    <h3>${s.title}</h3>
+    <div class="meta">${s.when?s.when+' · ':''}${c?c.name:''}</div>
+    ${ppl?`<div class="people-graph">${ppl}</div>`:''}
+    <p>${full?s.text:(s.text.length>220?s.text.slice(0,220)+'…':s.text)}</p>
+    ${s.img?`<img src="${s.img}">`:''}${s.audio?`<audio controls src="${s.audio}"></audio>`:''}
+    <div class="from">${s.from?'מהזווית של '+s.from:(EXPORTING&&D.owner?'מהזווית של '+D.owner:'הזווית שלי'+(D.owner?' ('+D.owner+')':''))}</div>
+    <div class="noprint" style="margin-top:8px">${full?`<button class="btn small" onclick="shareStory('${s.id}')">🤝 שתף עם מי שהיה שם</button> <button class="btn small sec" onclick="writeAngle('${s.id}')">✍️ הוסף זווית</button> <button class="btn small sec" onclick="editStory('${s.id}')">ערוך</button> <button class="btn small danger" onclick="delStory('${s.id}')">מחק</button>`:`<button class="btn small sec" onclick="openStory('${s.id}')">פתח</button>`}</div>
+  </div>`;
+}
+function renderBook(){
+  const f=document.getElementById('readFilter');const cur=f.value;
+  f.innerHTML='<option value="all">כל הספר</option>'+D.circles.map(c=>`<option value="${c.id}">${c.name}</option>`).join('')+D.people.map(p=>`<option value="p:${p.id}">👤 ${p.name}</option>`).join('');
+  f.value=[...f.options].some(o=>o.value===cur)?cur:'all';
+  let list=[...D.stories];
+  if(f.value.startsWith('p:')){const pid=f.value.slice(2);list=list.filter(s=>s.people.includes(pid));}
+  else if(f.value!=='all')list=list.filter(s=>s.circle===f.value);
+  const sort=document.getElementById('readSort').value;
+  list.sort((a,b)=>sort==='when'?(parseInt(a.when)||9999)-(parseInt(b.when)||9999):a.added-b.added);
+  const b=document.getElementById('book');
+  if(!list.length){b.innerHTML='<div class="card empty"><b>אין כאן סיפורים עדיין</b></div>';return;}
+  const groups={};list.forEach(s=>{(groups[s.circle]=groups[s.circle]||[]).push(s);});
+  b.innerHTML=Object.entries(groups).map(([cid,ss])=>{const c=circleOf(cid);
+    const chapterPeople=[...new Set(ss.flatMap(s=>s.people))].map(personOf).filter(Boolean);
+    return `<div class="card"><h2 style="color:${c?col(c.color):'#999'}">${c?c.name:'ללא מעגל'}</h2>
+      <div class="people-graph" style="margin:8px 0 14px">${chapterPeople.map(p=>`<span class="pg"><i style="background:${c?col(c.color):'#999'}"></i>${p.name}</span>`).join('')||'<span class="muted">עדיין אין דמויות בפרק</span>'}</div>
+      ${eventsHtml(ss,false)}</div>`;}).join('');
+}
+function openStory(sid){const s=D.stories.find(x=>x.id===sid);document.getElementById('mStoryBody').innerHTML=storyHtml(s,true)+'<div class="row noprint"><button class="btn sec" onclick="closeModals()">סגור</button></div>';document.getElementById('mStory').classList.add('on');}
+
+/* ---------- control ---------- */
+function composeMsg(){
+  const n=document.getElementById('rName').value.trim()||'',ex=document.getElementById('rExample').value.trim(),owner=D.owner||'אני';
+  document.getElementById('rMsg').value=`היי ${n},
+התחלתי לאסוף סיפורים לספר חיים כזה, שמצטבר לאט לאורך השנים. גיליתי שזה דבר ממש כיפי, ואולי כדאי גם לך.
+יש לי כמה סיפורים שאני זוכר עליך${ex?` (למשל: ${ex})`:''}, ויהיה לי כיף אם תזרוק לי זיכרון או שניים שיש לך ממני. אפילו שלוש מילים, או הקלטה קולית של דקה. לא צריך לכתוב יפה.
+תודה! ${owner}`;
+}
+['rName','rExample'].forEach(i=>document.getElementById(i).oninput=composeMsg);
+function sendWhatsapp(){
+  const n=document.getElementById('rName').value.trim();if(!n){toast('כתוב שם');return;}
+  if(!ensureOwner())return;
+  const ph=normPhone(document.getElementById('rPhone').value);
+  const msg=document.getElementById('rMsg').value+'\n\nאפשר לכתוב או להקליט כאן:\n'+inviteLink(n,document.getElementById('rExample').value.trim(),'');
+  D.requests.push({id:id(),name:n,phone:ph,sent:Date.now(),done:false});save();renderControl();
+  window.open(`https://wa.me/${ph}?text=${encodeURIComponent(msg)}`,'_blank');
+}
+function renderControl(){
+  if(!document.getElementById('rMsg').value)composeMsg();
+  document.getElementById('reqTable').innerHTML=D.requests.length?D.requests.map(r=>`<tr><td>${r.name}</td><td>${new Date(r.sent).toLocaleDateString('he-IL')}</td>
+    <td><span class="status ${r.done?'s-done':'s-wait'}">${r.done?'התקבל':'ממתין'}</span></td>
+    <td><button class="btn small sec" onclick="toggleReq('${r.id}')">${r.done?'סמן ממתין':'התקבל ✓'}</button> <button class="btn small sec" onclick="remind('${r.id}')">תזכורת</button> <button class="btn small danger" onclick="delReq('${r.id}')">✕</button></td></tr>`).join(''):'<tr><td colspan="4" class="muted">עדיין לא נשלחו בקשות</td></tr>';
+  renderSelTree();
+  document.getElementById('backupInfo').textContent=D.lastBackup?`גיבוי אחרון: ${new Date(D.lastBackup).toLocaleDateString('he-IL')}. כדאי לגבות פעם בחודש.`:'הספר שמור במכשיר הזה בלבד ועדיין לא גובה. כדאי לגבות פעם בחודש.';
+  document.getElementById('sTitle').value=D.title;document.getElementById('sOwner').value=D.owner;document.getElementById('sPhone').value=D.phone||'';
+}
+function toggleReq(rid){const r=D.requests.find(x=>x.id===rid);r.done=!r.done;save();renderControl();}
+function delReq(rid){D.requests=D.requests.filter(x=>x.id!==rid);save();renderControl();}
+function remind(rid){const r=D.requests.find(x=>x.id===rid);window.open(`https://wa.me/${r.phone}?text=${encodeURIComponent('היי '+r.name+', רק תזכורת קטנה לגבי הזיכרון לספר, אם יש לך דקה 🙂')}`,'_blank');}
+function eventsHtml(ss,full){
+  const order=[],by={};
+  ss.forEach(s=>{const k=s.ev||s.id;if(!by[k]){by[k]=[];order.push(k);}by[k].push(s);});
+  return order.map(k=>by[k].length===1?storyHtml(by[k][0],full):
+    `<div class="event"><span class="ev-badge">אירוע משותף · ${by[k].length} זוויות</span>${by[k].map(s=>storyHtml(s,full)).join('')}</div>`).join('');
+}
+function renderSelTree(){
+  document.getElementById('selTree').innerHTML=D.circles.map(c=>{const ss=D.stories.filter(s=>s.circle===c.id);
+    return `<div class="sel-circle"><label class="chk"><input type="checkbox" class="selC" data-c="${c.id}" ${ss.length?'checked':'disabled'} onchange="document.querySelectorAll('.selS[data-c=\\'${c.id}\\']').forEach(x=>x.checked=this.checked)"><i style="width:12px;height:12px;border-radius:50%;background:${col(c.color)};display:inline-block"></i>${esc(c.name)} <span class="muted">(${ss.length})</span></label>
+      ${ss.length?`<details><summary class="muted" style="cursor:pointer;font-size:13px;padding-right:24px">בחירת סיפורים</summary><div class="sel-stories">${ss.map(s=>`<label class="chk"><input type="checkbox" class="selS" data-c="${c.id}" value="${s.id}" checked>${esc(s.title)}${s.from?` <span class="muted">(${esc(s.from)})</span>`:''}</label>`).join('')}</div></details>`:''}</div>`;}).join('');
+}
+function selectedStories(){return [...document.querySelectorAll('.selS:checked')].map(x=>x.value);}
+let EXPORTING=false;
+function buildBookHtml(ids,withMedia,autoPrint){EXPORTING=true;try{return buildBookHtml_(ids,withMedia,autoPrint);}finally{EXPORTING=false;}}
+function buildBookHtml_(ids,withMedia,autoPrint){
+  const css=document.querySelector('style').textContent;
+  const sel=D.stories.filter(s=>ids.includes(s.id)).map(s=>withMedia?s:Object.assign({},s,{img:null,audio:null}));
+  const circles=D.circles.filter(c=>sel.some(s=>s.circle===c.id));
+  const toc=circles.map(c=>{const ss=sel.filter(s=>s.circle===c.id);return `<a href="#c-${c.id}" class="toc-b" style="background:${col(c.color)}"><b>${esc(c.name)}</b><small>${ss.length} סיפורים</small><span>${[...new Set(ss.map(s=>s.title))].slice(0,3).map(t=>'· '+esc(t)).join('<br>')}</span></a>`;}).join('');
+  let body='';
+  circles.forEach(c=>{const ss=sel.filter(s=>s.circle===c.id).sort((a,b)=>(parseInt(a.when)||9999)-(parseInt(b.when)||9999));
+    const ppl=[...new Set(ss.flatMap(s=>s.people))].map(personOf).filter(Boolean);
+    body+=`<section class="chapter" id="c-${c.id}"><h2 style="font-size:30px;color:${col(c.color)}">${esc(c.name)}</h2><div class="people-graph" style="margin:8px 0 14px">${ppl.map(p=>`<span class="pg"><i style="background:${col(c.color)}"></i>${esc(p.name)}</span>`).join('')}</div>${eventsHtml(ss,true)}</section>`;});
+  return `<!DOCTYPE html><html lang="he" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${esc(D.title)}${D.owner?' – '+esc(D.owner):''}</title><link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;700&family=Heebo:wght@300;400;600&display=swap" rel="stylesheet"><style>${css}
+body{padding:24px 16px;max-width:820px;margin:0 auto}.noprint{display:none!important}
+.cover{text-align:center;padding:40px 0 20px}.cover h1{font-size:44px;color:var(--accent)}
+.toc{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:20px 0 40px}
+.toc-b{width:150px;height:150px;border-radius:50%;color:#fff;text-decoration:none;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:12px;box-shadow:0 6px 18px rgba(0,0,0,.15)}
+.toc-b b{font-family:'Frank Ruhl Libre',serif;font-size:18px}.toc-b small{font-size:11px;opacity:.9}.toc-b span{font-size:10.5px;margin-top:4px;line-height:1.25}
+.chapter{margin-bottom:40px}${autoPrint?'.chapter{page-break-before:always}':''}
+</style></head><body>
+<div class="cover"><h1>${esc(D.title)}</h1><p class="muted">${D.owner?'של '+esc(D.owner)+' · ':''}${new Date().toLocaleDateString('he-IL')}</p></div>
+<div class="toc">${toc}</div>${body}
+<p class="muted" style="text-align:center;margin-top:40px">נוצר בכלי "ספר החיים"</p>
+${autoPrint?'<script>setTimeout(()=>window.print(),900)<\/script>':''}</body></html>`;
+}
+function printSelected(){
+  const ids=selectedStories();if(!ids.length){toast('לא נבחרו סיפורים');return;}
+  const w=window.open('','_blank');w.document.write(buildBookHtml(ids,document.getElementById('selMedia').checked,true));w.document.close();
+}
+async function shareDigital(){
+  const ids=selectedStories();if(!ids.length){toast('לא נבחרו סיפורים');return;}
+  const html=buildBookHtml(ids,document.getElementById('selMedia').checked,false);
+  const name=`${D.title}${D.owner?' - '+D.owner:''}.html`.replace(/[\\/:*?"<>|]/g,'');
+  const file=new File([html],name,{type:'text/html'});
+  if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title:D.title,text:'הספר שלי 📖 (פותחים את הקובץ בדפדפן)'});return;}catch(e){if(e.name==='AbortError')return;}}
+  const a=document.createElement('a');a.href=URL.createObjectURL(file);a.download=name;document.body.appendChild(a);a.click();a.remove();toast('הקובץ ירד. אפשר לשלוח אותו לכל אחד');
+}
+
+/* ---------- shared stories (book to book) ---------- */
+function shareStory(sid){
+  const s=D.stories.find(x=>x.id===sid);if(!s)return;if(!ensureOwner(false))return;
+  const withN=s.people.map(personOf).filter(Boolean).map(p=>p.name);
+  const author=s.from||D.owner;
+  const link=baseUrl()+'?import='+enc({k:'s',ev:s.ev||s.id,f:author,by:D.owner,ti:s.title,w:s.when,x:s.text,with:withN});
+  const msg=`📖 ${D.owner} הוסיף/ה לספר סיפור שגם את/ה בו:
+*${s.title}*${s.when?` (${s.when})`:''}
+${s.text?'\n'+(s.text.length>700?s.text.slice(0,700)+'…':s.text)+'\n':''}
+להוספה לספר שלך ולכתיבת הזווית שלך, איך זה היה בעיניים שלך:
+${link}`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,'_blank');
+}
+function writeAngle(sid){
+  const s=D.stories.find(x=>x.id===sid);if(!s)return;closeModals();show('write');resetForm();
+  formEv=s.ev||s.id;document.getElementById('fTitle').value=s.title;document.getElementById('fWhen').value=s.when||'';document.getElementById('fCircle').value=s.circle;
+  s.people.forEach(p=>selPeople.add(p));renderPeopleChips();
+  document.getElementById('writeTitle').textContent='הזווית שלי על: '+s.title;
+  document.getElementById('fText').focus();
+}
+
+/* ---------- group invite: start a book ---------- */
+function groupLink(){
+  const g=document.getElementById('gName').value.trim(),m=document.getElementById('gMembers').value.split(/[,،\n]/).map(x=>x.trim()).filter(Boolean);
+  if(!g){toast('כתוב שם לחבורה');return null;}
+  return {g,link:baseUrl()+'?start='+enc({g,m,from:D.owner||'',note:document.getElementById('gNote').value.trim()})};
+}
+function sendGroupInvite(){const r=groupLink();if(!r)return;
+  const msg=`📖 ${r.g}, פתחתי לנו משהו:
+ספר חיים לכל אחד, שבו כל שטות והרפתקה נכתבות מהזוויות של כולנו, ונשמרות בספרים של כל מי שהיה שם.
+נכנסים, בוחרים מי אתם, ומתחילים לכתוב:
+${r.link}`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,'_blank');}
+async function copyGroupInvite(){const r=groupLink();if(!r)return;try{await navigator.clipboard.writeText(r.link);toast('הקישור הועתק');}catch(e){prompt('העתק את הקישור:',r.link);}}
+
+/* ---------- welcome (start link) ---------- */
+let W=null,wPick='';
+function startWelcome(inv){
+  W=inv;document.body.classList.add('guest');
+  document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id==='v-welcome'));
+  document.getElementById('wHello').textContent=inv.g?`${inv.g}, ברוכים הבאים 📖`:'ברוכים הבאים 📖';
+  document.getElementById('wIntro').textContent=`${inv.from?inv.from+' מזמין/ה אתכם':'אתם מוזמנים'} לפתוח ספר חיים. כל אחד מקבל ספר משלו, וכל סיפור משותף נכתב מהזוויות של כל מי שהיה שם. עם השנים הספרים מתמלאים ומתחברים זה לזה.`;
+  if(inv.note){const n=document.getElementById('wNote');n.hidden=false;n.textContent='💬 '+inv.note;}
+  document.getElementById('wWho').innerHTML=(inv.m||[]).map(n=>`<span class="chip" onclick="pickWho(this)">${esc(n)}</span>`).join('');
+}
+function pickWho(el){document.querySelectorAll('#wWho .chip').forEach(c=>c.classList.toggle('on',c===el));wPick=el.textContent;document.getElementById('wName').value='';}
+function startMyBook(){
+  const me=(document.getElementById('wName').value.trim()||wPick).trim();if(!me){toast('בחר/י מי את/ה');return;}
+  if(!D.owner)D.owner=me;
+  if(D.title==='ספר החיים')D.title='החיים שלי';
+  let c=W.g?D.circles.find(x=>x.name===W.g):null;
+  if(W.g&&!c){c={id:id(),name:W.g,color:COLORS[D.circles.length%COLORS.length]};D.circles.unshift(c);}
+  (W.m||[]).filter(n=>n!==me).forEach(n=>{if(!D.people.find(p=>p.name===n))D.people.push({id:id(),name:n,circle:c?c.id:D.circles[0].id});});
+  save();history.replaceState(null,'',baseUrl());document.body.classList.remove('guest');applyTitle();
+  document.getElementById('guideWelcome').hidden=false;show('guide');
+}
+function exportJson(){D.lastBackup=Date.now();save();if(document.getElementById('backupInfo'))renderControl();const a=document.createElement('a');a.href='data:application/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(D));a.download='sefer-hachaim-backup.json';a.click();}
+function importJson(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{D=JSON.parse(r.result);save();toast('הספר שוחזר');show('map');}catch(e){toast('קובץ לא תקין');}};r.readAsText(f);}
+function saveSettings(){D.title=document.getElementById('sTitle').value.trim()||'ספר החיים';D.owner=document.getElementById('sOwner').value.trim();D.phone=document.getElementById('sPhone').value.trim();save();applyTitle();toast('נשמר');}
+function applyTitle(){document.getElementById('bookTitle').childNodes[0].textContent=D.title;document.getElementById('bookOwner').textContent=D.owner?'הסיפורים של '+D.owner+', מצטברים לאורך השנים':'הסיפורים שלי, מצטברים לאורך השנים';}
+
+/* ---------- invite links ---------- */
+function enc(o){return btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}
+function dec(t){t=t.replace(/-/g,'+').replace(/_/g,'/');while(t.length%4)t+='=';return JSON.parse(decodeURIComponent(escape(atob(t))));}
+function baseUrl(){return location.origin+location.pathname;}
+function normPhone(v){let ph=(v||'').replace(/\D/g,'');if(ph.startsWith('0'))ph='972'+ph.slice(1);return ph;}
+function ensureOwner(needPhone=true){
+  if(!D.owner){const o=prompt('איך לחתום את ההזמנה? (השם שלך)','');if(!o)return false;D.owner=o.trim();save();applyTitle();}
+  if(needPhone&&!D.phone){const ph=prompt('לאיזה מספר וואטסאפ יחזרו הזיכרונות? (המספר שלך)','');if(!ph)return false;D.phone=ph.trim();save();}
+  return true;
+}
+function inviteLink(name,example,question){return baseUrl()+'?invite='+enc({o:D.owner,op:normPhone(D.phone),n:name,e:example,q:question,t:D.title});}
+function sendInvite(){
+  const n=document.getElementById('iName').value.trim();if(!n){toast('למי שולחים?');return;}
+  if(!ensureOwner())return;
+  const ph=normPhone(document.getElementById('iPhone').value);
+  const ex=document.getElementById('iExample').value.trim(),q=document.getElementById('iQuestion').value.trim();
+  const msg=`היי ${n},
+התחלתי לאסוף סיפורים לספר החיים שלי, ויהיה לי כיף אם תוסיף/י זיכרון או שניים שיש לך ממני${ex?` (אני למשל זוכר: ${ex})`:''}.
+אפשר לכתוב, להקליט, או פשוט לדבר והטלפון יקליד. אפילו כמה מילים זה מצוין:
+${inviteLink(n,ex,q)}
+תודה! ${D.owner}`;
+  D.requests.push({id:id(),name:n,phone:ph,sent:Date.now(),done:false});save();
+  window.open(`https://wa.me/${ph}?text=${encodeURIComponent(msg)}`,'_blank');
+  toast('ההזמנה נפתחה בוואטסאפ ונרשמה במעקב');
+}
+
+/* ---------- guest mode ---------- */
+let G=null,gHist=[],gFont=18,recog=null,dictOn=false,gRec=null,gChunks=[],gAudio=null,gTimer=null;
+function startGuest(inv){
+  G=inv;document.body.classList.add('guest');
+  document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id==='v-guest'));
+  document.getElementById('bookTitle').childNodes[0].textContent=inv.t||'ספר החיים';
+  document.getElementById('bookOwner').textContent='הספר של '+(inv.o||'');
+  document.getElementById('gHello').textContent=`היי ${inv.n||''} 👋`;
+  document.getElementById('gIntro').textContent=`${inv.o||'חבר'} אוסף/ת סיפורים לספר החיים שלו/ה, ויהיה לו/ה כיף לקבל ממך זיכרון. משהו קטן, מצחיק, מרגש, או סתם רגע שנשאר לך בראש.`;
+  if(inv.e){const e=document.getElementById('gExample');e.hidden=false;e.textContent=`${inv.o} נזכר/ת למשל: «${inv.e}»`;}
+  if(inv.q){const e=document.getElementById('gQuestion');e.hidden=false;e.textContent=`שאלה מיוחדת: ${inv.q}`;}
+  document.getElementById('gSendBtn').textContent='שלח ל'+(inv.o||'בעל הספר');
+  document.getElementById('gOwnLink').href=baseUrl()+'?welcome=1';document.getElementById('gPromoLink').href=baseUrl()+'?welcome=1';
+  const qs=['איך הכרנו','רגע שצחקנו ממנו','משהו שלמדתי ממך','מקום שהיינו בו יחד','מה הרשים אותי בך','סיפור שאף אחד לא יודע'];
+  if(inv.q)qs.unshift(inv.q);
+  document.getElementById('gChips').innerHTML=qs.map(q=>`<span class="chip" onclick="insertPrompt(this.textContent)">${q}</span>`).join('');
+  const ta=document.getElementById('gText');
+  try{const d=localStorage.getItem('guestDraft_'+inv.n);if(d)ta.value=d;}catch(e){}
+  ta.addEventListener('input',()=>{pushHist();try{localStorage.setItem('guestDraft_'+inv.n,ta.value);}catch(e){}});
+  gHist=[ta.value];
+}
+function pushHist(){const v=document.getElementById('gText').value;if(gHist[gHist.length-1]!==v){gHist.push(v);if(gHist.length>200)gHist.shift();}}
+function undoText(){if(gHist.length<2){toast('אין מה לבטל');return;}gHist.pop();const ta=document.getElementById('gText');ta.value=gHist[gHist.length-1];ta.dispatchEvent(new Event('input'));}
+function clearText(){const ta=document.getElementById('gText');if(!ta.value)return;if(!confirm('לנקות את כל הטקסט?'))return;ta.value='';pushHist();ta.dispatchEvent(new Event('input'));}
+function fontSize(d){gFont=Math.max(14,Math.min(30,gFont+d));document.getElementById('gText').style.fontSize=gFont+'px';}
+function insertPrompt(q){const ta=document.getElementById('gText');const pre=ta.value&&!ta.value.endsWith('\n')?'\n\n':'';ta.value+=pre+q+': ';pushHist();ta.focus();ta.setSelectionRange(ta.value.length,ta.value.length);ta.dispatchEvent(new Event('input'));}
+function heVoice(){const vs=speechSynthesis.getVoices();return vs.find(v=>/^he|^iw/i.test(v.lang));}
+function speak(t){
+  if(!('speechSynthesis' in window)){toast('הקראה לא נתמכת בדפדפן הזה');return;}
+  if(speechSynthesis.speaking){speechSynthesis.cancel();return;}
+  if(!t.trim()){toast('אין עדיין מה להקריא');return;}
+  const u=new SpeechSynthesisUtterance(t);u.lang='he-IL';const v=heVoice();if(v)u.voice=v;u.rate=.95;speechSynthesis.speak(u);
+}
+function speakInvite(){speak([document.getElementById('gHello').textContent,document.getElementById('gIntro').textContent,document.getElementById('gExample').hidden?'':document.getElementById('gExample').textContent,document.getElementById('gQuestion').hidden?'':document.getElementById('gQuestion').textContent].join('. '));}
+function speakText(){speak(document.getElementById('gText').value);}
+function toggleDictation(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition,btn=document.getElementById('dictBtn'),st=document.getElementById('dictStatus');
+  if(!SR){st.textContent='ההכתבה לא נתמכת בדפדפן הזה. אפשר ללחוץ על המיקרופון שבמקלדת של הטלפון ולדבר.';return;}
+  if(dictOn){recog.stop();return;}
+  recog=new SR();recog.lang='he-IL';recog.continuous=true;recog.interimResults=true;
+  const ta=document.getElementById('gText');let base=ta.value;
+  recog.onresult=e=>{let fin='',tmp='';for(let i=e.resultIndex;i<e.results.length;i++){const r=e.results[i];if(r.isFinal)fin+=r[0].transcript;else tmp+=r[0].transcript;}
+    if(fin){base=(base&&!/\s$/.test(base)?base+' ':base)+fin.trim();ta.value=base;pushHist();ta.dispatchEvent(new Event('input'));}
+    else ta.value=(base&&!/\s$/.test(base)?base+' ':base)+tmp;};
+  recog.onstart=()=>{dictOn=true;btn.classList.add('live');btn.textContent='⏹ עצור הכתבה';st.textContent='מקשיב... דבר/י בחופשיות';};
+  recog.onend=()=>{dictOn=false;btn.classList.remove('live');btn.textContent='🎤 הכתבה בקול';st.textContent='';ta.value=base;};
+  recog.onerror=e=>{st.textContent=e.error==='not-allowed'?'צריך לאשר גישה למיקרופון':'ההכתבה נעצרה, אפשר ללחוץ שוב';};
+  base=ta.value;recog.start();
+}
+async function guestRec(){
+  const btn=document.getElementById('gRecBtn'),tm=document.getElementById('gRecTime');
+  if(gRec&&gRec.state==='recording'){gRec.stop();return;}
+  try{const st=await navigator.mediaDevices.getUserMedia({audio:true});
+    gRec=new MediaRecorder(st);gChunks=[];gRec.ondataavailable=e=>gChunks.push(e.data);
+    const t0=Date.now();gTimer=setInterval(()=>{const s=Math.floor((Date.now()-t0)/1000);tm.textContent=Math.floor(s/60)+':'+String(s%60).padStart(2,'0');},500);
+    gRec.onstop=()=>{st.getTracks().forEach(t=>t.stop());clearInterval(gTimer);
+      gAudio=new Blob(gChunks,{type:gRec.mimeType||'audio/webm'});
+      document.getElementById('gAudioBox').innerHTML=`<audio controls src="${URL.createObjectURL(gAudio)}" style="width:100%"></audio><button class="btn small danger" style="margin-top:6px" onclick="delGuestAudio()">מחק הקלטה</button>`;
+      btn.classList.remove('live');btn.textContent='⏺ הקלט מחדש';};
+    gRec.start();btn.classList.add('live');btn.textContent='⏹ עצור הקלטה';
+  }catch(e){toast('אין גישה למיקרופון');}
+}
+function delGuestAudio(){gAudio=null;document.getElementById('gAudioBox').innerHTML='';document.getElementById('gRecTime').textContent='';document.getElementById('gRecBtn').textContent='⏺ התחל הקלטה';}
+async function guestSend(){
+  const ti=document.getElementById('gTitle').value.trim(),w=document.getElementById('gWhen').value.trim(),x=document.getElementById('gText').value.trim();
+  if(!x&&!gAudio){toast('כתוב/י משהו או הקלט/י קודם');return;}
+  const link=baseUrl()+'?import='+enc({f:G.n,ti,w,x});
+  const msg=`${G.o} שלום, זיכרון לספר שלך מ${G.n} 💛${ti?`\n*${ti}*`:''}${w?` (${w})`:''}${x?'\n\n'+(x.length>1500?x.slice(0,1500)+'…':x):''}${gAudio?'\n\n🎙 צירפתי הקלטה קולית.':''}\n\nלהוספה לספר:\n${link}`;
+  if(gAudio){
+    const ext=(gAudio.type.includes('mp4')||gAudio.type.includes('aac'))?'m4a':'webm';
+    const file=new File([gAudio],`זיכרון-מ${G.n}.${ext}`,{type:gAudio.type});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){
+      try{await navigator.share({files:[file],text:msg});guestDone(true);return;}catch(e){if(e.name==='AbortError')return;}
+    }
+    const a=document.createElement('a');a.href=URL.createObjectURL(gAudio);a.download=file.name;a.click();
+    toast('ההקלטה נשמרה בטלפון. צרף/י אותה בוואטסאפ');
+  }
+  window.open(`https://wa.me/${G.op}?text=${encodeURIComponent(msg)}`,'_blank');
+  guestDone(false);
+}
+function guestDone(){try{localStorage.removeItem('guestDraft_'+G.n);}catch(e){}
+  document.getElementById('gThanks').hidden=false;document.getElementById('gThanksText').textContent=`הזיכרון בדרך ל${G.o}. רק לוודא שלחצת "שלח" בוואטסאפ.`;
+  document.getElementById('gThanks').scrollIntoView({behavior:'smooth'});}
+function guestAnother(){['gTitle','gWhen','gText'].forEach(i=>document.getElementById(i).value='');delGuestAudio();gHist=[''];document.getElementById('gThanks').hidden=true;window.scrollTo(0,0);}
+
+/* ---------- import a memory sent back by a guest ---------- */
+let IMP=null;
+function openImport(m){
+  IMP=m;const shared=m.k==='s';
+  const dup=shared&&D.stories.some(s=>s.ev===m.ev&&(s.from||D.owner)===m.f);
+  document.querySelector('#mImport h3').textContent=shared?`🤝 ${m.by||m.f} שיתף/ה איתך סיפור משותף`:'📬 התקבל זיכרון חדש';
+  document.getElementById('impBody').innerHTML=`<div class="story"><h3>${esc(m.ti||'(ללא כותרת)')}</h3><div class="meta">${shared?'הזווית של':'מאת'} ${esc(m.f||'')}${m.w?' · '+esc(m.w):''}</div>${(m.with||[]).length?`<div class="people-graph">${m.with.map(n=>`<span class="pg">${esc(n)}</span>`).join('')}</div>`:''}<p>${esc(m.x||'(הזיכרון נשלח כהקלטה קולית בוואטסאפ)')}</p></div>${dup?'<p class="muted">⚠️ הזווית הזאת כבר נמצאת בספר שלך.</p>':''}`;
+  const sameEv=shared&&D.stories.find(s=>s.ev===m.ev);
+  document.getElementById('impCircle').innerHTML=D.circles.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('');
+  if(sameEv)document.getElementById('impCircle').value=sameEv.circle;
+  const btns=document.querySelectorAll('#mImport .row .btn');
+  btns[0].textContent='הוסף לספר';btns[1].textContent=shared?'הוסף וכתוב את הזווית שלי':'ערוך לפני שמוסיפים';
+  document.getElementById('mImport').classList.add('on');
+}
+function closeImport(){document.getElementById('mImport').classList.remove('on');IMP=null;history.replaceState(null,'',baseUrl());}
+function esc(t){return String(t||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function importAdd(second){
+  const m=IMP,cid=document.getElementById('impCircle').value,shared=m.k==='s';
+  const personFor=n=>{if(!n||n===D.owner)return null;let p=D.people.find(x=>x.name===n);if(!p){p={id:id(),name:n,circle:cid};D.people.push(p);}return p;};
+  const fp=personFor(m.f);
+  const ppl=[...new Set([fp,...(m.with||[]).map(personFor)].filter(Boolean).map(p=>p.id))];
+  D.requests.forEach(r=>{if(r.name===m.f)r.done=true;});
+  if(!shared&&second){save();closeImport();show('write');resetForm();
+    document.getElementById('fTitle').value=m.ti||'';document.getElementById('fWhen').value=m.w||'';document.getElementById('fText').value=m.x||'';
+    document.getElementById('fFrom').value=m.f||'';document.getElementById('fCircle').value=cid;ppl.forEach(x=>selPeople.add(x));renderPeopleChips();
+    toast('ערוך ולחץ "שמור לספר"');return;}
+  const dup=shared&&D.stories.some(s=>s.ev===m.ev&&(s.from||D.owner)===m.f);
+  let st=null;
+  if(!dup){st={id:id(),ev:shared?m.ev:null,title:m.ti||'(ללא כותרת)',when:m.w||'',circle:cid,text:m.x||'',people:ppl,from:m.f===D.owner?'':(m.f||''),img:null,audio:null,added:Date.now()};if(!st.ev)st.ev=st.id;D.stories.push(st);}
+  save();closeImport();
+  if(shared&&second){const base=st||D.stories.find(s=>s.ev===m.ev);writeAngle(base.id);toast('כתוב/י איך את/ה זוכר/ת את זה');return;}
+  show('map');toast(dup?'כבר בספר':'נוסף לספר');
+}
+
+/* ---------- boot ---------- */
+const QP=new URLSearchParams(location.search);
+// old stories without an event id
+D.stories.forEach(s=>{if(!s.ev)s.ev=s.id;});
+if(QP.get('invite')){try{startGuest(dec(QP.get('invite')));}catch(e){applyTitle();renderMap();renderForm();toast('הקישור לא תקין');}}
+else if(QP.get('start')){applyTitle();renderForm();try{startWelcome(dec(QP.get('start')));}catch(e){renderMap();toast('הקישור לא תקין');}}
+else{
+applyTitle();renderMap();renderForm();
+if(QP.get('welcome')){history.replaceState(null,'',baseUrl());document.getElementById('guideWelcome').hidden=false;show('guide');}
+else if(QP.get('import')){try{openImport(dec(QP.get('import')));}catch(e){toast('קישור הזיכרון לא תקין');}}
+else if(!D.stories.length&&!D.owner)show('guide');
+}
+window.addEventListener('resize',()=>{if(document.getElementById('v-map').classList.contains('on'))renderMap();});
+</script>
+</body>
+</html>

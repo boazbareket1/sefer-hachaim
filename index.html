@@ -17,7 +17,10 @@ h1,h2,h3{font-family:'Frank Ruhl Libre',serif;margin:0}
 header{background:var(--paper);border-bottom:1px solid var(--line);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:0;z-index:10}
 header h1{font-size:22px;color:var(--accent)}
 header h1 span{font-family:'Heebo';font-weight:300;font-size:13px;color:var(--muted);display:block}
-nav{display:flex;gap:4px;background:var(--soft);padding:4px;border-radius:30px}
+nav{display:flex;gap:4px;background:var(--soft);padding:4px;border-radius:30px;overflow-x:auto;max-width:100%;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+header{flex-wrap:wrap}
+nav button{white-space:nowrap}
 nav button{border:0;background:transparent;padding:8px 14px;border-radius:24px;font-family:inherit;font-size:14px;cursor:pointer;color:var(--muted)}
 nav button.on{background:var(--paper);color:var(--accent);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.08)}
 main{max-width:900px;margin:0 auto;padding:18px 16px 80px}
@@ -91,6 +94,25 @@ td,th{padding:8px 6px;border-bottom:1px solid var(--line);text-align:right}
 .guest-hero p{font-size:17px;line-height:1.7}
 body.guest header nav{display:none}
 .rec-timer{font-variant-numeric:tabular-nums;color:var(--muted);font-size:14px}
+/* shared events, guide, welcome */
+.event{border:2px dashed var(--line);border-radius:14px;padding:12px 12px 2px;margin-bottom:14px;background:#fffaf2}
+.ev-badge{display:inline-block;background:var(--accent2);color:#fff;font-size:12px;padding:3px 10px;border-radius:12px;margin-bottom:10px}
+.guide h2{color:var(--accent);margin-bottom:6px}
+.guide h3{color:var(--accent);font-size:19px;margin:18px 0 6px}
+.guide p,.guide li{line-height:1.75;font-size:15.5px}
+.guide ul{padding-right:20px;margin:6px 0}
+.guide .step{background:var(--soft);border-radius:10px;padding:2px 8px;font-size:13px;font-weight:600;color:var(--accent);white-space:nowrap}
+.vision{background:linear-gradient(135deg,#8c4a2f,#c9823f);color:#fff;border:0}
+.vision h3,.vision p{color:#fff}
+.who-chips .chip{cursor:pointer;background:#fff;color:var(--ink);border:2px solid var(--line);font-size:17px;padding:10px 18px;margin:4px}
+.who-chips .chip.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.promo{background:linear-gradient(135deg,#fff8ee,#f6ead6);border-color:#e6cfa8;text-align:center}
+.sel-circle{border-bottom:1px solid var(--line);padding:6px 0}
+.sel-circle>label{font-weight:600;color:var(--ink);font-size:15px}
+.sel-circle .sel-stories{padding-right:24px}
+.sel-circle .sel-stories label{font-size:14px;color:var(--ink);margin:3px 0}
+.chk{display:flex;align-items:center;gap:8px}
+.chk input{width:auto}
 @media print{
   header,nav,.noprint{display:none!important}
   body{background:#fff}
@@ -107,6 +129,7 @@ body.guest header nav{display:none}
     <button data-v="write">כתיבה</button>
     <button data-v="read">הספר</button>
     <button data-v="control">מרכז שליטה</button>
+    <button data-v="guide">מדריך</button>
   </nav>
 </header>
 
@@ -227,11 +250,81 @@ body.guest header nav{display:none}
   </div>
   <button class="btn big-btn" id="gSendBtn" onclick="guestSend()">שלח</button>
   <p class="muted" style="text-align:center">הזיכרון נשלח בוואטסאפ. אין צורך להירשם לשום דבר.</p>
+  <div class="card promo" style="margin-top:22px">
+    <h3>📖 ומה עם הספר שלך?</h3>
+    <p style="line-height:1.7">גם לך יש סיפורים ששווה לשמור. פתח/י ספר חיים משלך, והזמן/י את החברים לכתוב יחד: כל אירוע שחוויתם נכתב מכמה זוויות, ונשמר בספרים של כל מי שהיה שם.</p>
+    <a class="btn" id="gPromoLink" href="#">פתח/י ספר משלי, בחינם</a>
+  </div>
   <div class="card" id="gThanks" hidden style="text-align:center">
     <h2>תודה! 💛</h2>
     <p id="gThanksText"></p>
     <button class="btn sec" onclick="guestAnother()">רוצה לשלוח עוד זיכרון</button>
     <p class="muted" style="margin-top:14px">רוצה ספר משלך? <a id="gOwnLink" href="#">פתח ספר חיים משלך</a></p>
+  </div>
+</section>
+
+<!-- ===== WELCOME (start a book from a group invite) ===== -->
+<section class="view" id="v-welcome">
+  <div class="card guest-hero">
+    <h2 id="wHello">ברוכים הבאים 📖</h2>
+    <p id="wIntro"></p>
+    <div class="example" id="wNote" hidden></div>
+  </div>
+  <div class="card" id="wWhoCard">
+    <h3>מי את/ה?</h3>
+    <div class="who-chips" id="wWho"></div>
+    <label>או כתוב/י את השם שלך</label>
+    <input id="wName" placeholder="השם שלך">
+    <button class="btn big-btn" style="margin-top:14px" onclick="startMyBook()">פתח את הספר שלי</button>
+    <p class="muted" style="text-align:center">הספר נשמר אצלך במכשיר. אין הרשמה ואין תשלום.</p>
+  </div>
+</section>
+
+<!-- ===== GUIDE ===== -->
+<section class="view guide" id="v-guide">
+  <div class="card" id="guideWelcome" hidden style="background:linear-gradient(135deg,#fff8ee,#f6ead6)">
+    <h2>הספר שלך מוכן 🎉</h2>
+    <p>כמה דקות קריאה כאן, ואז ישר לכתיבת הסיפור הראשון.</p>
+  </div>
+  <div class="card">
+    <h2>ספר החיים: איך זה עובד</h2>
+    <p>זה ספר שנכתב לאט, לאורך החיים, ולא בבת אחת. בכל פעם שעולה זיכרון, שטות מהצופים, הרפתקה מהתיכון, משהו שקרה אתמול, מכניסים אותו לספר. ועם השנים הספר מתמלא.</p>
+    <p>הקסם הוא שלא כותבים לבד. החברים שהיו שם כותבים את הזווית שלהם על אותו אירוע, והסיפור נשמר בספרים של כל מי שהיה חלק ממנו.</p>
+
+    <h3>✍️ איך כותבים</h3>
+    <p>לשונית <span class="step">כתיבה</span>: כותרת, מתי זה היה, לאיזה מעגל זה שייך (משפחה, צבא, החבר'ה...), ומי היה שם.</p>
+    <ul>
+      <li><b>אל תחכו לגרסה המושלמת.</b> שלוש מילים מספיקות כדי לא לשכוח. אפשר להרחיב אחר כך.</li>
+      <li><b>הפרטים הקטנים שווים זהב:</b> משפט שמישהו אמר, ריח, השיר שהתנגן ברקע, מה אכלתם.</li>
+      <li><b>תנו לסיפור שם שאתם קוראים לו בחבורה.</b> "הלילה של הטנדר" עדיף על "טיול בכנרת".</li>
+      <li><b>אין כוח לכתוב?</b> מקליטים בקול, או מצרפים תמונה ומוסיפים שורה.</li>
+      <li><b>גם מה שקורה עכשיו נכנס.</b> קרה משהו מצחיק היום? זה הספר.</li>
+    </ul>
+
+    <h3>🫧 המעגלים</h3>
+    <p>לשונית <span class="step">מפה</span> היא תוכן העניינים: כל בועה היא מעגל בחיים שלך, והיא גדלה ככל שמתווספים סיפורים. ב<span class="step">ניהול מעגלים</span> מוסיפים, משנים שם וצבע, ומוחקים.</p>
+
+    <h3>🤝 סיפור אחד, הרבה זוויות</h3>
+    <p>כתבת סיפור שחברים היו בו? פותחים אותו ולוחצים <span class="step">שתף עם מי שהיה שם</span>. אפשר לשלוח לחבר אחד או ישר לקבוצת הוואטסאפ.</p>
+    <p>מי שמקבל לוחץ על הקישור, הסיפור נכנס לספר שלו, והוא כותב את הזווית שלו ומשתף בחזרה. בספר של כל אחד האירוע מופיע עם כל הגרסאות יחד, וכמעט תמיד כל אחד זוכר את זה קצת אחרת. ככה הספרים שלכם מתחברים אחד לשני.</p>
+
+    <h3>💌 מזמינים מישהו לכתוב עליך</h3>
+    <p>בלשונית <span class="step">הספר</span> יש כרטיס הזמנה: שם, טלפון, וזיכרון קטן שלך עליו כדי שיהיה לו קל להתחיל. הוא מקבל דף פשוט שבו אפשר להקליד, להכתיב בקול או להקליט, ושולח לך את הזיכרון בוואטסאפ. אתה מחליט מה נכנס לספר.</p>
+
+    <h3>📣 מזמינים חברים לפתוח ספר</h3>
+    <p>ב<span class="step">מרכז שליטה</span>, בכרטיס "הזמנה לפתוח ספר", כותבים את שם החבורה ואת השמות. כל אחד מקבל קישור, בוחר מי הוא, והספר שלו נפתח עם מעגל החבורה ועם כל החברים בפנים.</p>
+
+    <h3>🎁 משתפים את הספר</h3>
+    <p>ב<span class="step">מרכז שליטה</span> בוחרים בדיוק מה לכלול: מעגלים שלמים או סיפורים בודדים, עם תמונות והקלטות או בלי. אחר כך יוצרים קובץ דיגיטלי שאפשר לשלוח לכל אחד, או PDF להדפסה. מתאים ליום הולדת, לחתונה, או סתם כדי לשמח מישהו.</p>
+
+    <h3>💾 חשוב: לגבות</h3>
+    <p>בשלב הזה הספר שמור רק במכשיר הזה. פעם בחודש לוחצים <span class="step">גיבוי הספר</span> במרכז השליטה ושומרים את הקובץ במקום בטוח, למשל בדרייב או בצ'אט עם עצמך בוואטסאפ. אם מחליפים טלפון, <span class="step">שחזר מגיבוי</span> מחזיר הכול.</p>
+  </div>
+  <div class="card vision">
+    <h3>🎂 לאן זה הולך: יום הולדת 80</h3>
+    <p>תדמיינו את מסיבת יום ההולדת ה-80. במקום שכל אחד ינסה לשחזר מהזיכרון, לכל אחד מכם יש ספר עבה ומלא: הצופים, התיכון, הטיולים, החתונות, הילדים, השטויות שעשיתם בגיל 50. כל אירוע כתוב מכל הזוויות, והספרים שלכם מקושרים זה לזה.</p>
+    <p>כל סיפור שמישהו מכניס מעשיר את הספרים של כולם. ובכל רגע בדרך, ליום הולדת 30, 50 או 80, אפשר לבחור מה לכלול ולשתף גרסה דיגיטלית של הספר.</p>
+    <button class="btn" style="background:#fff;color:var(--accent);margin-top:6px" onclick="show('write')">לכתוב את הסיפור הראשון</button>
   </div>
 </section>
 
@@ -257,13 +350,36 @@ body.guest header nav{display:none}
     <h2>מעקב בקשות</h2>
     <table><thead><tr><th>חבר</th><th>נשלח</th><th>סטטוס</th><th></th></tr></thead><tbody id="reqTable"></tbody></table>
   </div>
-  <div class="card">
-    <h2>הדפסה וייצוא</h2>
-    <p class="muted">בחר מעגלים להדפסה, למשל לכבוד יום הולדת. הדפסה ל-PDF מהדפדפן.</p>
-    <div id="printCircles"></div>
+  <div class="card invite-card">
+    <h2>📣 הזמנה לפתוח ספר</h2>
+    <p class="muted">לחבורה או לחבר. כל מי שמקבל בוחר מי הוא, והספר שלו נפתח עם מעגל החבורה ועם כל החברים בפנים, מוכן לסיפורים משותפים.</p>
+    <div class="row">
+      <div><label>שם החבורה או המעגל</label><input id="gName" placeholder="החבר'ה מהצופים"></div>
+    </div>
+    <label>השמות (מופרדים בפסיקים)</label>
+    <input id="gMembers" placeholder="דני, רוני, מיכל">
+    <label>מילה אישית (לא חובה)</label>
+    <textarea id="gNote" style="min-height:70px" placeholder="יאללה, תתחילו מהשטויות של כיתה ט'"></textarea>
     <div class="row" style="margin-top:10px">
-      <button class="btn" onclick="printSelected()">הדפס / שמור PDF</button>
-      <button class="btn sec" onclick="exportJson()">גיבוי הספר (קובץ)</button>
+      <button class="btn" onclick="sendGroupInvite()">שלח בוואטסאפ</button>
+      <button class="btn sec" onclick="copyGroupInvite()">העתק קישור</button>
+    </div>
+  </div>
+  <div class="card">
+    <h2>🎁 שיתוף והדפסה</h2>
+    <p class="muted">בחר מה לכלול: מעגלים שלמים או סיפורים בודדים. אחר כך אפשר ליצור קובץ דיגיטלי לשליחה, או PDF להדפסה.</p>
+    <div id="selTree"></div>
+    <label class="chk" style="margin-top:10px"><input type="checkbox" id="selMedia" checked> לכלול תמונות והקלטות</label>
+    <div class="row" style="margin-top:10px">
+      <button class="btn" onclick="shareDigital()">ספר דיגיטלי לשיתוף</button>
+      <button class="btn sec" onclick="printSelected()">הדפס / PDF</button>
+    </div>
+  </div>
+  <div class="card">
+    <h2>💾 גיבוי</h2>
+    <p class="muted" id="backupInfo">הספר שמור במכשיר הזה בלבד. כדאי לגבות פעם בחודש.</p>
+    <div class="row">
+      <button class="btn" onclick="exportJson()">גיבוי הספר (קובץ)</button>
       <label class="btn sec" style="text-align:center">שחזר מגיבוי<input type="file" accept=".json" style="display:none" onchange="importJson(this)"></label>
     </div>
   </div>
@@ -357,7 +473,7 @@ function renderMap(){
     b.onclick=()=>{document.getElementById('readFilter').value=c.id;show('read');};
     box.appendChild(b);
   });
-  if(!D.stories.length){const e=document.createElement('div');e.className='empty';e.style.cssText='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none';e.innerHTML='<div><b>הספר עדיין ריק</b>עבור ל"כתיבה" והוסף את הזיכרון הראשון</div>';box.appendChild(e);}
+  if(!D.stories.length){const e=document.createElement('div');e.className='empty';e.style.cssText='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none';e.style.pointerEvents='auto';e.innerHTML='<div><b>הספר עדיין ריק</b>עבור ל"כתיבה" והוסף את הזיכרון הראשון<br><button class="btn sec small" style="margin-top:10px" onclick="show(\'guide\')">איך מתחילים? למדריך</button></div>';box.appendChild(e);}
 }
 function colorOpts(sel){return COLORS.map((c,i)=>`<option value="${c}" ${c===sel?'selected':''}>צבע ${i+1}</option>`).join('');}
 function openCirclesModal(){
@@ -405,7 +521,7 @@ function delPerson(pid){if(!confirm('למחוק את האדם מהספר?'))retu
 function showPerson(pid){closeModals();document.getElementById('readFilter').value='p:'+pid;show('read');}
 
 /* ---------- write ---------- */
-let editing=null,media={img:null,audio:null},selPeople=new Set();
+let editing=null,formEv=null,media={img:null,audio:null},selPeople=new Set();
 function renderForm(){
   document.getElementById('fCircle').innerHTML=D.circles.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
   renderPeopleChips();
@@ -437,11 +553,12 @@ function preview(){const p=document.getElementById('fPreview');p.innerHTML=(medi
 function saveStory(){
   const title=document.getElementById('fTitle').value.trim(),text=document.getElementById('fText').value.trim();
   if(!title&&!text&&!media.audio){toast('כתוב לפחות כותרת או כמה מילים');return;}
-  const s={id:editing||id(),title:title||'(ללא כותרת)',when:document.getElementById('fWhen').value.trim(),circle:document.getElementById('fCircle').value,text,people:[...selPeople],from:document.getElementById('fFrom').value.trim(),img:media.img,audio:media.audio,added:editing?(D.stories.find(x=>x.id===editing)||{}).added||Date.now():Date.now()};
+  const s={id:editing||id(),title:title||'(ללא כותרת)',when:document.getElementById('fWhen').value.trim(),circle:document.getElementById('fCircle').value,text,people:[...selPeople],from:document.getElementById('fFrom').value.trim(),ev:formEv||(editing&&(D.stories.find(x=>x.id===editing)||{}).ev)||null,img:media.img,audio:media.audio,added:editing?(D.stories.find(x=>x.id===editing)||{}).added||Date.now():Date.now()};
+  if(!s.ev)s.ev=s.id;
   if(editing)D.stories=D.stories.map(x=>x.id===editing?s:x);else D.stories.push(s);
   save();resetForm();toast('נשמר בספר');show('map');
 }
-function resetForm(){editing=null;media={img:null,audio:null};selPeople=new Set();['fTitle','fWhen','fText','fFrom','fNewPerson'].forEach(i=>document.getElementById(i).value='');document.getElementById('fImg').value='';document.getElementById('fPreview').innerHTML='';document.getElementById('recStatus').textContent='';document.getElementById('writeTitle').textContent='זיכרון חדש';renderPeopleChips();}
+function resetForm(){editing=null;formEv=null;media={img:null,audio:null};selPeople=new Set();['fTitle','fWhen','fText','fFrom','fNewPerson'].forEach(i=>document.getElementById(i).value='');document.getElementById('fImg').value='';document.getElementById('fPreview').innerHTML='';document.getElementById('recStatus').textContent='';document.getElementById('writeTitle').textContent='זיכרון חדש';renderPeopleChips();}
 function editStory(sid){const s=D.stories.find(x=>x.id===sid);if(!s)return;closeModals();show('write');editing=sid;
   document.getElementById('fTitle').value=s.title;document.getElementById('fWhen').value=s.when;document.getElementById('fCircle').value=s.circle;document.getElementById('fText').value=s.text;document.getElementById('fFrom').value=s.from||'';
   media={img:s.img,audio:s.audio};selPeople=new Set(s.people);renderPeopleChips();preview();document.getElementById('writeTitle').textContent='עריכת זיכרון';}
@@ -457,8 +574,8 @@ function storyHtml(s,full){
     ${ppl?`<div class="people-graph">${ppl}</div>`:''}
     <p>${full?s.text:(s.text.length>220?s.text.slice(0,220)+'…':s.text)}</p>
     ${s.img?`<img src="${s.img}">`:''}${s.audio?`<audio controls src="${s.audio}"></audio>`:''}
-    ${s.from?`<div class="from">מהזווית של ${s.from}</div>`:''}
-    <div class="noprint" style="margin-top:8px">${full?`<button class="btn small sec" onclick="editStory('${s.id}')">ערוך</button> <button class="btn small danger" onclick="delStory('${s.id}')">מחק</button>`:`<button class="btn small sec" onclick="openStory('${s.id}')">פתח</button>`}</div>
+    <div class="from">${s.from?'מהזווית של '+s.from:(EXPORTING&&D.owner?'מהזווית של '+D.owner:'הזווית שלי'+(D.owner?' ('+D.owner+')':''))}</div>
+    <div class="noprint" style="margin-top:8px">${full?`<button class="btn small" onclick="shareStory('${s.id}')">🤝 שתף עם מי שהיה שם</button> <button class="btn small sec" onclick="writeAngle('${s.id}')">✍️ הוסף זווית</button> <button class="btn small sec" onclick="editStory('${s.id}')">ערוך</button> <button class="btn small danger" onclick="delStory('${s.id}')">מחק</button>`:`<button class="btn small sec" onclick="openStory('${s.id}')">פתח</button>`}</div>
   </div>`;
 }
 function renderBook(){
@@ -477,7 +594,7 @@ function renderBook(){
     const chapterPeople=[...new Set(ss.flatMap(s=>s.people))].map(personOf).filter(Boolean);
     return `<div class="card"><h2 style="color:${c?col(c.color):'#999'}">${c?c.name:'ללא מעגל'}</h2>
       <div class="people-graph" style="margin:8px 0 14px">${chapterPeople.map(p=>`<span class="pg"><i style="background:${c?col(c.color):'#999'}"></i>${p.name}</span>`).join('')||'<span class="muted">עדיין אין דמויות בפרק</span>'}</div>
-      ${ss.map(s=>storyHtml(s,false)).join('')}</div>`;}).join('');
+      ${eventsHtml(ss,false)}</div>`;}).join('');
 }
 function openStory(sid){const s=D.stories.find(x=>x.id===sid);document.getElementById('mStoryBody').innerHTML=storyHtml(s,true)+'<div class="row noprint"><button class="btn sec" onclick="closeModals()">סגור</button></div>';document.getElementById('mStory').classList.add('on');}
 
@@ -503,25 +620,119 @@ function renderControl(){
   document.getElementById('reqTable').innerHTML=D.requests.length?D.requests.map(r=>`<tr><td>${r.name}</td><td>${new Date(r.sent).toLocaleDateString('he-IL')}</td>
     <td><span class="status ${r.done?'s-done':'s-wait'}">${r.done?'התקבל':'ממתין'}</span></td>
     <td><button class="btn small sec" onclick="toggleReq('${r.id}')">${r.done?'סמן ממתין':'התקבל ✓'}</button> <button class="btn small sec" onclick="remind('${r.id}')">תזכורת</button> <button class="btn small danger" onclick="delReq('${r.id}')">✕</button></td></tr>`).join(''):'<tr><td colspan="4" class="muted">עדיין לא נשלחו בקשות</td></tr>';
-  document.getElementById('printCircles').innerHTML=D.circles.map(c=>`<label style="display:inline-flex;align-items:center;gap:6px;margin:4px 10px 4px 0;font-size:15px;color:var(--ink)"><input type="checkbox" class="pc" value="${c.id}" checked style="width:auto">${c.name}</label>`).join('');
+  renderSelTree();
+  document.getElementById('backupInfo').textContent=D.lastBackup?`גיבוי אחרון: ${new Date(D.lastBackup).toLocaleDateString('he-IL')}. כדאי לגבות פעם בחודש.`:'הספר שמור במכשיר הזה בלבד ועדיין לא גובה. כדאי לגבות פעם בחודש.';
   document.getElementById('sTitle').value=D.title;document.getElementById('sOwner').value=D.owner;document.getElementById('sPhone').value=D.phone||'';
 }
 function toggleReq(rid){const r=D.requests.find(x=>x.id===rid);r.done=!r.done;save();renderControl();}
 function delReq(rid){D.requests=D.requests.filter(x=>x.id!==rid);save();renderControl();}
 function remind(rid){const r=D.requests.find(x=>x.id===rid);window.open(`https://wa.me/${r.phone}?text=${encodeURIComponent('היי '+r.name+', רק תזכורת קטנה לגבי הזיכרון לספר, אם יש לך דקה 🙂')}`,'_blank');}
-function printSelected(){
-  const ids=[...document.querySelectorAll('.pc:checked')].map(c=>c.value);
-  const w=window.open('','_blank');
-  const css=document.querySelector('style').textContent;
-  let html=`<!DOCTYPE html><html lang="he" dir="rtl"><head><meta charset="UTF-8"><title>${D.title}</title><link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;700&family=Heebo:wght@300;400;600&display=swap" rel="stylesheet"><style>${css} body{padding:30px;background:#fff} .noprint{display:none}</style></head><body>
-  <h1 style="font-size:40px;color:var(--accent)">${D.title}</h1><p class="muted">${D.owner?'של '+D.owner:''} · הופק ב-${new Date().toLocaleDateString('he-IL')}</p>`;
-  D.circles.filter(c=>ids.includes(c.id)).forEach(c=>{const ss=D.stories.filter(s=>s.circle===c.id).sort((a,b)=>(parseInt(a.when)||9999)-(parseInt(b.when)||9999));if(!ss.length)return;
-    const ppl=[...new Set(ss.flatMap(s=>s.people))].map(personOf).filter(Boolean).map(p=>p.name).join(' · ');
-    html+=`<div style="page-break-before:always"><h2 style="font-size:30px;color:${col(c.color)}">${c.name}</h2><p class="muted">דמויות בפרק: ${ppl||'—'}</p>${ss.map(s=>storyHtml(s,true)).join('')}</div>`;});
-  html+='<script>setTimeout(()=>window.print(),800)<\/script></body></html>';
-  w.document.write(html);w.document.close();
+function eventsHtml(ss,full){
+  const order=[],by={};
+  ss.forEach(s=>{const k=s.ev||s.id;if(!by[k]){by[k]=[];order.push(k);}by[k].push(s);});
+  return order.map(k=>by[k].length===1?storyHtml(by[k][0],full):
+    `<div class="event"><span class="ev-badge">אירוע משותף · ${by[k].length} זוויות</span>${by[k].map(s=>storyHtml(s,full)).join('')}</div>`).join('');
 }
-function exportJson(){const a=document.createElement('a');a.href='data:application/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(D));a.download='sefer-hachaim-backup.json';a.click();}
+function renderSelTree(){
+  document.getElementById('selTree').innerHTML=D.circles.map(c=>{const ss=D.stories.filter(s=>s.circle===c.id);
+    return `<div class="sel-circle"><label class="chk"><input type="checkbox" class="selC" data-c="${c.id}" ${ss.length?'checked':'disabled'} onchange="document.querySelectorAll('.selS[data-c=\\'${c.id}\\']').forEach(x=>x.checked=this.checked)"><i style="width:12px;height:12px;border-radius:50%;background:${col(c.color)};display:inline-block"></i>${esc(c.name)} <span class="muted">(${ss.length})</span></label>
+      ${ss.length?`<details><summary class="muted" style="cursor:pointer;font-size:13px;padding-right:24px">בחירת סיפורים</summary><div class="sel-stories">${ss.map(s=>`<label class="chk"><input type="checkbox" class="selS" data-c="${c.id}" value="${s.id}" checked>${esc(s.title)}${s.from?` <span class="muted">(${esc(s.from)})</span>`:''}</label>`).join('')}</div></details>`:''}</div>`;}).join('');
+}
+function selectedStories(){return [...document.querySelectorAll('.selS:checked')].map(x=>x.value);}
+let EXPORTING=false;
+function buildBookHtml(ids,withMedia,autoPrint){EXPORTING=true;try{return buildBookHtml_(ids,withMedia,autoPrint);}finally{EXPORTING=false;}}
+function buildBookHtml_(ids,withMedia,autoPrint){
+  const css=document.querySelector('style').textContent;
+  const sel=D.stories.filter(s=>ids.includes(s.id)).map(s=>withMedia?s:Object.assign({},s,{img:null,audio:null}));
+  const circles=D.circles.filter(c=>sel.some(s=>s.circle===c.id));
+  const toc=circles.map(c=>{const ss=sel.filter(s=>s.circle===c.id);return `<a href="#c-${c.id}" class="toc-b" style="background:${col(c.color)}"><b>${esc(c.name)}</b><small>${ss.length} סיפורים</small><span>${[...new Set(ss.map(s=>s.title))].slice(0,3).map(t=>'· '+esc(t)).join('<br>')}</span></a>`;}).join('');
+  let body='';
+  circles.forEach(c=>{const ss=sel.filter(s=>s.circle===c.id).sort((a,b)=>(parseInt(a.when)||9999)-(parseInt(b.when)||9999));
+    const ppl=[...new Set(ss.flatMap(s=>s.people))].map(personOf).filter(Boolean);
+    body+=`<section class="chapter" id="c-${c.id}"><h2 style="font-size:30px;color:${col(c.color)}">${esc(c.name)}</h2><div class="people-graph" style="margin:8px 0 14px">${ppl.map(p=>`<span class="pg"><i style="background:${col(c.color)}"></i>${esc(p.name)}</span>`).join('')}</div>${eventsHtml(ss,true)}</section>`;});
+  return `<!DOCTYPE html><html lang="he" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${esc(D.title)}${D.owner?' – '+esc(D.owner):''}</title><link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;700&family=Heebo:wght@300;400;600&display=swap" rel="stylesheet"><style>${css}
+body{padding:24px 16px;max-width:820px;margin:0 auto}.noprint{display:none!important}
+.cover{text-align:center;padding:40px 0 20px}.cover h1{font-size:44px;color:var(--accent)}
+.toc{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:20px 0 40px}
+.toc-b{width:150px;height:150px;border-radius:50%;color:#fff;text-decoration:none;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:12px;box-shadow:0 6px 18px rgba(0,0,0,.15)}
+.toc-b b{font-family:'Frank Ruhl Libre',serif;font-size:18px}.toc-b small{font-size:11px;opacity:.9}.toc-b span{font-size:10.5px;margin-top:4px;line-height:1.25}
+.chapter{margin-bottom:40px}${autoPrint?'.chapter{page-break-before:always}':''}
+</style></head><body>
+<div class="cover"><h1>${esc(D.title)}</h1><p class="muted">${D.owner?'של '+esc(D.owner)+' · ':''}${new Date().toLocaleDateString('he-IL')}</p></div>
+<div class="toc">${toc}</div>${body}
+<p class="muted" style="text-align:center;margin-top:40px">נוצר בכלי "ספר החיים"</p>
+${autoPrint?'<script>setTimeout(()=>window.print(),900)<\/script>':''}</body></html>`;
+}
+function printSelected(){
+  const ids=selectedStories();if(!ids.length){toast('לא נבחרו סיפורים');return;}
+  const w=window.open('','_blank');w.document.write(buildBookHtml(ids,document.getElementById('selMedia').checked,true));w.document.close();
+}
+async function shareDigital(){
+  const ids=selectedStories();if(!ids.length){toast('לא נבחרו סיפורים');return;}
+  const html=buildBookHtml(ids,document.getElementById('selMedia').checked,false);
+  const name=`${D.title}${D.owner?' - '+D.owner:''}.html`.replace(/[\\/:*?"<>|]/g,'');
+  const file=new File([html],name,{type:'text/html'});
+  if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title:D.title,text:'הספר שלי 📖 (פותחים את הקובץ בדפדפן)'});return;}catch(e){if(e.name==='AbortError')return;}}
+  const a=document.createElement('a');a.href=URL.createObjectURL(file);a.download=name;document.body.appendChild(a);a.click();a.remove();toast('הקובץ ירד. אפשר לשלוח אותו לכל אחד');
+}
+
+/* ---------- shared stories (book to book) ---------- */
+function shareStory(sid){
+  const s=D.stories.find(x=>x.id===sid);if(!s)return;if(!ensureOwner(false))return;
+  const withN=s.people.map(personOf).filter(Boolean).map(p=>p.name);
+  const author=s.from||D.owner;
+  const link=baseUrl()+'?import='+enc({k:'s',ev:s.ev||s.id,f:author,by:D.owner,ti:s.title,w:s.when,x:s.text,with:withN});
+  const msg=`📖 ${D.owner} הוסיף/ה לספר סיפור שגם את/ה בו:
+*${s.title}*${s.when?` (${s.when})`:''}
+${s.text?'\n'+(s.text.length>700?s.text.slice(0,700)+'…':s.text)+'\n':''}
+להוספה לספר שלך ולכתיבת הזווית שלך, איך זה היה בעיניים שלך:
+${link}`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,'_blank');
+}
+function writeAngle(sid){
+  const s=D.stories.find(x=>x.id===sid);if(!s)return;closeModals();show('write');resetForm();
+  formEv=s.ev||s.id;document.getElementById('fTitle').value=s.title;document.getElementById('fWhen').value=s.when||'';document.getElementById('fCircle').value=s.circle;
+  s.people.forEach(p=>selPeople.add(p));renderPeopleChips();
+  document.getElementById('writeTitle').textContent='הזווית שלי על: '+s.title;
+  document.getElementById('fText').focus();
+}
+
+/* ---------- group invite: start a book ---------- */
+function groupLink(){
+  const g=document.getElementById('gName').value.trim(),m=document.getElementById('gMembers').value.split(/[,،\n]/).map(x=>x.trim()).filter(Boolean);
+  if(!g){toast('כתוב שם לחבורה');return null;}
+  return {g,link:baseUrl()+'?start='+enc({g,m,from:D.owner||'',note:document.getElementById('gNote').value.trim()})};
+}
+function sendGroupInvite(){const r=groupLink();if(!r)return;
+  const msg=`📖 ${r.g}, פתחתי לנו משהו:
+ספר חיים לכל אחד, שבו כל שטות והרפתקה נכתבות מהזוויות של כולנו, ונשמרות בספרים של כל מי שהיה שם.
+נכנסים, בוחרים מי אתם, ומתחילים לכתוב:
+${r.link}`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,'_blank');}
+async function copyGroupInvite(){const r=groupLink();if(!r)return;try{await navigator.clipboard.writeText(r.link);toast('הקישור הועתק');}catch(e){prompt('העתק את הקישור:',r.link);}}
+
+/* ---------- welcome (start link) ---------- */
+let W=null,wPick='';
+function startWelcome(inv){
+  W=inv;document.body.classList.add('guest');
+  document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id==='v-welcome'));
+  document.getElementById('wHello').textContent=inv.g?`${inv.g}, ברוכים הבאים 📖`:'ברוכים הבאים 📖';
+  document.getElementById('wIntro').textContent=`${inv.from?inv.from+' מזמין/ה אתכם':'אתם מוזמנים'} לפתוח ספר חיים. כל אחד מקבל ספר משלו, וכל סיפור משותף נכתב מהזוויות של כל מי שהיה שם. עם השנים הספרים מתמלאים ומתחברים זה לזה.`;
+  if(inv.note){const n=document.getElementById('wNote');n.hidden=false;n.textContent='💬 '+inv.note;}
+  document.getElementById('wWho').innerHTML=(inv.m||[]).map(n=>`<span class="chip" onclick="pickWho(this)">${esc(n)}</span>`).join('');
+}
+function pickWho(el){document.querySelectorAll('#wWho .chip').forEach(c=>c.classList.toggle('on',c===el));wPick=el.textContent;document.getElementById('wName').value='';}
+function startMyBook(){
+  const me=(document.getElementById('wName').value.trim()||wPick).trim();if(!me){toast('בחר/י מי את/ה');return;}
+  if(!D.owner)D.owner=me;
+  if(D.title==='ספר החיים')D.title='החיים שלי';
+  let c=W.g?D.circles.find(x=>x.name===W.g):null;
+  if(W.g&&!c){c={id:id(),name:W.g,color:COLORS[D.circles.length%COLORS.length]};D.circles.unshift(c);}
+  (W.m||[]).filter(n=>n!==me).forEach(n=>{if(!D.people.find(p=>p.name===n))D.people.push({id:id(),name:n,circle:c?c.id:D.circles[0].id});});
+  save();history.replaceState(null,'',baseUrl());document.body.classList.remove('guest');applyTitle();
+  document.getElementById('guideWelcome').hidden=false;show('guide');
+}
+function exportJson(){D.lastBackup=Date.now();save();if(document.getElementById('backupInfo'))renderControl();const a=document.createElement('a');a.href='data:application/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(D));a.download='sefer-hachaim-backup.json';a.click();}
 function importJson(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{D=JSON.parse(r.result);save();toast('הספר שוחזר');show('map');}catch(e){toast('קובץ לא תקין');}};r.readAsText(f);}
 function saveSettings(){D.title=document.getElementById('sTitle').value.trim()||'ספר החיים';D.owner=document.getElementById('sOwner').value.trim();D.phone=document.getElementById('sPhone').value.trim();save();applyTitle();toast('נשמר');}
 function applyTitle(){document.getElementById('bookTitle').childNodes[0].textContent=D.title;document.getElementById('bookOwner').textContent=D.owner?'הסיפורים של '+D.owner+', מצטברים לאורך השנים':'הסיפורים שלי, מצטברים לאורך השנים';}
@@ -531,9 +742,9 @@ function enc(o){return btoa(unescape(encodeURIComponent(JSON.stringify(o)))).rep
 function dec(t){t=t.replace(/-/g,'+').replace(/_/g,'/');while(t.length%4)t+='=';return JSON.parse(decodeURIComponent(escape(atob(t))));}
 function baseUrl(){return location.origin+location.pathname;}
 function normPhone(v){let ph=(v||'').replace(/\D/g,'');if(ph.startsWith('0'))ph='972'+ph.slice(1);return ph;}
-function ensureOwner(){
+function ensureOwner(needPhone=true){
   if(!D.owner){const o=prompt('איך לחתום את ההזמנה? (השם שלך)','');if(!o)return false;D.owner=o.trim();save();applyTitle();}
-  if(!D.phone){const ph=prompt('לאיזה מספר וואטסאפ יחזרו הזיכרונות? (המספר שלך)','');if(!ph)return false;D.phone=ph.trim();save();}
+  if(needPhone&&!D.phone){const ph=prompt('לאיזה מספר וואטסאפ יחזרו הזיכרונות? (המספר שלך)','');if(!ph)return false;D.phone=ph.trim();save();}
   return true;
 }
 function inviteLink(name,example,question){return baseUrl()+'?invite='+enc({o:D.owner,op:normPhone(D.phone),n:name,e:example,q:question,t:D.title});}
@@ -564,7 +775,7 @@ function startGuest(inv){
   if(inv.e){const e=document.getElementById('gExample');e.hidden=false;e.textContent=`${inv.o} נזכר/ת למשל: «${inv.e}»`;}
   if(inv.q){const e=document.getElementById('gQuestion');e.hidden=false;e.textContent=`שאלה מיוחדת: ${inv.q}`;}
   document.getElementById('gSendBtn').textContent='שלח ל'+(inv.o||'בעל הספר');
-  document.getElementById('gOwnLink').href=baseUrl();
+  document.getElementById('gOwnLink').href=baseUrl()+'?welcome=1';document.getElementById('gPromoLink').href=baseUrl()+'?welcome=1';
   const qs=['איך הכרנו','רגע שצחקנו ממנו','משהו שלמדתי ממך','מקום שהיינו בו יחד','מה הרשים אותי בך','סיפור שאף אחד לא יודע'];
   if(inv.q)qs.unshift(inv.q);
   document.getElementById('gChips').innerHTML=qs.map(q=>`<span class="chip" onclick="insertPrompt(this.textContent)">${q}</span>`).join('');
@@ -640,31 +851,48 @@ function guestAnother(){['gTitle','gWhen','gText'].forEach(i=>document.getElemen
 /* ---------- import a memory sent back by a guest ---------- */
 let IMP=null;
 function openImport(m){
-  IMP=m;
-  document.getElementById('impBody').innerHTML=`<div class="story"><h3>${esc(m.ti||'(ללא כותרת)')}</h3><div class="meta">מאת ${esc(m.f||'')}${m.w?' · '+esc(m.w):''}</div><p>${esc(m.x||'(הזיכרון נשלח כהקלטה קולית בוואטסאפ)')}</p></div>`;
+  IMP=m;const shared=m.k==='s';
+  const dup=shared&&D.stories.some(s=>s.ev===m.ev&&(s.from||D.owner)===m.f);
+  document.querySelector('#mImport h3').textContent=shared?`🤝 ${m.by||m.f} שיתף/ה איתך סיפור משותף`:'📬 התקבל זיכרון חדש';
+  document.getElementById('impBody').innerHTML=`<div class="story"><h3>${esc(m.ti||'(ללא כותרת)')}</h3><div class="meta">${shared?'הזווית של':'מאת'} ${esc(m.f||'')}${m.w?' · '+esc(m.w):''}</div>${(m.with||[]).length?`<div class="people-graph">${m.with.map(n=>`<span class="pg">${esc(n)}</span>`).join('')}</div>`:''}<p>${esc(m.x||'(הזיכרון נשלח כהקלטה קולית בוואטסאפ)')}</p></div>${dup?'<p class="muted">⚠️ הזווית הזאת כבר נמצאת בספר שלך.</p>':''}`;
+  const sameEv=shared&&D.stories.find(s=>s.ev===m.ev);
   document.getElementById('impCircle').innerHTML=D.circles.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('');
+  if(sameEv)document.getElementById('impCircle').value=sameEv.circle;
+  const btns=document.querySelectorAll('#mImport .row .btn');
+  btns[0].textContent='הוסף לספר';btns[1].textContent=shared?'הוסף וכתוב את הזווית שלי':'ערוך לפני שמוסיפים';
   document.getElementById('mImport').classList.add('on');
 }
 function closeImport(){document.getElementById('mImport').classList.remove('on');IMP=null;history.replaceState(null,'',baseUrl());}
 function esc(t){return String(t||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
-function importAdd(edit){
-  const m=IMP,cid=document.getElementById('impCircle').value;
-  let p=D.people.find(x=>x.name===m.f);if(!p&&m.f){p={id:id(),name:m.f,circle:cid};D.people.push(p);}
+function importAdd(second){
+  const m=IMP,cid=document.getElementById('impCircle').value,shared=m.k==='s';
+  const personFor=n=>{if(!n||n===D.owner)return null;let p=D.people.find(x=>x.name===n);if(!p){p={id:id(),name:n,circle:cid};D.people.push(p);}return p;};
+  const fp=personFor(m.f);
+  const ppl=[...new Set([fp,...(m.with||[]).map(personFor)].filter(Boolean).map(p=>p.id))];
   D.requests.forEach(r=>{if(r.name===m.f)r.done=true;});
-  if(edit){save();closeImport();show('write');resetForm();
+  if(!shared&&second){save();closeImport();show('write');resetForm();
     document.getElementById('fTitle').value=m.ti||'';document.getElementById('fWhen').value=m.w||'';document.getElementById('fText').value=m.x||'';
-    document.getElementById('fFrom').value=m.f||'';document.getElementById('fCircle').value=cid;if(p)selPeople.add(p.id);renderPeopleChips();
+    document.getElementById('fFrom').value=m.f||'';document.getElementById('fCircle').value=cid;ppl.forEach(x=>selPeople.add(x));renderPeopleChips();
     toast('ערוך ולחץ "שמור לספר"');return;}
-  D.stories.push({id:id(),title:m.ti||'(ללא כותרת)',when:m.w||'',circle:cid,text:m.x||'',people:p?[p.id]:[],from:m.f||'',img:null,audio:null,added:Date.now()});
-  save();closeImport();show('map');toast('הזיכרון נוסף לספר');
+  const dup=shared&&D.stories.some(s=>s.ev===m.ev&&(s.from||D.owner)===m.f);
+  let st=null;
+  if(!dup){st={id:id(),ev:shared?m.ev:null,title:m.ti||'(ללא כותרת)',when:m.w||'',circle:cid,text:m.x||'',people:ppl,from:m.f===D.owner?'':(m.f||''),img:null,audio:null,added:Date.now()};if(!st.ev)st.ev=st.id;D.stories.push(st);}
+  save();closeImport();
+  if(shared&&second){const base=st||D.stories.find(s=>s.ev===m.ev);writeAngle(base.id);toast('כתוב/י איך את/ה זוכר/ת את זה');return;}
+  show('map');toast(dup?'כבר בספר':'נוסף לספר');
 }
 
 /* ---------- boot ---------- */
 const QP=new URLSearchParams(location.search);
+// old stories without an event id
+D.stories.forEach(s=>{if(!s.ev)s.ev=s.id;});
 if(QP.get('invite')){try{startGuest(dec(QP.get('invite')));}catch(e){applyTitle();renderMap();renderForm();toast('הקישור לא תקין');}}
+else if(QP.get('start')){applyTitle();renderForm();try{startWelcome(dec(QP.get('start')));}catch(e){renderMap();toast('הקישור לא תקין');}}
 else{
 applyTitle();renderMap();renderForm();
-if(QP.get('import')){try{openImport(dec(QP.get('import')));}catch(e){toast('קישור הזיכרון לא תקין');}}
+if(QP.get('welcome')){history.replaceState(null,'',baseUrl());document.getElementById('guideWelcome').hidden=false;show('guide');}
+else if(QP.get('import')){try{openImport(dec(QP.get('import')));}catch(e){toast('קישור הזיכרון לא תקין');}}
+else if(!D.stories.length&&!D.owner)show('guide');
 }
 window.addEventListener('resize',()=>{if(document.getElementById('v-map').classList.contains('on'))renderMap();});
 </script>
