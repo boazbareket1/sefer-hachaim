@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#22322e">
+<title>ספר החיים</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=David+Libre:wght@400;500;700&family=Miriam+Libre:wght@400;600;700&family=Playpen+Sans+Hebrew:wght@400;600&family=Suez+One&display=swap" rel="stylesheet">
+<style>
+/* World: a cloth-bound memory notebook. Linen cover, paper pages, fountain-pen ink,
+   and a red binding thread. Signature move: the thread. It stitches the spine and
+   sews together the people and stories that belong to one another. */
+:root{
+  --cloth:#22322e; --cloth-ink:#cfd6cf; --foil:#d8c38a;
+  --paper:#f8f4eb; --paper-2:#f1ebdd; --rule:#dcd2bf;
+  --ink:#1d2740; --ink-2:#4a5068; --pencil:#5f5b52;
+  --pen:#2c4a9a; --pen-wash:#e4e9f5;
+  --thread:#a8323e; --margin:#e0a3a8; --marker:#f4dc9b;
+  --c1:#8c2f45; --c2:#2f6f6c; --c3:#8a5f0f; --c4:#4b3f8c;
+  --c5:#4f6b2f; --c6:#7a3f6e; --c7:#2c5a8f; --c8:#6b4a2b;
+  --display:'Suez One',serif; --read:'David Libre',serif;
+  --ui:'Miriam Libre',sans-serif; --hand:'Playpen Sans Hebrew',cursive;
+}
+*{box-sizing:border-box}
+html{background:var(--cloth);scrollbar-color:#b9ae98 transparent}
+body{margin:0;min-height:100vh;color:var(--ink);font:16px/1.55 var(--ui);
+  background:var(--cloth) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='6'%3E%3Cpath d='M0 .5h6M0 3.5h6' stroke='%23fff' stroke-opacity='.035'/%3E%3Cpath d='M.5 0v6M3.5 0v6' stroke='%23000' stroke-opacity='.13'/%3E%3C/svg%3E");
+  -webkit-font-smoothing:antialiased;caret-color:var(--pen);accent-color:var(--pen)}
+::selection{background:#c9d3ee;color:var(--ink)}
+::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-thumb{background:#c8bea9;border-radius:10px;border:3px solid transparent;background-clip:padding-box}
+:focus-visible{outline:2px solid var(--pen);outline-offset:2px;border-radius:3px}
+a{color:var(--pen);text-underline-offset:3px}
+h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;line-height:1.25;text-wrap:balance}
+p{margin:0 0 10px}
+[hidden]{display:none!important}
+.ic{width:18px;height:18px;flex:none;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+
+/* ---------- cover + tabs ---------- */
+.cover{max-width:900px;margin:0 auto;padding:22px 20px 0}
+.cover h1{font-size:30px;color:var(--foil);text-shadow:0 1px 0 rgba(0,0,0,.45);letter-spacing:.01em}
+.cover .sub{font:14px var(--hand);color:var(--cloth-ink);margin-top:2px}
+nav{display:flex;gap:2px;margin-top:18px;overflow-x:auto;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav button{display:flex;align-items:center;gap:7px;white-space:nowrap;border:0;background:transparent;color:var(--cloth-ink);
+  font:600 15px var(--ui);padding:11px 15px 12px;border-radius:9px 9px 0 0;cursor:pointer;transition:color .15s,background .15s}
+nav button:hover:not(.on){color:#fff;background:rgba(255,255,255,.05)}
+nav button.on{background:var(--paper);color:var(--ink)}
+body.guest nav{display:none}
+body.guest .cover{padding-bottom:16px}
+
+/* ---------- the page ---------- */
+main.page{position:relative;max-width:900px;margin:0 auto;min-height:calc(100vh - 110px);
+  background:var(--paper) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .3 0 0 0 0 .2 0 0 0 .045 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  padding:30px 52px 96px 26px;box-shadow:0 14px 34px rgba(0,0,0,.38)}
+body.guest main.page{border-radius:4px 4px 0 0}
+main.page::before{content:'';position:absolute;top:14px;bottom:14px;right:20px;width:2px;
+  background:repeating-linear-gradient(to bottom,var(--thread) 0 10px,transparent 10px 19px);opacity:.85}
+main.page::after{content:'';position:absolute;top:0;bottom:0;right:0;width:34px;pointer-events:none;
+  background:linear-gradient(to left,rgba(60,40,10,.10),rgba(60,40,10,0))}
+.view{display:none}.view.on{display:block}
+.turn .view.on{animation:turn .32s cubic-bezier(.2,.7,.2,1)}
+@keyframes turn{from{opacity:.4;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+h2{font-size:27px;margin-bottom:6px}
+h3{font-size:20px}
+.lead{font:18px/1.7 var(--read);color:var(--ink-2);max-width:62ch}
+.note{font:14.5px/1.6 var(--ui);color:var(--pencil)}
+.rule{border:0;height:9px;margin:38px 0 30px;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='9'%3E%3Cpath d='M11 .5l4 4-4 4-4-4z' fill='%23f8f4eb' stroke='%23a8323e'/%3E%3C/svg%3E") center/22px 9px no-repeat,
+  linear-gradient(var(--rule),var(--rule)) center/100% 1px no-repeat}
+.stack-sm>*+*{margin-top:6px}
+
+/* ---------- controls ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:600 15px var(--ui);cursor:pointer;
+  border:1.5px solid var(--ink);background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:7px;
+  transition:background .15s,color .15s,transform .1s;text-decoration:none;line-height:1.2}
+.btn:hover{background:#2c3858}
+.btn:active{transform:translateY(1px)}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.ghost:hover{background:rgba(29,39,64,.06)}
+.btn.small{padding:6px 11px;font-size:14px;gap:6px}
+.btn.small .ic{width:16px;height:16px}
+.btn.link{border:0;background:none;color:var(--pen);padding:4px 2px;text-decoration:underline;text-underline-offset:4px}
+.btn.link:hover{background:none;color:var(--ink)}
+.btn.danger{border-color:transparent;background:transparent;color:var(--thread)}
+.btn.danger:hover{background:rgba(168,50,62,.07)}
+.btn.live{background:var(--thread);border-color:var(--thread);color:#fff}
+.btn.wide{width:100%;padding:15px;font-size:17px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;align-items:center}
+
+label,.lbl{display:block;font:600 13.5px var(--ui);color:var(--ink-2);margin:18px 0 2px}
+input,select,textarea{width:100%;font:16px var(--ui);color:var(--ink);background:transparent;border:0;
+  border-bottom:1.5px solid var(--rule);padding:8px 2px;border-radius:0;transition:border-color .15s}
+input::placeholder,textarea::placeholder{color:#9a9384}
+input:focus,select:focus,textarea:focus{outline:none;border-bottom-color:var(--pen)}
+select{appearance:none;padding-left:22px;cursor:pointer;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%231d2740' stroke-width='1.6'/%3E%3C/svg%3E") left 4px center no-repeat}
+input[type=checkbox]{width:17px;height:17px;margin:0}
+input[type=file]{border:0;font-size:14px;padding:6px 0}
+textarea{resize:vertical;min-height:90px;line-height:1.6}
+textarea.lined{font:18px/34px var(--read);min-height:34px;padding:0 46px 0 6px;border:0;
+  background-image:linear-gradient(to left,transparent 32px,var(--margin) 32px,var(--margin) 33px,transparent 33px),
+    repeating-linear-gradient(to bottom,transparent 0 33px,var(--rule) 33px 34px);
+  background-attachment:local}
+textarea.lined:focus{background-image:linear-gradient(to left,transparent 32px,var(--thread) 32px,var(--thread) 33px,transparent 33px),
+    repeating-linear-gradient(to bottom,transparent 0 33px,var(--rule) 33px 34px)}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0 18px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 18px}
+.chk{display:flex;align-items:center;gap:9px;font:15px var(--ui);color:var(--ink);margin:6px 0;cursor:pointer}
+
+.seg{display:inline-flex;border:1.5px solid var(--ink);border-radius:7px;overflow:hidden;margin:20px 0 4px}
+.seg button{border:0;background:transparent;color:var(--ink);font:600 14px var(--ui);padding:8px 14px;cursor:pointer}
+.seg button+button{border-right:1.5px solid var(--ink)}
+.seg button.on{background:var(--ink);color:var(--paper)}
+
+.tag{display:inline-flex;align-items:center;gap:7px;font:600 14.5px var(--ui);padding:3px 11px;margin:3px 0 3px 6px;
+  border:1px solid var(--rule);border-radius:4px;background:#fffdf7;color:var(--ink);cursor:pointer;transition:background .15s}
+.tag i{width:8px;height:8px;border-radius:50%;background:var(--cc,var(--pencil));flex:none}
+.tag:hover{background:#fff}
+.tag.on{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.tag.big{font-size:17px;padding:9px 18px}
+.tags{display:flex;flex-wrap:wrap;align-items:center}
+
+details{margin-top:14px}
+details>summary{cursor:pointer;font:600 15px var(--ui);color:var(--ink);list-style:none;display:flex;align-items:center;gap:8px;padding:6px 0}
+details>summary::-webkit-details-marker{display:none}
+details>summary .chev{transition:transform .2s}
+details[open]>summary .chev{transform:rotate(90deg)}
+
+/* ---------- constellation ---------- */
+.map-wrap{position:relative;margin:8px -8px 0}
+#constellation{width:100%;height:auto;display:block;overflow:visible}
+.cl-disk{fill:color-mix(in srgb,var(--cc) 10%,transparent);stroke:var(--cc);stroke-width:1.2;stroke-dasharray:3 4;cursor:pointer;transition:fill .2s}
+.cl:hover .cl-disk,.cl:focus-visible .cl-disk{fill:color-mix(in srgb,var(--cc) 18%,transparent)}
+.cl-name{font:19px var(--display);fill:var(--cc);text-anchor:middle;pointer-events:none}
+.cl-count{font:12.5px var(--hand);fill:var(--pencil);text-anchor:middle;pointer-events:none}
+.thread{fill:none;stroke:var(--ink);stroke-opacity:.3;stroke-linecap:round}
+.thread.bridge{stroke:var(--thread);stroke-opacity:.9}
+.sewing .thread{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);animation:sew 1.2s cubic-bezier(.3,.7,.2,1) forwards;animation-delay:var(--d,0s)}
+@keyframes sew{to{stroke-dashoffset:0}}
+.pn{cursor:pointer}
+.pn circle{fill:var(--paper);stroke:var(--cc);stroke-width:2.2}
+.pn:hover circle{fill:var(--cc)}
+.pn text{font:600 13px var(--ui);fill:var(--ink);text-anchor:middle;paint-order:stroke;stroke:var(--paper);stroke-width:4px;stroke-linejoin:round}
+.me circle{fill:var(--paper);stroke:var(--thread);stroke-width:2;stroke-dasharray:4 3}
+.me text{font:16px var(--display);fill:var(--ink);text-anchor:middle}
+.map-legend{display:flex;flex-wrap:wrap;gap:6px 22px;font:13.5px var(--ui);color:var(--pencil);margin-top:30px}
+.map-legend span{display:inline-flex;align-items:center;gap:8px}
+.map-legend b{display:inline-block;width:26px;height:0;border-top:2px solid rgba(29,39,64,.35)}
+.map-legend b.r{border-top-color:var(--thread)}
+.bridges{list-style:none;padding:0;margin:8px 0 0}
+.bridges li{font:17px/1.6 var(--read);padding:8px 0;border-bottom:1px dotted var(--rule)}
+.bridges button{font:inherit;font-weight:700;color:var(--ink);background:none;border:0;padding:0;cursor:pointer;text-decoration:underline;text-decoration-color:var(--thread);text-underline-offset:4px}
+.map-empty{font:17px/1.7 var(--read);color:var(--ink-2);text-align:center;margin:10px auto 0;max-width:40ch}
+
+/* ---------- book ---------- */
+.filters{display:grid;grid-template-columns:2fr 1fr;gap:0 18px;margin-bottom:6px}
+.chapter{margin-top:42px}
+.chapter h2{color:var(--cc);font-size:30px}
+.chapter-intro{font:16.5px/1.7 var(--read);color:var(--ink-2);margin:4px 0 6px;max-width:62ch}
+.entry{padding:22px 0 20px;border-bottom:1px solid var(--rule)}
+.entry:last-child{border-bottom:0}
+.entry-t{font:22px/1.3 var(--display);color:var(--ink);background:none;border:0;padding:0;cursor:pointer;text-align:right}
+.entry-t:hover{color:var(--pen)}
+.meta{font:14px var(--hand);color:var(--pencil);margin:3px 0 8px}
+.pull{font:20px/1.5 var(--display);color:var(--ink);margin:10px 0 12px;padding:0;position:relative;max-width:46ch}
+.pull::before{content:'״';color:var(--thread);margin-left:4px}
+.excerpt{font:17.5px/1.8 var(--read);color:var(--ink);margin:0 0 8px;max-width:64ch;white-space:pre-wrap}
+.angles-line{display:inline-flex;align-items:center;gap:8px;font:14.5px var(--hand);color:var(--thread);background:none;border:0;padding:2px 0;cursor:pointer}
+.angles-line .ic{width:20px;height:20px}
+.invite-box{margin:0 0 18px}
+.invite-box summary{font:600 15px var(--ui);color:var(--pen)}
+.invite-box[open]{background:var(--paper-2);padding:4px 18px 16px;border-radius:4px}
+
+/* ---------- event page ---------- */
+.back{margin-bottom:10px}
+.ev-head h1{font-size:36px;color:var(--ink);margin:2px 0}
+.ev-sub{font:15px var(--hand);color:var(--pencil)}
+.missing{margin-top:22px;padding:14px 18px;background:var(--paper-2);border-radius:4px}
+.missing h3{font-size:18px;margin-bottom:6px}
+.missing .who-row{display:flex;flex-wrap:wrap;gap:8px}
+.angles{margin-top:18px}
+.angles.stack{position:relative;padding-right:30px}
+.angles.stack::before{content:'';position:absolute;right:8px;top:34px;bottom:40px;border-right:2px dashed var(--thread);opacity:.75}
+.angle{padding:24px 0;position:relative}
+.angles.stack .angle+.angle{border-top:1px solid var(--rule)}
+.angles.stack .angle::before{content:'';position:absolute;right:-29px;top:31px;width:12px;height:12px;border-radius:50%;background:var(--paper);border:2px solid var(--thread)}
+.angles.side{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(250px,1fr);gap:0;overflow-x:auto;padding-bottom:8px}
+.angles.side .angle{padding:6px 18px 10px}
+.angles.side .angle+.angle{border-right:1px solid var(--rule)}
+.who{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font:600 17px var(--hand);color:var(--pen)}
+.who .act{margin-right:auto;display:flex;gap:2px}
+.angle .text{font:18px/1.85 var(--read);margin-top:8px;max-width:64ch}
+.angle .text p{margin:0 0 .75em;white-space:pre-wrap}
+.angle img{display:block;max-width:100%;margin:14px 0 4px;border-radius:2px;box-shadow:0 3px 10px rgba(40,30,10,.22)}
+.angle audio{width:100%;margin-top:12px}
+.margin-notes{display:flex;flex-direction:column;gap:6px;margin-top:12px}
+.margin-notes div{display:flex;gap:8px;align-items:flex-start;font:15px/1.55 var(--hand);color:var(--ink-2)}
+.margin-notes .ic{margin-top:3px;color:var(--thread)}
+mark.uniq{background:linear-gradient(transparent 55%,var(--marker) 55%);color:inherit;padding:0 1px}
+
+/* ---------- writing ---------- */
+.arc{list-style:none;padding:0;margin:10px 0 0;counter-reset:a}
+.arc li{position:relative;padding-right:30px;counter-increment:a}
+.arc li::before{content:counter(a);position:absolute;right:0;top:20px;width:20px;height:20px;border-radius:50%;
+  border:1.5px solid var(--thread);color:var(--thread);font:600 12px/17px var(--ui);text-align:center}
+.arc textarea{min-height:56px;font:17px/1.6 var(--read)}
+.tools{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 10px}
+.rec-line{display:flex;align-items:center;gap:12px;margin-top:8px}
+.rec-time{font:15px var(--hand);color:var(--pencil);font-variant-numeric:tabular-nums}
+.preview img{max-width:180px;margin-top:10px;box-shadow:0 3px 10px rgba(40,30,10,.22)}
+.preview audio{width:100%;margin-top:10px}
+
+/* ---------- guest / welcome ---------- */
+.hero h1{font-size:34px;color:var(--ink)}
+.hero p{font:19px/1.7 var(--read);color:var(--ink-2);max-width:56ch}
+.example{font:17px/1.6 var(--hand);color:var(--pen);margin:12px 0}
+.qchips .tag{font-size:14.5px}
+.promo{text-align:center}
+.promo p{font:17px/1.7 var(--read);color:var(--ink-2);max-width:48ch;margin:8px auto 16px}
+.thanks{text-align:center;padding:18px 0}
+.thanks h2{color:var(--thread)}
+
+/* ---------- guide ---------- */
+.guide h3{font-size:22px;margin:34px 0 8px}
+.guide p,.guide li{font:17.5px/1.8 var(--read);max-width:64ch}
+.guide ul{padding-right:22px;margin:6px 0}
+.guide li{margin-bottom:4px}
+.kbd{font:600 14px var(--ui);background:var(--paper-2);border:1px solid var(--rule);padding:1px 8px;border-radius:4px;white-space:nowrap}
+.letter{margin-top:40px;padding:26px 24px;background:var(--paper-2);border-radius:4px;position:relative}
+.letter h3{margin-top:0;color:var(--thread)}
+
+/* ---------- control ---------- */
+table{width:100%;border-collapse:collapse;font-size:15px}
+td,th{padding:10px 6px;border-bottom:1px solid var(--rule);text-align:right;vertical-align:middle}
+th{font:600 13px var(--ui);color:var(--ink-2)}
+td .btn{margin:2px 0}
+.st{font:14px var(--hand)}
+.st.wait{color:var(--pencil)}.st.done{color:var(--c5)}
+.sel-circle{padding:8px 0;border-bottom:1px dotted var(--rule)}
+.sel-circle .sel-stories{padding-right:28px}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--cc)}
+
+/* ---------- slips (dialogs) + note ---------- */
+.modal{position:fixed;inset:0;background:rgba(18,26,24,.58);display:none;align-items:center;justify-content:center;z-index:30;padding:16px}
+.modal.on{display:flex}
+.slip{background:var(--paper);width:100%;max-width:540px;max-height:88vh;overflow:auto;padding:26px 24px;border-radius:3px;box-shadow:0 20px 44px rgba(0,0,0,.4)}
+.slip h3{font-size:22px;margin-bottom:8px}
+.row-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--rule);flex-wrap:wrap}
+.row-item input[type=text]{flex:1;min-width:120px}
+.row-item select{width:auto;min-width:96px}
+.row-item .cnt{font:13.5px var(--hand);color:var(--pencil);white-space:nowrap}
+.toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,12px);background:var(--ink);color:var(--paper);
+  font:600 15px var(--ui);padding:10px 18px;border-radius:4px;box-shadow:0 8px 20px rgba(0,0,0,.3);opacity:0;
+  transition:opacity .25s,transform .25s cubic-bezier(.2,.7,.2,1);pointer-events:none;z-index:40;max-width:90vw;text-align:center}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+/* bigger on computers, so no one needs Ctrl+ */
+@media (min-width:900px){body{zoom:1.14}}
+@media (min-width:1300px){body{zoom:1.26}}
+.cover-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.help-btn{flex:none;display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(216,195,138,.45);color:var(--foil);background:transparent;
+  border-radius:20px;padding:6px 12px;font:600 14px var(--ui);cursor:pointer;margin-top:4px}
+.help-btn:hover{background:rgba(216,195,138,.1)}
+body.guest .help-btn{display:none}
+.ob h1{font-size:34px;margin-bottom:6px}
+.ob .lead{margin-bottom:6px}
+.ob .tags .tag{font-size:16px;padding:8px 16px}
+.ob-add{display:flex;gap:10px;align-items:flex-end;margin-top:10px}
+.ob-add input{flex:1}
+.quiet-tools{display:flex;gap:4px;justify-content:flex-start;margin:14px 0 2px}
+.quiet-tools .btn{padding:5px 10px}
+.missing-line{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin-top:20px;font:15px var(--hand);color:var(--pencil)}
+.page-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
+@media (max-width:640px){
+  .hide-sm{display:none}.help-btn{padding:7px}
+  .cover{padding:18px 16px 0}
+  .cover h1{font-size:25px}
+  nav button{padding:10px 11px 11px;font-size:14px;gap:6px}
+  main.page{padding:24px 40px 88px 16px}
+  main.page::before{right:15px}
+  .grid3{grid-template-columns:1fr 1fr}
+  .grid3>:last-child{grid-column:1/-1}
+  .grid2{grid-template-columns:1fr}
+  .filters{grid-template-columns:1fr 1fr}
+  h2{font-size:24px}
+  .ev-head h1{font-size:29px}
+  .chapter h2{font-size:26px}
+  .angles.stack{padding-right:24px}
+  .angles.stack::before{right:5px}
+  .angles.stack .angle::before{right:-24px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .sewing .thread{stroke-dashoffset:0}
+}
+@media print{
+  .cover,nav,.noprint{display:none!important}
+  html,body{background:#fff}
+  main.page{box-shadow:none;padding:0}
+  main.page::before,main.page::after{display:none}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-map" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.2"/><circle cx="5" cy="6" r="1.8"/><circle cx="19" cy="6.5" r="1.8"/><circle cx="6.5" cy="18.5" r="1.8"/><circle cx="18" cy="18" r="1.8"/><path d="M6.4 7.2l4 3.3M17.6 7.7l-3.8 3M7.9 17.3l2.6-3.6M16.6 16.8l-2.8-3"/></symbol>
+  <symbol id="i-pen" viewBox="0 0 24 24"><path d="M4 20l1-4.2L15.6 5.2a2.1 2.1 0 013 3L8 18.8 4 20z"/><path d="M13.8 7l3 3"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 6.5C10 5 7 4.5 4 5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V5c-3-.5-6 0-8 1.5z"/><path d="M12 6.5v13"/></symbol>
+  <symbol id="i-desk" viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></symbol>
+  <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M9.6 9.5a2.5 2.5 0 014.7 1c0 1.8-2.3 2.2-2.3 3.6"/><circle cx="12" cy="17" r=".6" fill="currentColor"/></symbol>
+  <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3.5" width="6" height="11" rx="3"/><path d="M6 11.5a6 6 0 0012 0M12 17.5V21"/></symbol>
+  <symbol id="i-stop" viewBox="0 0 24 24"><rect x="6.5" y="6.5" width="11" height="11" rx="1.5"/></symbol>
+  <symbol id="i-rec" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5" fill="currentColor"/></symbol>
+  <symbol id="i-speak" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z"/><path d="M15.5 9a4 4 0 010 6M18 6.5a7.5 7.5 0 010 11"/></symbol>
+  <symbol id="i-undo" viewBox="0 0 24 24"><path d="M15 7H8.5a4.5 4.5 0 000 9H17"/><path d="M15 4l3 3-3 3" transform="matrix(-1 0 0 1 30 0)"/></symbol>
+  <symbol id="i-thread" viewBox="0 0 24 24"><path d="M3 16c3-6 6 2 9-4s6 2 9-4" stroke-dasharray="2.6 2.2"/><circle cx="3" cy="16" r="1.4" fill="currentColor"/><circle cx="21" cy="8" r="1.4" fill="currentColor"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24"><circle cx="17" cy="5.5" r="2.3"/><circle cx="6.5" cy="12" r="2.3"/><circle cx="17" cy="18.5" r="2.3"/><path d="M8.6 10.8l6.3-4M8.6 13.2l6.3 4"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M5 7h14M10 7V5h4v2M7 7l1 12h8l1-12"/></symbol>
+  <symbol id="i-edit" viewBox="0 0 24 24"><path d="M5 19h4L19 9l-4-4L5 15z"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="M14 6l-6 6 6 6"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M20 4L3.5 11l6 2.5L12 20z"/><path d="M20 4l-10.5 9.5"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="11" height="12" rx="1.5"/><path d="M5 15.5V5.5A1.5 1.5 0 016.5 4H15"/></symbol>
+  <symbol id="i-print" viewBox="0 0 24 24"><path d="M7 9V4h10v5M7 17H5a1 1 0 01-1-1v-6a1 1 0 011-1h14a1 1 0 011 1v6a1 1 0 01-1 1h-2"/><rect x="7" y="14" width="10" height="6"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M6 3.5h8l4 4V20.5H6z"/><path d="M14 3.5v4h4M9 13h6M9 16.5h6"/></symbol>
+  <symbol id="i-save" viewBox="0 0 24 24"><path d="M12 4v11M7.5 10.5L12 15l4.5-4.5M5 19.5h14"/></symbol>
+  <symbol id="i-restore" viewBox="0 0 24 24"><path d="M12 20V9M7.5 13.5L12 9l4.5 4.5M5 4.5h14"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-quote" viewBox="0 0 24 24"><path d="M10 7H6v5h3v1.5c0 1.5-1 2.5-3 3M19 7h-4v5h3v1.5c0 1.5-1 2.5-3 3"/></symbol>
+  <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M5 19c0-8 5-13 14-14-1 9-6 14-14 14z"/><path d="M5 19l7-7"/></symbol>
+  <symbol id="i-note" viewBox="0 0 24 24"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></symbol>
+  <symbol id="i-people" viewBox="0 0 24 24"><circle cx="9" cy="8.5" r="3"/><path d="M3.5 19c.6-3.3 2.7-5 5.5-5s4.9 1.7 5.5 5"/><circle cx="17" cy="9.5" r="2.4"/><path d="M15.5 14.3c2.6-.5 4.5 1 5 4.2"/></symbol>
+  <symbol id="i-circles" viewBox="0 0 24 24"><circle cx="9" cy="10" r="5"/><circle cx="15.5" cy="14" r="5"/></symbol>
+  <symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M12 4l1.8 5.2L19 11l-5.2 1.8L12 18l-1.8-5.2L5 11l5.2-1.8z"/></symbol>
+</svg>
+
+<header class="cover">
+  <div class="cover-row">
+    <div><h1 id="bookTitle">ספר החיים</h1><div class="sub" id="bookOwner">הסיפורים שלי, מצטברים לאורך השנים</div></div>
+    <button class="help-btn" onclick="show('guide')" aria-label="איך זה עובד"><svg class="ic"><use href="#i-help"/></svg><span class="hide-sm">איך זה עובד</span></button>
+  </div>
+  <nav aria-label="ניווט">
+    <button class="on" data-v="map"><svg class="ic"><use href="#i-map"/></svg>מפה</button>
+    <button data-v="write"><svg class="ic"><use href="#i-pen"/></svg>כתיבה</button>
+    <button data-v="read"><svg class="ic"><use href="#i-book"/></svg>הספר</button>
+    <button data-v="control"><svg class="ic"><use href="#i-desk"/></svg>מרכז שליטה</button>
+  </nav>
+</header>
+
+<main class="page" id="page">
+
+<!-- ===================== MAP ===================== -->
+<section class="view on" id="v-map">
+  <div class="page-head"><h2>המעגלים שלי</h2><span class="note" id="mapStats"></span></div>
+  <div class="map-wrap"><svg id="constellation" role="img" aria-label="מפת המעגלים והחוטים"></svg></div>
+  <div class="map-legend" id="mapLegend"><span><b></b>סיפור משותף</span><span><b class="r"></b>גשר בין מעגלים</span></div>
+  <div id="mapEmpty" class="map-empty" hidden></div>
+  <details id="bridgesBox" hidden>
+    <summary><svg class="ic chev"><use href="#i-chev"/></svg><span id="bridgesT">גשרים בין מעגלים</span></summary>
+    <ul class="bridges" id="bridges"></ul>
+  </details>
+  <div class="actions noprint">
+    <button class="btn ghost small" onclick="openCirclesModal()"><svg class="ic"><use href="#i-circles"/></svg>המעגלים</button>
+    <button class="btn ghost small" onclick="openPeopleModal()"><svg class="ic"><use href="#i-people"/></svg>האנשים</button>
+  </div>
+</section>
+
+<!-- ===================== WRITE ===================== -->
+<section class="view" id="v-write">
+  <h2 id="writeTitle">זיכרון חדש</h2>
+  <input id="fTitle" aria-label="שם הסיפור" placeholder="איך קוראים לסיפור? למשל: הלילה של הטנדר" style="font:20px var(--display);margin-top:8px">
+  <span class="lbl">מי היה שם</span>
+  <div class="tags" id="fPeople"></div>
+  <input id="fNewPerson" placeholder="+ עוד מישהו (שם ואז Enter)" enterkeyhint="done">
+
+  <div class="quiet-tools">
+    <button class="btn link small" id="arcToggle" onclick="setMode(mode==='arc'?'free':'arc')"><svg class="ic"><use href="#i-sparkle"/></svg><span>בנה סיפור</span></button>
+    <button class="btn link small" id="fDictBtn" onclick="toggleDictation('fText','fDictBtn','fDictStatus')"><svg class="ic"><use href="#i-mic"/></svg><span>הכתבה</span></button>
+    <button class="btn link small" onclick="copyPrompt()"><svg class="ic"><use href="#i-copy"/></svg><span>ניסוח</span></button>
+  </div>
+  <div id="arcBox" hidden>
+    <ol class="arc">
+      <li><label for="a1">איך זה התחיל?</label><textarea id="a1" rows="2"></textarea></li>
+      <li><label for="a2">ואז... מה השתבש, או מה הפתיע</label><textarea id="a2" rows="2"></textarea></li>
+      <li><label for="a3">השיא: הרגע שכולם זוכרים</label><textarea id="a3" rows="2"></textarea></li>
+      <li><label for="a4">איך זה נגמר</label><textarea id="a4" rows="2"></textarea></li>
+      <li><label for="a5">ומה זה אומר עלינו היום</label><textarea id="a5" rows="2"></textarea></li>
+    </ol>
+    <div class="actions"><button class="btn ghost small" onclick="composeArc()"><svg class="ic"><use href="#i-pen"/></svg>הרכב מזה טיוטה</button></div>
+  </div>
+  <div class="note" id="fDictStatus"></div>
+  <textarea id="fText" class="lined" rows="7" placeholder="גם שלוש מילים זה זיכרון. אפשר להרחיב אחר כך."></textarea>
+
+  <details id="moreBox">
+    <summary><svg class="ic chev"><use href="#i-chev"/></svg>עוד פרטים</summary>
+    <div class="grid3">
+      <div><label for="fWhen">מתי</label><input id="fWhen" placeholder="קיץ 2009"></div>
+      <div><label for="fPlace">איפה</label><input id="fPlace" placeholder="חוף הכנרת"></div>
+      <div><label for="fCircle">מעגל</label><select id="fCircle"></select></div>
+    </div>
+    <label for="fQuote">המשפט: מה מישהו אמר שם</label><input id="fQuote" placeholder="״רגע, מי לקח את המפתחות?״">
+    <div class="grid2">
+      <div><label for="fDetail">הפרט הקטן</label><input id="fDetail" placeholder="ריח, בגד, מה אכלתם"></div>
+      <div><label for="fSong">השיר של הרגע</label><input id="fSong" placeholder="מה התנגן ברקע"></div>
+    </div>
+    <div class="grid2">
+      <div><label for="fImg">תמונה</label><input type="file" id="fImg" accept="image/*"></div>
+      <div><span class="lbl">הקלטה</span><div class="rec-line"><button class="btn ghost small" id="recBtn" onclick="toggleRec()"><svg class="ic"><use href="#i-rec"/></svg><span>התחל הקלטה</span></button><span class="rec-time" id="recStatus"></span></div></div>
+    </div>
+    <div class="preview" id="fPreview"></div>
+    <label for="fFrom">הזיכרון הגיע ממישהו אחר? (ממי)</label><input id="fFrom" placeholder="ריק = זה שלי">
+  </details>
+  <div class="actions">
+    <button class="btn" onclick="saveStory()"><svg class="ic"><use href="#i-check"/></svg>שמור לספר</button>
+    <button class="btn link" onclick="resetForm()">נקה</button>
+  </div>
+</section>
+
+<!-- ===================== BOOK ===================== -->
+<section class="view" id="v-read">
+  <details class="invite-box noprint" id="inviteBox">
+    <summary><svg class="ic chev"><use href="#i-chev"/></svg>הזמן מישהו לכתוב עליך</summary>
+    <div class="grid2">
+      <div><label for="iName">למי</label><input id="iName" placeholder="סבתא רותי"></div>
+      <div><label for="iPhone">הטלפון שלו/ה</label><input id="iPhone" inputmode="tel" placeholder="052..."></div>
+    </div>
+    <label for="iExample">זיכרון קטן שלך עליו/ה, בכמה מילים</label>
+    <input id="iExample" placeholder="ארוחות שישי אצלך בחיפה">
+    <label for="iQuestion">נושא או שאלה מיוחדת (לא חובה)</label>
+    <input id="iQuestion" placeholder="איך היה כשנולדתי?">
+    <div class="actions"><button class="btn" onclick="sendInvite()"><svg class="ic"><use href="#i-send"/></svg>שלח הזמנה בוואטסאפ</button></div>
+  </details>
+  <div class="filters noprint">
+    <select id="readFilter" onchange="renderBook()" aria-label="סינון"></select>
+    <select id="readSort" onchange="renderBook()" aria-label="סדר">
+      <option value="when">לפי זמן בחיים</option>
+      <option value="added">לפי סדר הוספה</option>
+    </select>
+  </div>
+  <div id="book"></div>
+</section>
+
+<!-- ===================== EVENT ===================== -->
+<section class="view" id="v-event">
+  <button class="btn link back noprint" onclick="goBack()"><svg class="ic"><use href="#i-back"/></svg>חזרה</button>
+  <div id="evBody"></div>
+</section>
+
+<!-- ===================== GUEST ===================== -->
+<section class="view" id="v-guest">
+  <div class="hero">
+    <h1 id="gHello">היי</h1>
+    <p id="gIntro"></p>
+    <div class="example" id="gExample" hidden></div>
+    <div class="example" id="gQuestion" hidden></div>
+    <button class="btn ghost small" onclick="speakInvite()"><svg class="ic"><use href="#i-speak"/></svg>הקרא לי את ההזמנה</button>
+  </div>
+  <hr class="rule">
+  <label for="gTitle">על מה הזיכרון? (לא חובה)</label>
+  <input id="gTitle" placeholder="למשל: הטיול לאילת">
+  <label for="gWhen">מתי זה היה? (לא חובה)</label>
+  <input id="gWhen" placeholder="שנה, עונה, או בערך">
+  <span class="lbl">מאיפה להתחיל? לחיצה מוסיפה לטקסט</span>
+  <div class="tags qchips" id="gChips"></div>
+  <div class="tools">
+    <button class="btn ghost small" id="dictBtn" onclick="toggleDictation('gText','dictBtn','dictStatus')"><svg class="ic"><use href="#i-mic"/></svg><span>הכתבה בקול</span></button>
+    <button class="btn ghost small" onclick="speakText()"><svg class="ic"><use href="#i-speak"/></svg><span>הקרא לי מה שכתבתי</span></button>
+    <button class="btn ghost small" onclick="undoText()"><svg class="ic"><use href="#i-undo"/></svg><span>בטל</span></button>
+    <button class="btn ghost small" onclick="fontSize(2)" aria-label="הגדל טקסט">א+</button>
+    <button class="btn ghost small" onclick="fontSize(-2)" aria-label="הקטן טקסט">א−</button>
+    <button class="btn danger small" onclick="clearText()">נקה</button>
+  </div>
+  <div class="note" id="dictStatus"></div>
+  <textarea id="gText" class="lined" rows="8" placeholder="אפשר לכתוב, או ללחוץ על 'הכתבה בקול' ולדבר. גם כמה מילים זה מצוין, ולא צריך לכתוב יפה."></textarea>
+  <h3 style="margin-top:30px">מעדיפים לספר בקול?</h3>
+  <p class="note">אפשר להקליט, לשמוע, ולהקליט מחדש.</p>
+  <div class="rec-line"><button class="btn ghost small" id="gRecBtn" onclick="guestRec()"><svg class="ic"><use href="#i-rec"/></svg><span>התחל הקלטה</span></button><span class="rec-time" id="gRecTime"></span></div>
+  <div id="gAudioBox" class="preview"></div>
+  <div class="actions"><button class="btn wide" id="gSendBtn" onclick="guestSend()"><svg class="ic"><use href="#i-send"/></svg><span>שלח</span></button></div>
+  <p class="note" style="text-align:center">הזיכרון נשלח בוואטסאפ. אין צורך להירשם לשום דבר.</p>
+  <div class="thanks" id="gThanks" hidden>
+    <h2>תודה!</h2>
+    <p class="lead" id="gThanksText" style="margin:0 auto 12px"></p>
+    <button class="btn ghost" onclick="guestAnother()">רוצה לשלוח עוד זיכרון</button>
+  </div>
+  <hr class="rule">
+  <div class="promo">
+    <h3>ומה עם הספר שלך?</h3>
+    <p>גם לך יש סיפורים ששווה לשמור. פתח/י ספר חיים משלך והזמן/י את החברים לכתוב יחד: כל אירוע נכתב מכמה זוויות, ונשמר בספרים של כל מי שהיה שם.</p>
+    <a class="btn" id="gPromoLink" href="#"><svg class="ic"><use href="#i-book"/></svg>פתח/י ספר משלי, בחינם</a>
+  </div>
+</section>
+
+<!-- ===================== WELCOME ===================== -->
+<section class="view" id="v-welcome">
+  <div class="hero">
+    <h1 id="wHello">ברוכים הבאים</h1>
+    <p id="wIntro"></p>
+    <div class="example" id="wNote" hidden></div>
+  </div>
+  <hr class="rule">
+  <h3>מי את/ה?</h3>
+  <div class="tags" id="wWho"></div>
+  <label for="wName">או כתוב/י את השם שלך</label>
+  <input id="wName" placeholder="השם שלך">
+  <div class="actions"><button class="btn wide" onclick="startMyBook()"><svg class="ic"><use href="#i-book"/></svg>פתח את הספר שלי</button></div>
+  <p class="note" style="text-align:center">הספר נשמר אצלך במכשיר. אין הרשמה ואין תשלום.</p>
+</section>
+
+<!-- ===================== ONBOARDING ===================== -->
+<section class="view ob" id="v-onboard">
+  <div id="ob1">
+    <h1>ספר החיים שלך</h1>
+    <p class="lead">סיפורים שנכתבים לאורך השנים, יחד עם מי שהיה שם.</p>
+    <label for="obName">איך קוראים לך?</label>
+    <input id="obName" placeholder="השם שלך" style="font-size:20px" enterkeyhint="next">
+    <div class="actions"><button class="btn wide" onclick="obNext()">המשך<svg class="ic"><use href="#i-chev"/></svg></button></div>
+  </div>
+  <div id="ob2" hidden>
+    <h1>מי המעגלים שלך?</h1>
+    <p class="lead">בחר/י כמה שרוצים, ותן/י להם כל שם. אפשר לשנות תמיד.</p>
+    <div class="tags" id="obChips"></div>
+    <div class="ob-add"><input id="obCustom" placeholder="מעגל משלי, למשל: החבר'ה מהשכונה" enterkeyhint="done"><button class="btn ghost small" onclick="obAdd()"><svg class="ic"><use href="#i-plus"/></svg>הוסף</button></div>
+    <div class="actions"><button class="btn wide" onclick="obFinish()"><svg class="ic"><use href="#i-book"/></svg>לספר שלי</button></div>
+  </div>
+</section>
+
+<!-- ===================== GUIDE ===================== -->
+<section class="view guide" id="v-guide">
+  <div id="guideWelcome" hidden>
+    <h2 style="color:var(--thread)">הספר שלך מוכן</h2>
+    <p class="lead">כמה דקות קריאה כאן, ואז ישר לסיפור הראשון.</p>
+    <hr class="rule">
+  </div>
+  <h2>ספר החיים: איך זה עובד</h2>
+  <p>זה ספר שנכתב לאט, לאורך החיים. בכל פעם שעולה זיכרון, שטות מהצופים, הרפתקה מהתיכון, משהו שקרה אתמול, מכניסים אותו לספר. הקסם הוא שלא כותבים לבד: מי שהיה שם כותב את הזווית שלו, והסיפור נתפר לספרים של כולם.</p>
+
+  <h3>כותבים סיפור</h3>
+  <p>בלשונית <span class="kbd">כתיבה</span> נותנים לסיפור את השם שאתם קוראים לו בחבורה, כותבים מתי ואיפה, ומסמנים מי היה שם. אפשר לכתוב חופשי, או ללחוץ <span class="kbd">בנה את הסיפור</span> ולענות על חמש שאלות קצרות: איך זה התחיל, מה השתבש, השיא, איך זה נגמר, ומה זה אומר עלינו היום. הכלי מרכיב מזה טיוטה.</p>
+  <ul>
+    <li><b>שלוש מילים מספיקות</b> כדי שזיכרון לא ילך לאיבוד. אפשר להרחיב אחר כך.</li>
+    <li><b>המשפט, הפרט והשיר</b> הם מה שהופך זיכרון לסיפור: מה מישהו אמר, ריח או בגד, ומה התנגן ברקע.</li>
+    <li><b>אין כוח לכתוב?</b> מכתיבים בקול, מקליטים, או מצרפים תמונה ושורה אחת.</li>
+    <li><b>רוצים עזרה בניסוח?</b> <span class="kbd">הכן לי ניסוח</span> מעתיק את ההערות שלך עם הנחיה מוכנה. מדביקים בצ'אט עם Claude (או כל כלי אחר), ואת הסיפור שחוזר מדביקים בחזרה.</li>
+  </ul>
+
+  <h3>המפה והחוטים</h3>
+  <p>הלשונית <span class="kbd">מפה</span> מראה את המעגלים של החיים שלך. כל חוט מחבר אנשים שחוו סיפור יחד, וחוט אדום הוא גשר: סיפור שבו נפגשו אנשים ממעגלים שונים, כמו חתונה שבה החבר'ה מהצופים פגשו את החבר'ה מהצבא. לחיצה על מעגל או על אדם פותחת את הסיפורים שלו.</p>
+
+  <h3>סיפור אחד, הרבה זוויות</h3>
+  <p>לכל סיפור יש דף משלו. שם רואים את כל הזוויות, אחת אחרי השנייה או זו לצד זו, ואפשר לסמן מה שרק אחד מכם זוכר. בדף מופיע גם מי היה שם ועוד לא סיפר, עם כפתור לבקש ממנו.</p>
+  <p>כדי לחבר ספרים לוחצים <span class="kbd">שתף עם מי שהיה שם</span> ושולחים לחבר או לקבוצת הוואטסאפ. מי שמקבל מוסיף את הסיפור לספר שלו, כותב את הזווית שלו ומשתף בחזרה.</p>
+
+  <h3>מזמינים</h3>
+  <p>בלשונית <span class="kbd">הספר</span> מזמינים מישהו לכתוב עליך זיכרון, גם אם אין לו ספר. ב<span class="kbd">מרכז שליטה</span> מזמינים חבורה שלמה לפתוח ספרים: כל אחד בוחר מי הוא, והספר שלו נפתח עם מעגל החבורה ועם כל החברים.</p>
+
+  <h3>משתפים ומדפיסים</h3>
+  <p>ב<span class="kbd">מרכז שליטה</span> בוחרים מעגלים או סיפורים, ויוצרים קובץ דיגיטלי לשליחה או PDF להדפסה. מתאים ליום הולדת, לחתונה, או סתם כדי לשמח מישהו.</p>
+
+  <h3>חשוב: לגבות</h3>
+  <p>בשלב הזה הספר שמור רק במכשיר הזה. פעם בחודש לוחצים <span class="kbd">גיבוי הספר</span> במרכז השליטה ושומרים את הקובץ במקום בטוח. אם מחליפים טלפון, <span class="kbd">שחזר מגיבוי</span> מחזיר הכול.</p>
+
+  <div class="letter">
+    <h3>לאן זה הולך: יום הולדת 80</h3>
+    <p>תדמיינו את מסיבת יום ההולדת ה-80. במקום לנסות להיזכר, לכל אחד ספר עבה ומלא: הצופים, התיכון, הטיולים, החתונות, הילדים, השטויות שעשיתם בגיל 50. כל אירוע כתוב מכל הזוויות, והספרים של כולכם תפורים זה לזה.</p>
+    <p>כל סיפור שמישהו מכניס מעשיר את הספרים של כולם. ובכל רגע בדרך אפשר לבחור מה לכלול ולשתף.</p>
+    <button class="btn" onclick="show('write')"><svg class="ic"><use href="#i-pen"/></svg>לכתוב את הסיפור הראשון</button>
+  </div>
+</section>
+
+<!-- ===================== CONTROL ===================== -->
+<section class="view" id="v-control">
+  <h2>מרכז שליטה</h2>
+  <h3 style="margin-top:22px">בקשות שנשלחו</h3>
+  <table><thead><tr><th>למי</th><th>על מה</th><th>נשלח</th><th>מצב</th><th></th></tr></thead><tbody id="reqTable"></tbody></table>
+
+  <hr class="rule">
+  <h3>הזמנה לפתוח ספר</h3>
+    <label for="gName">שם החבורה או המעגל</label><input id="gName" placeholder="החבר'ה מהצופים">
+  <label for="gMembers">השמות, מופרדים בפסיקים</label><input id="gMembers" placeholder="דני, רוני, מיכל">
+  <label for="gNote">מילה אישית (לא חובה)</label><input id="gNote" placeholder="יאללה, תתחילו מהשטויות של כיתה ט'">
+  <div class="actions">
+    <button class="btn" onclick="sendGroupInvite()"><svg class="ic"><use href="#i-send"/></svg>שלח בוואטסאפ</button>
+    <button class="btn ghost" onclick="copyGroupInvite()"><svg class="ic"><use href="#i-copy"/></svg>העתק קישור</button>
+  </div>
+
+  <hr class="rule">
+  <h3>שיתוף והדפסה</h3>
+    <div id="selTree"></div>
+  <label class="chk" style="margin-top:12px"><input type="checkbox" id="selMedia" checked> לכלול תמונות והקלטות</label>
+  <div class="actions">
+    <button class="btn" onclick="shareDigital()"><svg class="ic"><use href="#i-file"/></svg>ספר דיגיטלי לשיתוף</button>
+    <button class="btn ghost" onclick="printSelected()"><svg class="ic"><use href="#i-print"/></svg>הדפס / PDF</button>
+  </div>
+
+  <hr class="rule">
+  <h3>גיבוי</h3>
+  <p class="note" id="backupInfo"></p>
+  <div class="actions">
+    <button class="btn" onclick="exportJson()"><svg class="ic"><use href="#i-save"/></svg>גיבוי הספר</button>
+    <label class="btn ghost" style="margin:0"><svg class="ic"><use href="#i-restore"/></svg>שחזר מגיבוי<input type="file" accept=".json" hidden onchange="importJson(this)"></label>
+  </div>
+
+  <hr class="rule">
+  <h3>הגדרות הספר</h3>
+  <div class="grid3">
+    <div><label for="sTitle">שם הספר</label><input id="sTitle"></div>
+    <div><label for="sOwner">השם שלי</label><input id="sOwner" placeholder="בועז"></div>
+    <div><label for="sPhone">הוואטסאפ שלי (לשם יחזרו זיכרונות)</label><input id="sPhone" inputmode="tel" placeholder="050..."></div>
+  </div>
+  <div class="actions"><button class="btn small" onclick="saveSettings()">שמור</button></div>
+</section>
+</main>
+
+<!-- ===================== SLIPS ===================== -->
+<div class="modal" id="mCircles" role="dialog" aria-modal="true" aria-labelledby="mCirclesT"><div class="slip">
+  <h3 id="mCirclesT">המעגלים של הספר</h3>
+  
+  <div id="circlesList"></div>
+  <span class="lbl">מעגל חדש</span>
+  <div class="row-item" style="border:0">
+    <input id="cName" type="text" placeholder="חברים מהתיכון">
+    <select id="cColor"></select>
+    <button class="btn small" onclick="addCircle()"><svg class="ic"><use href="#i-plus"/></svg>הוסף</button>
+  </div>
+  <div class="actions"><button class="btn ghost" onclick="closeModals()">סגור</button></div>
+</div></div>
+<div class="modal" id="mPeople" role="dialog" aria-modal="true" aria-labelledby="mPeopleT"><div class="slip">
+  <h3 id="mPeopleT">האנשים בספר</h3>
+  
+  <div id="peopleList"></div>
+  <div class="actions"><button class="btn ghost" onclick="closeModals()">סגור</button></div>
+</div></div>
+<div class="modal" id="mImport" role="dialog" aria-modal="true" aria-labelledby="mImportT"><div class="slip">
+  <h3 id="mImportT">התקבל זיכרון חדש</h3>
+  <div id="impBody"></div>
+  <label for="impCircle">לאיזה מעגל?</label>
+  <select id="impCircle"></select>
+  <div class="actions">
+    <button class="btn" id="impBtnA" onclick="importAdd(false)">הוסף לספר</button>
+    <button class="btn ghost" id="impBtnB" onclick="importAdd(true)">ערוך לפני שמוסיפים</button>
+    <button class="btn link" onclick="closeImport()">לא עכשיו</button>
+  </div>
+</div></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ================= data ================= */
+const $=i=>document.getElementById(i);
+const KEY='seferHachaim_v1';
+const COLORS=['--c1','--c2','--c3','--c4','--c5','--c6','--c7','--c8'];
+function id(){return Math.random().toString(36).slice(2,9);}
+function load(){
+  try{const d=JSON.parse(localStorage.getItem(KEY));if(d&&d.circles)return d;}catch(e){}
+  return {title:'ספר החיים',owner:'',circles:[],people:[],stories:[],requests:[],fresh:true};
+}
+let D=load();
+// migrate older books
+D.v=5; if(!D.myId)D.myId='p'+id()+id(); D.requests=D.requests||[]; D.people=D.people||[];
+D.stories.forEach(s=>{if(!s.ev)s.ev=s.id;if(!s.people)s.people=[];});
+// v0.6: drop the old preset circles nobody used (no stories, no people)
+if(!D.cleanedPresets){const OLD=['משפחה','חברי ילדות','צבא','עבודה'];
+  D.circles=D.circles.filter(c=>!(OLD.includes(c.name)&&!D.stories.some(s=>s.circle===c.id)&&!D.people.some(p=>p.circle===c.id)));D.cleanedPresets=true;}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(D));return true;}catch(e){toast('לא הצלחתי לשמור: הזיכרון של הדפדפן מלא. כדאי להוריד תמונות גדולות ולגבות');return false;}}
+save();
+const esc=t=>String(t??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ico=(n,cls='')=>`<svg class="ic ${cls}" aria-hidden="true"><use href="#i-${n}"/></svg>`;
+function setBtn(el,n,t){el.innerHTML=ico(n)+`<span>${esc(t)}</span>`;}
+let toastT;function toast(t){const e=$('toast');e.textContent=t;e.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>e.classList.remove('on'),2600);}
+const circleOf=cid=>D.circles.find(c=>c.id===cid);
+const personOf=pid=>D.people.find(p=>p.id===pid);
+const ccVar=c=>c?`var(${c.color})`:'var(--pencil)';
+const yearOf=w=>{const m=String(w||'').match(/(19|20)\d\d/);return m?+m[0]:null;};
+const isSelf=(name,pid)=>pid?pid===D.myId:(!!name&&name===D.owner);
+const authorOf=s=>s.from||D.owner||'אני';
+const isMine=s=>!s.from;
+
+/* ================= events (one event = all angles of a shared story) ================= */
+function anglesOf(ev){return D.stories.filter(s=>s.ev===ev).sort((a,b)=>(a.added||0)-(b.added||0));}
+function evInfo(angles){
+  const m=angles.find(isMine)||angles[0];
+  const pick=k=>(angles.find(a=>isMine(a)&&a[k])||angles.find(a=>a[k])||{})[k]||'';
+  return {ev:m.ev,title:m.title,when:pick('when'),place:pick('place'),circle:m.circle,quote:pick('quote'),angles,
+    added:Math.min(...angles.map(a=>a.added||0))};
+}
+function groupEvents(list){const by={},order=[];list.forEach(s=>{if(!by[s.ev]){by[s.ev]=[];order.push(s.ev);}by[s.ev].push(s);});
+  return order.map(ev=>evInfo(by[ev].sort((a,b)=>(a.added||0)-(b.added||0))));}
+// everyone involved in an event, as person ids (self excluded)
+function evParticipants(angles){
+  const set=new Set();
+  angles.forEach(a=>{a.people.forEach(p=>personOf(p)&&set.add(p));
+    if(a.from){const p=D.people.find(x=>x.name===a.from);if(p)set.add(p.id);}});
+  return [...set];
+}
+function personFor(name,pid,circleId){
+  if(!name||isSelf(name,pid))return null;
+  let p=(pid&&D.people.find(x=>x.pid===pid))||D.people.find(x=>x.name===name);
+  if(!p){p={id:id(),name,circle:circleId||(D.circles[0]||{}).id};D.people.push(p);}
+  if(pid&&!p.pid)p.pid=pid;
+  return p;
+}
+
+/* ================= navigation ================= */
+let curView='map',prevView='map';
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>show(b.dataset.v));
+function show(v){
+  if(v!==curView){prevView=curView;curView=v;}
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
+  document.querySelectorAll('.view').forEach(s=>s.classList.toggle('on',s.id==='v-'+v));
+  if(v==='onboard')document.body.classList.add('guest');else if(!G&&!W)document.body.classList.remove('guest');
+  if(v==='map')renderMap();if(v==='write')renderForm();if(v==='read')renderBook();if(v==='control')renderControl();
+  const pg=$('page');pg.classList.remove('turn');void pg.offsetWidth;pg.classList.add('turn');
+  window.scrollTo(0,0);
+}
+function goBack(){show(prevView&&prevView!=='event'?prevView:'read');}
+function applyTitle(){
+  $('bookTitle').textContent=D.title||'ספר החיים';
+  $('bookOwner').textContent=D.owner?`הסיפורים של ${D.owner}, מצטברים לאורך השנים`:'הסיפורים שלי, מצטברים לאורך השנים';
+  document.title=D.title||'ספר החיים';
+}
+
+/* ================= constellation map ================= */
+let sewn=false;
+function renderMap(){
+  const svg=$('constellation');const W=Math.max(320,svg.parentElement.clientWidth);const narrow=W<560;
+  const H=narrow?Math.round(W*1.22):Math.round(Math.min(500,W*.56));
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  const cx=W/2,cy=H/2,n=D.circles.length;
+  const Rx=Math.min(W/2-(narrow?64:110),narrow?999:360),Ry=H/2-(narrow?78:80);
+  const pos={},cpos={};let out='';
+  if(!n){svg.setAttribute('viewBox',`0 0 ${W} 200`);svg.innerHTML=`<g class="me"><circle cx="${cx}" cy="100" r="24"/><text x="${cx}" y="105">${esc(D.owner||'אני')}</text></g>`;}
+  D.circles.forEach((c,i)=>{
+    const a=-Math.PI/2+i*2*Math.PI/Math.max(n,1);
+    const x=n===1?cx:cx+Math.cos(a)*Rx,y=n===1?cy-Ry*.55:cy+Math.sin(a)*Ry;
+    const ppl=D.people.filter(p=>p.circle===c.id);
+    const rc=(narrow?34:40)+Math.min(ppl.length,9)*(narrow?3.2:4.2);
+    cpos[c.id]={x,y,rc,a};
+    ppl.forEach((p,j)=>{const b=a+Math.PI/2+j*2*Math.PI/Math.max(ppl.length,1);const rr=ppl.length===1?0:rc*.62;pos[p.id]={x:x+Math.cos(b)*rr,y:y+Math.sin(b)*rr,cc:c.color};});
+  });
+  if(!n){afterMap({});return;}
+  // clusters
+  D.circles.forEach(c=>{const{x,y,rc,a}=cpos[c.id];const cnt=groupEvents(D.stories.filter(s=>s.circle===c.id)).length;
+    const up=Math.sin(a)<-.2&&n>1;const lx=x,ly=up?y-rc-30:y+rc+24;
+    out+=`<g class="cl" style="--cc:var(${c.color})" tabindex="0" role="button" aria-label="${esc(c.name)}" onclick="openCircle('${c.id}')" onkeydown="if(event.key==='Enter')openCircle('${c.id}')">
+      <circle class="cl-disk" cx="${x}" cy="${y}" r="${rc}"/>
+      <text class="cl-name" x="${lx}" y="${ly}">${esc(c.name)}</text>
+      <text class="cl-count" x="${lx}" y="${ly+17}">${cnt?(cnt===1?'סיפור אחד':cnt+' סיפורים'):'עוד ריק'}</text></g>`;});
+  // threads
+  const edges={};
+  groupEvents(D.stories).forEach(e=>{
+    const P=evParticipants(e.angles).filter(p=>pos[p]);
+    const add=(a,b)=>{const k=a<b?a+'|'+b:b+'|'+a;(edges[k]=edges[k]||{a,b,w:0,ev:e.ev}).w++;};
+    if(P.length===1)add('me',P[0]);else for(let i=0;i<P.length;i++)for(let j=i+1;j<P.length;j++)add(P[i],P[j]);
+  });
+  const me={x:cx,y:cy};let k=0;
+  Object.values(edges).forEach(E=>{const A=E.a==='me'?me:pos[E.a],B=E.b==='me'?me:pos[E.b];if(!A||!B)return;
+    const bridge=E.a!=='me'&&E.b!=='me'&&personOf(E.a).circle!==personOf(E.b).circle;
+    const mx=(A.x+B.x)/2,my=(A.y+B.y)/2,qx=mx+(cx-mx)*.35,qy=my+(cy-my)*.35;
+    out+=`<path class="thread${bridge?' bridge':''}" style="--d:${(k++*.06).toFixed(2)}s" stroke-width="${(bridge?1.6:1.1)+Math.min(E.w,6)*.5}" d="M${A.x.toFixed(1)} ${A.y.toFixed(1)}Q${qx.toFixed(1)} ${qy.toFixed(1)} ${B.x.toFixed(1)} ${B.y.toFixed(1)}"/>`;});
+  // people
+  const many=D.people.length>28;
+  D.people.forEach(p=>{const P=pos[p.id];if(!P)return;const cnt=storiesOfPerson(p.id).length;
+    out+=`<g class="pn" style="--cc:var(${P.cc})" tabindex="0" role="button" aria-label="${esc(p.name)}" onclick="openPerson('${p.id}')" onkeydown="if(event.key==='Enter')openPerson('${p.id}')"><title>${esc(p.name)}</title>
+      <circle cx="${P.x.toFixed(1)}" cy="${P.y.toFixed(1)}" r="${(4.5+Math.min(cnt,6)*.8).toFixed(1)}"/>${many?'':`<text x="${P.x.toFixed(1)}" y="${(P.y-10).toFixed(1)}">${esc(p.name)}</text>`}</g>`;});
+  out+=`<g class="me"><circle cx="${cx}" cy="${cy}" r="${narrow?20:24}"/><text x="${cx}" y="${cy+5}">${esc(D.owner||'אני')}</text></g>`;
+  svg.innerHTML=out;
+  afterMap(edges);
+}
+function afterMap(edges){
+  const svg=$('constellation');
+  if(!sewn&&Object.keys(edges).length){svg.querySelectorAll('.thread').forEach(t=>t.style.setProperty('--len',Math.ceil(t.getTotalLength())));svg.classList.add('sewing');sewn=true;setTimeout(()=>svg.classList.remove('sewing'),3500);}
+  // stats, empty state, bridges
+  const evs=groupEvents(D.stories);
+  const nn=(k,one,many)=>k===1?one:k+' '+many;$('mapStats').textContent=evs.length?`${nn(evs.length,'סיפור אחד','סיפורים')} · ${nn(D.people.length,'אדם אחד','אנשים')}`:'';$('mapLegend').hidden=!Object.keys(edges).length;
+  const empty=$('mapEmpty');
+  if(!D.stories.length){empty.hidden=false;empty.innerHTML=`כל סיפור שתכתוב/י עם אנשים יתפור אותם למפה.<div class="actions" style="justify-content:center"><button class="btn" onclick="show('write')">${ico('pen')}לכתוב את הסיפור הראשון</button></div>`;}
+  else empty.hidden=true;
+  const br=evs.map(e=>{const cs=[...new Set([e.circle,...evParticipants(e.angles).map(p=>personOf(p).circle)])].map(circleOf).filter(Boolean);return {e,cs};}).filter(x=>x.cs.length>1);
+  $('bridgesBox').hidden=!br.length;$('bridgesT').textContent=`גשרים בין מעגלים (${br.length})`;
+  $('bridges').innerHTML=br.map(({e,cs})=>`<li><button onclick="openEvent('${e.ev}')">${esc(e.title)}</button> מחבר את ${cs.map(c=>`<span style="color:var(${c.color})">${esc(c.name)}</span>`).join(cs.length>2?', ':' ו')}${e.when?` · <span class="note">${esc(e.when)}</span>`:''}</li>`).join('');
+}
+function storiesOfPerson(pid){const p=personOf(pid);return D.stories.filter(s=>s.people.includes(pid)||(p&&s.from===p.name));}
+function openCircle(cid){show('read');$('readFilter').value=cid;renderBook();}
+function openPerson(pid){closeModals();show('read');$('readFilter').value='p:'+pid;renderBook();}
+
+/* ================= circles + people slips ================= */
+function colorOpts(sel){return COLORS.map((c,i)=>`<option value="${c}" ${c===sel?'selected':''}>דיו ${i+1}</option>`).join('');}
+function openCirclesModal(){$('cColor').innerHTML=colorOpts(COLORS[D.circles.length%COLORS.length]);$('cName').value='';renderCirclesList();$('mCircles').classList.add('on');}
+function renderCirclesList(){
+  $('circlesList').innerHTML=D.circles.map(c=>{const n=D.stories.filter(s=>s.circle===c.id).length;
+    return `<div class="row-item"><span class="dot" style="--cc:var(${c.color})"></span>
+      <input type="text" value="${esc(c.name)}" aria-label="שם המעגל" onchange="renameCircle('${c.id}',this.value)">
+      <select aria-label="צבע" onchange="recolorCircle('${c.id}',this.value)">${colorOpts(c.color)}</select>
+      <span class="cnt">${n} סיפורים</span>
+      <button class="btn danger small" onclick="delCircle('${c.id}')" aria-label="מחק">${ico('trash')}</button></div>`;}).join('')||'<p class="note">אין מעגלים. הוסף/י אחד למטה.</p>';
+}
+function addCircle(){const n=$('cName').value.trim();if(!n){toast('כתוב/י שם למעגל');return;}
+  D.circles.push({id:id(),name:n,color:$('cColor').value});save();$('cName').value='';$('cColor').innerHTML=colorOpts(COLORS[D.circles.length%COLORS.length]);renderCirclesList();renderMap();toast('המעגל נוסף');}
+function renameCircle(cid,v){const c=circleOf(cid);v=v.trim();if(!c||!v){renderCirclesList();return;}c.name=v;save();renderMap();}
+function recolorCircle(cid,v){const c=circleOf(cid);if(!c)return;c.color=v;save();renderCirclesList();renderMap();}
+function delCircle(cid){
+  const c=circleOf(cid);if(!c)return;const n=D.stories.filter(s=>s.circle===cid).length;const others=D.circles.filter(x=>x.id!==cid);let target=null;
+  if(n){if(!others.length){toast('זה המעגל היחיד ויש בו סיפורים. הוסף/י מעגל אחר קודם');return;}
+    const ans=prompt(`במעגל "${c.name}" יש ${n} סיפורים.\nלאיזה מעגל להעביר אותם? כתוב/י מספר:\n${others.map((x,i)=>`${i+1}. ${x.name}`).join('\n')}`,'1');
+    if(ans===null)return;const o=others[parseInt(ans)-1];if(!o){toast('מספר לא תקין');return;}target=o.id;}
+  else if(!confirm(`למחוק את המעגל "${c.name}"?`))return;
+  const to=target||(others[0]||{}).id||null;
+  D.stories.forEach(s=>{if(s.circle===cid)s.circle=to;});D.people.forEach(p=>{if(p.circle===cid)p.circle=to;});
+  D.circles=others;save();renderCirclesList();renderMap();toast('המעגל נמחק');
+}
+function openPeopleModal(){
+  $('peopleList').innerHTML=D.people.length?D.people.map(p=>`<div class="row-item">
+    <button class="btn link" style="flex:1;justify-content:flex-start;font-size:16px" onclick="openPerson('${p.id}')">${esc(p.name)}</button>
+    <span class="cnt">${storiesOfPerson(p.id).length} סיפורים</span>
+    <select aria-label="מעגל" onchange="movePerson('${p.id}',this.value)">${D.circles.map(c=>`<option value="${c.id}" ${c.id===p.circle?'selected':''}>${esc(c.name)}</option>`).join('')}</select>
+    <button class="btn danger small" onclick="delPerson('${p.id}')" aria-label="מחק">${ico('trash')}</button></div>`).join(''):'<p class="note">עדיין אין אנשים. הם נוספים דרך הסיפורים.</p>';
+  $('mPeople').classList.add('on');
+}
+function movePerson(pid,cid){const p=personOf(pid);if(p){p.circle=cid;save();renderMap();}}
+function delPerson(pid){if(!confirm('למחוק את האדם מהספר? הסיפורים נשארים.'))return;D.people=D.people.filter(p=>p.id!==pid);D.stories.forEach(s=>s.people=s.people.filter(x=>x!==pid));save();openPeopleModal();renderMap();}
+function closeModals(){document.querySelectorAll('.modal').forEach(m=>m.classList.remove('on'));}
+document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m){m.id==='mImport'?closeImport():closeModals();}}));
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if($('mImport').classList.contains('on'))closeImport();else closeModals();}});
+
+/* ================= writing ================= */
+let editing=null,formEv=null,media={img:null,audio:null},selPeople=new Set(),mode='free',circleTouched=false;
+function renderForm(){
+  const cur=$('fCircle').value;
+  $('fCircle').innerHTML=D.circles.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('');
+  if(cur&&circleOf(cur))$('fCircle').value=cur;
+  renderPeopleChips();
+}
+function renderPeopleChips(){
+  const cid=$('fCircle').value;
+  const ppl=[...D.people].sort((a,b)=>(selPeople.has(b.id)-selPeople.has(a.id))||((b.circle===cid)-(a.circle===cid)));
+  $('fPeople').innerHTML=ppl.map(p=>`<button type="button" class="tag ${selPeople.has(p.id)?'on':''}" style="--cc:${ccVar(circleOf(p.circle))}" aria-pressed="${selPeople.has(p.id)}" onclick="togglePerson('${p.id}')"><i></i>${esc(p.name)}</button>`).join('')||'<span class="note">עדיין אין אנשים. הוסף/י למטה.</span>';
+}
+$('fCircle').addEventListener('change',()=>{circleTouched=true;renderPeopleChips();});
+function togglePerson(pid){
+  if(selPeople.has(pid))selPeople.delete(pid);
+  else{selPeople.add(pid);const p=personOf(pid);if(!circleTouched&&!editing&&!formEv&&selPeople.size===1&&p&&circleOf(p.circle))$('fCircle').value=p.circle;}
+  renderPeopleChips();}
+$('fNewPerson').addEventListener('keydown',e=>{
+  if(e.key!=='Enter')return;e.preventDefault();
+  e.target.value.split(/[,،]/).map(x=>x.trim()).filter(Boolean).forEach(n=>{const p=personFor(n,null,$('fCircle').value);if(p)selPeople.add(p.id);});
+  save();e.target.value='';renderPeopleChips();
+});
+function setMode(m){mode=m;$('arcBox').hidden=m!=='arc';$('arcToggle').classList.toggle('on',m==='arc');}
+function composeArc(){
+  const parts=['a1','a2','a3','a4','a5'].map(i=>$(i).value.trim()).filter(Boolean);
+  if(!parts.length){toast('כתוב/י לפחות תשובה אחת');return;}
+  const draft=parts.join('\n\n');const ta=$('fText');
+  if(ta.value.trim()&&!confirm('יש כבר טקסט. להוסיף את הטיוטה מתחתיו?'))return;
+  ta.value=ta.value.trim()?ta.value.trim()+'\n\n'+draft:draft;
+  setMode('free');ta.focus();toast('הטיוטה מוכנה. עכשיו אפשר ללטש');
+}
+async function copyPrompt(){
+  const t=$('fTitle').value.trim(),w=$('fWhen').value.trim(),pl=$('fPlace').value.trim();
+  const ppl=[...selPeople].map(personOf).filter(Boolean).map(p=>p.name);
+  const arc=['a1','a2','a3','a4','a5'].map(i=>$(i).value.trim());
+  const notes=[$('fText').value.trim(),...arc.filter(Boolean)].filter(Boolean).join('\n');
+  if(!notes&&!t){toast('כתוב/י קודם כמה מילים או ראשי פרקים');return;}
+  const pr=`עזור/י לי לכתוב זיכרון לספר החיים שלי כסיפור קצר בעברית.
+כתוב/י בגוף ראשון, בקול שלי ובשפה יומיומית, ושמור/י על כל הפרטים שאני נותן/ת. אל תמציא/י פרטים, שמות או רגשות שלא כתבתי. אם חסר משהו חשוב, שאל/י אותי במקום לנחש. אורך: עד 250 מילים.
+
+שם הסיפור: ${t||'(עוד אין)'}${w?`\nמתי: ${w}`:''}${pl?`\nאיפה: ${pl}`:''}${ppl.length?`\nמי היה שם: ${ppl.join(', ')}`:''}${$('fQuote').value.trim()?`\nמשפט שמישהו אמר: ${$('fQuote').value.trim()}`:''}${$('fDetail').value.trim()?`\nפרט קטן: ${$('fDetail').value.trim()}`:''}${$('fSong').value.trim()?`\nהשיר של הרגע: ${$('fSong').value.trim()}`:''}
+
+ההערות שלי:
+${notes}`;
+  try{await navigator.clipboard.writeText(pr);toast('הועתק. הדבק/י בצ׳אט עם Claude, ואת הסיפור שחוזר הדבק/י כאן');}
+  catch(e){prompt('העתק/י את ההנחיה:',pr);}
+}
+$('fImg').onchange=e=>{const f=e.target.files[0];if(!f)return;const img=new Image(),r=new FileReader();
+  r.onload=()=>{img.onload=()=>{const c=document.createElement('canvas');const sc=Math.min(1,1000/img.width);c.width=img.width*sc;c.height=img.height*sc;c.getContext('2d').drawImage(img,0,0,c.width,c.height);media.img=c.toDataURL('image/jpeg',.78);preview();};img.src=r.result;};r.readAsDataURL(f);};
+let rec=null,chunks=[],recT=null;
+async function toggleRec(){
+  const btn=$('recBtn');if(rec&&rec.state==='recording'){rec.stop();return;}
+  try{const st=await navigator.mediaDevices.getUserMedia({audio:true});rec=new MediaRecorder(st);chunks=[];
+    rec.ondataavailable=e=>chunks.push(e.data);const t0=Date.now();recT=setInterval(()=>{$('recStatus').textContent=clock(Date.now()-t0);},500);
+    rec.onstop=()=>{st.getTracks().forEach(t=>t.stop());clearInterval(recT);const b=new Blob(chunks,{type:rec.mimeType});const r=new FileReader();
+      r.onload=()=>{media.audio=r.result;preview();};r.readAsDataURL(b);btn.classList.remove('live');setBtn(btn,'rec','הקלט מחדש');$('recStatus').textContent='יש הקלטה';};
+    rec.start();btn.classList.add('live');setBtn(btn,'stop','עצור');
+  }catch(e){toast('אין גישה למיקרופון. צריך לאשר בדפדפן');}
+}
+const clock=ms=>{const s=Math.floor(ms/1000);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');};
+function preview(){$('fPreview').innerHTML=(media.img?`<img src="${media.img}" alt="">`:'')+(media.audio?`<audio controls src="${media.audio}"></audio>`:'')+((media.img||media.audio)?`<div><button class="btn danger small" onclick="media={img:null,audio:null};preview()">${ico('trash')}הסר</button></div>`:'');}
+function saveStory(){
+  const title=$('fTitle').value.trim(),text=$('fText').value.trim();
+  if(!title&&!text&&!media.audio){toast('כתוב/י לפחות שם לסיפור או כמה מילים');return;}
+  const old=editing?D.stories.find(x=>x.id===editing):null;
+  const s={id:editing||id(),ev:formEv||(old&&old.ev)||null,title:title||'(בלי שם)',when:$('fWhen').value.trim(),place:$('fPlace').value.trim(),
+    circle:$('fCircle').value,text,quote:$('fQuote').value.trim(),detail:$('fDetail').value.trim(),song:$('fSong').value.trim(),
+    people:[...selPeople],from:$('fFrom').value.trim(),img:media.img,audio:media.audio,added:old?old.added:Date.now()};
+  if(!s.ev)s.ev=s.id;
+  if(old)D.stories=D.stories.map(x=>x.id===editing?s:x);else D.stories.push(s);
+  if(!save())return;
+  resetForm();toast('נשמר בספר');openEvent(s.ev);
+}
+function resetForm(){editing=null;formEv=null;media={img:null,audio:null};selPeople=new Set();
+  ['fTitle','fWhen','fPlace','fText','fFrom','fNewPerson','fQuote','fDetail','fSong','a1','a2','a3','a4','a5'].forEach(i=>$(i).value='');
+  circleTouched=false;$('moreBox').open=false;$('fImg').value='';$('fPreview').innerHTML='';$('recStatus').textContent='';$('writeTitle').textContent='זיכרון חדש';setMode('free');renderPeopleChips();}
+function fillForm(s){
+  if(s.when||s.place||s.quote||s.detail||s.song||s.from||s.img||s.audio)$('moreBox').open=true;
+  $('fTitle').value=s.title||'';$('fWhen').value=s.when||'';$('fPlace').value=s.place||'';if(circleOf(s.circle))$('fCircle').value=s.circle;
+  $('fText').value=s.text||'';$('fFrom').value=s.from||'';$('fQuote').value=s.quote||'';$('fDetail').value=s.detail||'';$('fSong').value=s.song||'';
+}
+function editStory(sid){const s=D.stories.find(x=>x.id===sid);if(!s)return;show('write');resetForm();editing=sid;fillForm(s);
+  media={img:s.img||null,audio:s.audio||null};selPeople=new Set(s.people);renderPeopleChips();preview();$('writeTitle').textContent='עריכה: '+s.title;}
+function writeAngle(ev){
+  const e=evInfo(anglesOf(ev));show('write');resetForm();formEv=ev;
+  $('fTitle').value=e.title;$('fWhen').value=e.when;$('fPlace').value=e.place;if(circleOf(e.circle))$('fCircle').value=e.circle;
+  e.angles.forEach(a=>a.people.forEach(p=>selPeople.add(p)));
+  e.angles.forEach(a=>{if(a.from){const p=D.people.find(x=>x.name===a.from);if(p)selPeople.add(p.id);}});
+  renderPeopleChips();$('writeTitle').textContent='הזווית שלי על: '+e.title;$('fText').focus();
+}
+function delStory(sid){if(!confirm('למחוק את הזווית הזאת?'))return;const s=D.stories.find(x=>x.id===sid);D.stories=D.stories.filter(x=>x.id!==sid);save();toast('נמחק');
+  if(s&&anglesOf(s.ev).length)renderEvent();else show('read');}
+
+/* ================= the book ================= */
+function renderBook(){
+  const f=$('readFilter');const cur=f.value;
+  f.innerHTML='<option value="all">כל הספר</option>'+D.circles.map(c=>`<option value="${c.id}">מעגל: ${esc(c.name)}</option>`).join('')+D.people.map(p=>`<option value="p:${p.id}">עם ${esc(p.name)}</option>`).join('');
+  f.value=[...f.options].some(o=>o.value===cur)?cur:'all';
+  let evs=groupEvents(D.stories);
+  if(f.value.startsWith('p:')){const pid=f.value.slice(2),p=personOf(pid);evs=evs.filter(e=>e.angles.some(a=>a.people.includes(pid)||(p&&a.from===p.name)));}
+  else if(f.value!=='all')evs=evs.filter(e=>e.circle===f.value);
+  const byWhen=$('readSort').value==='when';
+  evs.sort((a,b)=>byWhen?((yearOf(a.when)||9999)-(yearOf(b.when)||9999)||a.added-b.added):a.added-b.added);
+  const b=$('book');
+  if(!evs.length){b.innerHTML=`<p class="map-empty" style="margin-top:40px">${D.stories.length?'אין כאן סיפורים עדיין.':'הספר מחכה לסיפור הראשון.'}</p><div class="actions" style="justify-content:center"><button class="btn" onclick="show('write')">${ico('pen')}לכתוב סיפור</button></div>`;return;}
+  const chapters=[];const idx={};
+  evs.forEach(e=>{const k=circleOf(e.circle)?e.circle:'_';if(!(k in idx)){idx[k]=chapters.length;chapters.push({c:circleOf(e.circle),evs:[]});}chapters[idx[k]].evs.push(e);});
+  b.innerHTML=chapters.map(ch=>`<section class="chapter" style="--cc:${ccVar(ch.c)}">
+    <h2>${esc(ch.c?ch.c.name:'בלי מעגל')}</h2>
+    <p class="chapter-intro">${chapterIntro(ch.evs)}</p>
+    ${ch.evs.map(entryHtml).join('')}</section>`).join('');
+}
+function chapterIntro(evs){
+  const ys=evs.map(e=>yearOf(e.when)).filter(Boolean);
+  const ppl=[...new Set(evs.flatMap(e=>evParticipants(e.angles)))].map(personOf).filter(Boolean).map(p=>p.name);
+  const places=[...new Set(evs.map(e=>e.place).filter(Boolean))];
+  const multi=evs.filter(e=>e.angles.length>1).length;
+  let t=`${evs.length===1?'סיפור אחד':evs.length+' סיפורים'}`;
+  if(ys.length)t+=Math.min(...ys)===Math.max(...ys)?`, מ-${ys[0]}`:`, בין ${Math.min(...ys)} ל-${Math.max(...ys)}`;
+  if(ppl.length)t+=`, עם ${ppl.length>4?ppl.slice(0,3).join(', ')+` ועוד ${ppl.length-3}`:ppl.length>1?ppl.slice(0,-1).join(', ')+' ו'+ppl.slice(-1):ppl[0]}`;
+  t+='.';
+  if(places.length)t+=` ${places.length>1?'מקומות':'מקום'}: ${places.slice(0,4).join(', ')}.`;
+  if(multi)t+=` ${multi===1?'סיפור אחד נכתב':multi+' סיפורים נכתבו'} מכמה זוויות.`;
+  return esc(t);
+}
+function entryHtml(e){
+  const first=e.angles.find(a=>a.text)||e.angles[0];
+  const tx=(first.text||'').replace(/\s*\n\s*/g,' ');const ex=tx.length>260?tx.slice(0,260).replace(/\s+\S*$/,'')+'…':tx;
+  const authors=[...new Set(e.angles.map(a=>isMine(a)?'אני':a.from))];
+  const ppl=evParticipants(e.angles).map(personOf).filter(Boolean);
+  return `<article class="entry">
+    <button class="entry-t" onclick="openEvent('${e.ev}')">${esc(e.title)}</button>
+    <div class="meta">${[e.when,e.place].filter(Boolean).map(esc).join(' · ')||'&nbsp;'}</div>
+    ${e.quote?`<p class="pull">${esc(e.quote)}</p>`:''}
+    ${ex?`<p class="excerpt">${esc(ex)}</p>`:(first.audio?'<p class="note">סיפור מוקלט</p>':'')}
+    ${(e.angles.length>1||!isMine(first))?`<button class="angles-line" onclick="openEvent('${e.ev}')">${ico('thread')}${e.angles.length>1?e.angles.length+' זוויות: ':'הזווית של '}${authors.map(esc).join(', ')}</button>`:''}
+    ${ppl.length?`<div class="tags">${ppl.map(p=>`<button class="tag" style="--cc:${ccVar(circleOf(p.circle))}" onclick="openPerson('${p.id}')"><i></i>${esc(p.name)}</button>`).join('')}</div>`:''}
+  </article>`;
+}
+
+/* ================= event page ================= */
+let EV=null,evMode='stack',evUniq=false;
+function openEvent(ev){EV=ev;evMode='stack';evUniq=false;renderEvent();show('event');}
+const STOP=new Set('היה היו היינו הייתה היתה אבל אחרי לפני עוד כמו אנחנו אני הוא היא הם הן זאת זה שלנו שלי שלו שלה כבר איזה כולם בכלל ככה מאוד כל לא גם רק מה איך כי אז עם על את של יש אין אותו אותה אותנו אחד אחת שם פה כאן ואז ממש פשוט'.split(' '));
+const norm=w=>w.replace(/["׳״']/g,'').replace(/^[והבלמשכ](?=[֐-׿]{3,})/,'');
+const words=t=>(String(t||'').match(/[֐-׿A-Za-z0-9"׳״']+/g)||[]).map(norm).filter(w=>w.length>=3&&!STOP.has(w));
+function renderEvent(){
+  const A=anglesOf(EV);if(!A.length){show('read');return;}
+  const e=evInfo(A);const c=circleOf(e.circle);
+  const ppl=evParticipants(A).map(personOf).filter(Boolean);
+  const authors=new Set(A.map(a=>a.from).filter(Boolean));
+  const missing=ppl.filter(p=>!authors.has(p.name));
+  const iWrote=A.some(isMine);
+  let uniq=null;
+  if(evUniq&&A.length>1){const sets=A.map(a=>new Set(words(a.text)));uniq=sets.map((s,i)=>new Set([...s].filter(w=>!sets.some((o,j)=>j!==i&&o.has(w)))));}
+  $('evBody').innerHTML=`<div class="ev-head" style="--cc:${ccVar(c)}">
+      <h1>${esc(e.title)}</h1>
+      <div class="ev-sub">${[e.when,e.place,c&&c.name].filter(Boolean).map(esc).join(' · ')}</div>
+      ${ppl.length?`<div class="tags" style="margin-top:10px">${ppl.map(p=>`<button class="tag" style="--cc:${ccVar(circleOf(p.circle))}" onclick="openPerson('${p.id}')"><i></i>${esc(p.name)}</button>`).join('')}</div>`:''}
+    </div>
+    <div class="actions noprint">
+      <button class="btn small" onclick="shareEvent('${EV}')">${ico('share')}שתף עם מי שהיה שם</button>
+      ${iWrote?'':`<button class="btn ghost small" onclick="writeAngle('${EV}')">${ico('pen')}הזווית שלי</button>`}
+    </div>
+    ${missing.length?`<div class="missing-line noprint">עוד לא סיפרו:${missing.map(p=>`<button class="btn link small" onclick="requestAngle('${p.id}')">${ico('send')}${esc(p.name)}</button>`).join('')}</div>`:''}
+    ${A.length>1?`<div class="noprint" style="display:flex;flex-wrap:wrap;align-items:center;gap:6px 20px">
+      <div class="seg" role="group" aria-label="תצוגה"><button class="${evMode==='stack'?'on':''}" onclick="evMode='stack';renderEvent()">אחת אחרי השנייה</button><button class="${evMode==='side'?'on':''}" onclick="evMode='side';renderEvent()">זו לצד זו</button></div>
+      <label class="chk" style="margin:16px 0 0"><input type="checkbox" ${evUniq?'checked':''} onchange="evUniq=this.checked;renderEvent()"> סמן מה שרק אחד זכר</label></div>`:''}
+    <div class="angles ${A.length>1?evMode:'stack'}">${A.map((a,i)=>angleHtml(a,uniq&&uniq[i],false)).join('')}</div>`;
+}
+function markUniq(text,set){
+  return esc(text).replace(/[֐-׿A-Za-z0-9"׳״']+/g,m=>set.has(norm(m.replace(/&quot;/g,'"')))?`<mark class="uniq">${m}</mark>`:m);
+}
+function angleHtml(a,uniq,exporting){
+  const who=isMine(a)?(exporting&&D.owner?'הזווית של '+D.owner:'הזווית שלי'):'הזווית של '+a.from;
+  return `<article class="angle">
+    <div class="who">${esc(who)}${exporting?'':`<span class="act noprint">${isMine(a)?`<button class="btn link small" onclick="editStory('${a.id}')" aria-label="ערוך">${ico('edit')}ערוך</button>`:''}<button class="btn danger small" onclick="delStory('${a.id}')" aria-label="מחק">${ico('trash')}</button></span>`}</div>
+    ${a.quote?`<p class="pull">${esc(a.quote)}</p>`:''}
+    ${a.text?`<div class="text">${a.text.trim().split(/\n\s*\n/).map(pp=>`<p>${uniq?markUniq(pp,uniq):esc(pp)}</p>`).join('')}</div>`:''}
+    ${(a.detail||a.song)?`<div class="margin-notes">${a.detail?`<div>${ico('leaf')}<span>${esc(a.detail)}</span></div>`:''}${a.song?`<div>${ico('note')}<span>${esc(a.song)}</span></div>`:''}</div>`:''}
+    ${a.img?`<img src="${a.img}" alt="">`:''}${a.audio?`<audio controls src="${a.audio}"></audio>`:''}
+  </article>`;
+}
+
+/* ================= links between books ================= */
+function enc(o){return btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}
+function dec(t){t=t.replace(/-/g,'+').replace(/_/g,'/');while(t.length%4)t+='=';return JSON.parse(decodeURIComponent(escape(atob(t))));}
+function baseUrl(){return location.origin+location.pathname;}
+function normPhone(v){let ph=(v||'').replace(/\D/g,'');if(ph.startsWith('0'))ph='972'+ph.slice(1);return ph;}
+function ensureOwner(needPhone=true){
+  if(!D.owner){const o=prompt('איך לחתום? (השם שלך)','');if(!o)return false;D.owner=o.trim();save();applyTitle();}
+  if(needPhone&&!D.phone){const ph=prompt('לאיזה מספר וואטסאפ יחזרו הזיכרונות? (המספר שלך)','');if(!ph)return false;D.phone=ph.trim();save();}
+  return true;
+}
+const wa=(phone,msg)=>window.open(`https://wa.me/${phone||''}?text=${encodeURIComponent(msg)}`,'_blank');
+function inviteLink(o){return baseUrl()+'?invite='+enc(Object.assign({o:D.owner,op:normPhone(D.phone),t:D.title,pid:D.myId},o));}
+function sendInvite(){
+  const n=$('iName').value.trim();if(!n){toast('למי שולחים?');return;}if(!ensureOwner())return;
+  const ex=$('iExample').value.trim(),q=$('iQuestion').value.trim();
+  wa(normPhone($('iPhone').value),`היי ${n},
+התחלתי לאסוף סיפורים לספר החיים שלי, ויהיה לי כיף אם תוסיף/י זיכרון או שניים שיש לך ממני${ex?` (אני למשל זוכר/ת: ${ex})`:''}.
+אפשר לכתוב, להקליט, או פשוט לדבר והטלפון יקליד. אפילו כמה מילים זה מצוין:
+${inviteLink({n,e:ex,q})}
+תודה! ${D.owner}`);
+  D.requests.push({id:id(),name:n,phone:normPhone($('iPhone').value),sent:Date.now(),done:false});save();
+  toast('ההזמנה נפתחה בוואטסאפ ונרשמה במעקב');
+}
+function requestAngle(pid){
+  const p=personOf(pid);if(!p||!ensureOwner())return;const e=evInfo(anglesOf(EV));
+  wa('',`היי ${p.name},
+כתבתי בספר שלי על "${e.title}"${e.when?` (${e.when})`:''}, ואני סקרן/ית איך זה נראה מהצד שלך. אפשר לכתוב או להקליט כאן, אפילו כמה מילים:
+${inviteLink({n:p.name,q:`איך את/ה זוכר/ת את "${e.title}"?`,ev:EV,ti:e.title,w:e.when})}
+${D.owner}`);
+  D.requests.push({id:id(),name:p.name,ev:EV,about:e.title,sent:Date.now(),done:false});save();toast('הבקשה נפתחה בוואטסאפ');
+}
+function shareEvent(ev){
+  if(!ensureOwner(false))return;const A=anglesOf(ev);const e=evInfo(A);
+  const s=A.find(isMine)||A[0];
+  const withN=evParticipants(A).map(personOf).filter(Boolean);
+  const author=s.from||D.owner;const ap=isMine(s)?D.myId:((D.people.find(p=>p.name===s.from)||{}).pid||'');
+  const link=baseUrl()+'?import='+enc({k:'s',ev,f:author,fp:ap,by:D.owner,bp:D.myId,ti:e.title,w:e.when,pl:e.place,x:s.text,qu:s.quote,de:s.detail,so:s.song,
+    with:[...withN.map(p=>p.name),...(isMine(s)?[]:[D.owner])],withP:[...withN.map(p=>p.pid||''),...(isMine(s)?[]:[D.myId])]});
+  const tx=s.text||'';
+  wa('',`${D.owner} הוסיף/ה לספר סיפור שגם את/ה בו:
+*${e.title}*${e.when?` (${e.when})`:''}
+${tx?'\n'+(tx.length>700?tx.slice(0,700)+'…':tx)+'\n':''}
+להוספה לספר שלך ולכתיבת הזווית שלך, איך זה היה בעיניים שלך:
+${link}`);
+}
+function groupLink(){
+  const g=$('gName').value.trim(),m=$('gMembers').value.split(/[,،\n]/).map(x=>x.trim()).filter(Boolean);
+  if(!g){toast('כתוב/י שם לחבורה');return null;}
+  return {g,link:baseUrl()+'?start='+enc({g,m,from:D.owner||'',note:$('gNote').value.trim()})};
+}
+function sendGroupInvite(){const r=groupLink();if(!r)return;
+  wa('',`${r.g}, פתחתי לנו משהו:
+ספר חיים לכל אחד, שבו כל שטות והרפתקה נכתבות מהזוויות של כולנו, ונשמרות בספרים של כל מי שהיה שם.
+נכנסים, בוחרים מי אתם, ומתחילים לכתוב:
+${r.link}`);}
+async function copyGroupInvite(){const r=groupLink();if(!r)return;try{await navigator.clipboard.writeText(r.link);toast('הקישור הועתק');}catch(e){prompt('העתק/י את הקישור:',r.link);}}
+
+/* ================= import (memory from a guest, or an angle from another book) ================= */
+let IMP=null;
+function openImport(m){
+  IMP=m;const shared=m.k==='s';const target=m.ev&&anglesOf(m.ev).length?evInfo(anglesOf(m.ev)):null;
+  const dup=m.ev&&D.stories.some(s=>s.ev===m.ev&&authorOf(s)===m.f);
+  $('mImportT').textContent=shared?`${m.by||m.f} שיתף/ה איתך סיפור משותף`:target?`${m.f} שלח/ה את הזווית שלו/ה`:'התקבל זיכרון חדש';
+  $('impBody').innerHTML=`${target&&!shared?`<p class="note">על: ${esc(target.title)}</p>`:''}<article class="angle" style="padding-top:6px">
+    <h3>${esc(m.ti||'(בלי שם)')}</h3><div class="meta">${shared?'הזווית של':'מאת'} ${esc(m.f||'')}${m.w?' · '+esc(m.w):''}${m.pl?' · '+esc(m.pl):''}</div>
+    ${(m.with||[]).length?`<div class="tags">${m.with.map(n=>`<span class="tag"><i></i>${esc(n)}</span>`).join('')}</div>`:''}
+    ${m.qu?`<p class="pull">${esc(m.qu)}</p>`:''}<div class="text">${esc(m.x||'(הזיכרון נשלח כהקלטה בוואטסאפ)')}</div></article>
+    ${dup?'<p class="note" style="color:var(--thread)">הזווית הזאת כבר נמצאת בספר שלך.</p>':''}`;
+  $('impCircle').innerHTML=D.circles.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('');
+  if(target&&circleOf(target.circle))$('impCircle').value=target.circle;
+  $('impBtnB').textContent=shared?'הוסף וכתוב את הזווית שלי':'ערוך לפני שמוסיפים';
+  $('mImport').classList.add('on');
+}
+function closeImport(){$('mImport').classList.remove('on');IMP=null;history.replaceState(null,'',baseUrl());}
+function importAdd(second){
+  const m=IMP,cid=$('impCircle').value,shared=m.k==='s';
+  const fp=personFor(m.f,m.fp,cid);
+  const others=(m.with||[]).map((n,i)=>personFor(n,(m.withP||[])[i],cid)).filter(Boolean);
+  const ppl=[...new Set([fp,...others].filter(Boolean).map(p=>p.id))];
+  D.requests.forEach(r=>{if(r.name===m.f&&(!r.ev||r.ev===m.ev))r.done=true;});
+  if(!shared&&second){save();closeImport();show('write');resetForm();
+    fillForm({title:m.ti,when:m.w,place:m.pl,circle:cid,text:m.x,from:m.f,quote:m.qu,detail:m.de,song:m.so});formEv=m.ev||null;
+    ppl.forEach(x=>selPeople.add(x));renderPeopleChips();toast('אפשר לערוך, ואז "שמור לספר"');return;}
+  const dup=m.ev&&D.stories.some(s=>s.ev===m.ev&&authorOf(s)===m.f);
+  let ev=m.ev;
+  if(!dup){const st={id:id(),ev:m.ev||null,title:m.ti||'(בלי שם)',when:m.w||'',place:m.pl||'',circle:cid,text:m.x||'',quote:m.qu||'',detail:m.de||'',song:m.so||'',
+      people:ppl,from:isSelf(m.f,m.fp)?'':(m.f||''),img:null,audio:null,added:Date.now()};if(!st.ev)st.ev=st.id;ev=st.ev;D.stories.push(st);}
+  save();closeImport();
+  if(shared&&second){writeAngle(ev);toast('כתוב/י איך את/ה זוכר/ת את זה');return;}
+  toast(dup?'כבר בספר':'נוסף לספר');openEvent(ev);
+}
+
+/* ================= control center ================= */
+function renderControl(){
+  $('reqTable').innerHTML=D.requests.length?[...D.requests].reverse().map(r=>`<tr>
+    <td>${esc(r.name)}</td><td class="note">${esc(r.about||'זיכרון עליי')}</td><td class="note">${new Date(r.sent).toLocaleDateString('he-IL')}</td>
+    <td><span class="st ${r.done?'done':'wait'}">${r.done?'התקבל':'ממתין'}</span></td>
+    <td style="white-space:nowrap"><button class="btn link small" onclick="toggleReq('${r.id}')">${r.done?'סמן ממתין':'סמן התקבל'}</button>${r.phone?`<button class="btn link small" onclick="remind('${r.id}')">תזכורת</button>`:''}<button class="btn danger small" onclick="delReq('${r.id}')" aria-label="מחק">${ico('x')}</button></td></tr>`).join('')
+    :'<tr><td colspan="5" class="note">עדיין לא נשלחו בקשות. אפשר להזמין מלשונית "הספר" או מדף של סיפור.</td></tr>';
+  renderSelTree();
+  $('backupInfo').textContent=D.lastBackup?`גיבוי אחרון: ${new Date(D.lastBackup).toLocaleDateString('he-IL')}. כדאי לגבות פעם בחודש.`:'הספר שמור במכשיר הזה בלבד ועדיין לא גובה. כדאי לגבות פעם בחודש.';
+  $('sTitle').value=D.title||'';$('sOwner').value=D.owner||'';$('sPhone').value=D.phone||'';
+}
+function toggleReq(rid){const r=D.requests.find(x=>x.id===rid);r.done=!r.done;save();renderControl();}
+function delReq(rid){D.requests=D.requests.filter(x=>x.id!==rid);save();renderControl();}
+function remind(rid){const r=D.requests.find(x=>x.id===rid);wa(r.phone,`היי ${r.name}, רק תזכורת קטנה לגבי הזיכרון לספר, אם יש לך דקה`);}
+function saveSettings(){D.title=$('sTitle').value.trim()||'ספר החיים';D.owner=$('sOwner').value.trim();D.phone=$('sPhone').value.trim();save();applyTitle();toast('נשמר');}
+function renderSelTree(){
+  $('selTree').innerHTML=D.circles.map(c=>{const evs=groupEvents(D.stories.filter(s=>s.circle===c.id));
+    return `<div class="sel-circle"><label class="chk"><input type="checkbox" class="selC" data-c="${c.id}" ${evs.length?'checked':'disabled'} onchange="document.querySelectorAll('.selS[data-c=\\'${c.id}\\']').forEach(x=>x.checked=this.checked)"><span class="dot" style="--cc:var(${c.color})"></span><b>${esc(c.name)}</b> <span class="note">(${evs.length})</span></label>
+      ${evs.length?`<details style="margin:0"><summary class="note" style="font:13.5px var(--hand);padding-right:26px">${ico('chev','chev')}בחירת סיפורים</summary><div class="sel-stories">${evs.map(e=>`<label class="chk"><input type="checkbox" class="selS" data-c="${c.id}" value="${e.ev}" checked>${esc(e.title)}${e.angles.length>1?` <span class="note">(${e.angles.length} זוויות)</span>`:''}</label>`).join('')}</div></details>`:''}</div>`;}).join('');
+}
+const selectedEvents=()=>[...document.querySelectorAll('.selS:checked')].map(x=>x.value);
+function buildBookHtml(evIds,withMedia,autoPrint){
+  const css=document.querySelector('style').textContent;
+  const evs=groupEvents(D.stories.filter(s=>evIds.includes(s.ev)).map(s=>withMedia?s:Object.assign({},s,{img:null,audio:null})));
+  const circles=D.circles.filter(c=>evs.some(e=>e.circle===c.id));
+  const toc=circles.map(c=>{const es=evs.filter(e=>e.circle===c.id);return `<li style="--cc:var(${c.color})"><a href="#c-${c.id}">${esc(c.name)}</a><span class="note"> · ${es.length} סיפורים</span><div class="note">${es.slice(0,3).map(e=>esc(e.title)).join(' · ')}</div></li>`;}).join('');
+  const body=circles.map(c=>{const es=evs.filter(e=>e.circle===c.id).sort((a,b)=>(yearOf(a.when)||9999)-(yearOf(b.when)||9999));
+    return `<section class="chapter" id="c-${c.id}" style="--cc:var(${c.color})"><h2>${esc(c.name)}</h2><p class="chapter-intro">${chapterIntro(es)}</p>
+      ${es.map(e=>`<div class="exp-ev"><h3 style="font-size:26px;margin-top:30px">${esc(e.title)}</h3><div class="ev-sub">${[e.when,e.place].filter(Boolean).map(esc).join(' · ')}</div>
+      <div class="angles stack">${e.angles.map(a=>angleHtml(a,null,true)).join('')}</div></div>`).join('')}</section>`;}).join('');
+  return `<!DOCTYPE html><html lang="he" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${esc(D.title)}${D.owner?' – '+esc(D.owner):''}</title>
+<link href="https://fonts.googleapis.com/css2?family=David+Libre:wght@400;500;700&family=Miriam+Libre:wght@400;600;700&family=Playpen+Sans+Hebrew:wght@400;600&family=Suez+One&display=swap" rel="stylesheet"><style>${css}
+html,body{background:var(--paper)}.exp{max-width:780px;margin:0 auto;padding:34px 20px 60px}.noprint{display:none!important}
+.exp-cover{text-align:center;padding:50px 0 30px;border-bottom:1px solid var(--rule)}.exp-cover h1{font-size:46px;color:var(--ink)}
+.toc{list-style:none;padding:0;margin:30px 0}.toc li{padding:10px 0;border-bottom:1px dotted var(--rule)}.toc a{font:22px var(--display);color:var(--cc);text-decoration:none}
+${autoPrint?'.chapter{page-break-before:always}.exp-ev{page-break-inside:avoid}':''}
+</style></head><body><div class="exp">
+<div class="exp-cover"><h1>${esc(D.title)}</h1><div class="note">${D.owner?'של '+esc(D.owner)+' · ':''}${new Date().toLocaleDateString('he-IL')}</div></div>
+<ul class="toc">${toc}</ul>${body}
+<p class="note" style="text-align:center;margin-top:50px">נוצר בכלי "ספר החיים"</p></div>
+${autoPrint?'<script>setTimeout(()=>window.print(),900)<\/script>':''}</body></html>`;
+}
+function printSelected(){const ids=selectedEvents();if(!ids.length){toast('לא נבחרו סיפורים');return;}
+  const w=window.open('','_blank');w.document.write(buildBookHtml(ids,$('selMedia').checked,true));w.document.close();}
+async function shareDigital(){
+  const ids=selectedEvents();if(!ids.length){toast('לא נבחרו סיפורים');return;}
+  const html=buildBookHtml(ids,$('selMedia').checked,false);
+  const name=`${D.title}${D.owner?' - '+D.owner:''}.html`.replace(/[\\/:*?"<>|]/g,'');
+  const file=new File([html],name,{type:'text/html'});
+  if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title:D.title,text:'הספר שלי (פותחים את הקובץ בדפדפן)'});return;}catch(e){if(e.name==='AbortError')return;}}
+  const a=document.createElement('a');a.href=URL.createObjectURL(file);a.download=name;document.body.appendChild(a);a.click();a.remove();toast('הקובץ ירד. אפשר לשלוח אותו לכל אחד');
+}
+function exportJson(){D.lastBackup=Date.now();save();renderControl();
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(D)],{type:'application/json'}));
+  a.download=`sefer-hachaim-${new Date().toISOString().slice(0,10)}.json`;document.body.appendChild(a);a.click();a.remove();}
+function importJson(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();
+  r.onload=()=>{try{const d=JSON.parse(r.result);if(!d.circles||!d.stories)throw 0;if(!confirm('לשחזר מהגיבוי? הספר הנוכחי במכשיר הזה יוחלף.'))return;
+    D=d;if(!D.myId)D.myId='p'+id()+id();D.stories.forEach(s=>{if(!s.ev)s.ev=s.id;});save();applyTitle();toast('הספר שוחזר');show('map');}catch(e){toast('הקובץ לא נראה כמו גיבוי של ספר החיים');}};r.readAsText(f);}
+
+/* ================= guest (invited to write) ================= */
+let G=null,gHist=[],gFont=18,recog=null,dictOn=false,gRec=null,gChunks=[],gAudio=null,gTimer=null;
+function startGuest(inv){
+  G=inv;document.body.classList.add('guest');
+  document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id==='v-guest'));
+  $('bookTitle').textContent=inv.t||'ספר החיים';$('bookOwner').textContent='הספר של '+(inv.o||'');
+  $('gHello').textContent=`היי ${inv.n||''}`;
+  $('gIntro').textContent=inv.ev?`${inv.o||'חבר'} כתב/ה בספר החיים שלו/ה על "${inv.ti}", ומאוד רוצה לשמוע איך זה נראה מהצד שלך. כל אחד זוכר קצת אחרת, וזה בדיוק הקסם.`
+    :`${inv.o||'חבר'} אוסף/ת סיפורים לספר החיים שלו/ה, ויהיה לו/ה כיף לקבל ממך זיכרון. משהו קטן, מצחיק, מרגש, או סתם רגע שנשאר לך בראש.`;
+  if(inv.e){$('gExample').hidden=false;$('gExample').textContent=`${inv.o} נזכר/ת למשל: ${inv.e}`;}
+  if(inv.q){$('gQuestion').hidden=false;$('gQuestion').textContent=inv.q;}
+  if(inv.ti)$('gTitle').value=inv.ti;if(inv.w)$('gWhen').value=inv.w;
+  setBtn($('gSendBtn'),'send','שלח ל'+(inv.o||'בעל הספר'));
+  $('gPromoLink').href=baseUrl()+'?welcome=1';
+  const qs=inv.ev?['מה אני זוכר/ת שהכי מצחיק','איפה הייתי באותו רגע','מה אף אחד לא יודע','משפט שמישהו אמר']:['איך הכרנו','רגע שצחקנו ממנו','משהו שלמדתי ממך','מקום שהיינו בו יחד','מה הרשים אותי בך','סיפור שאף אחד לא יודע'];
+  $('gChips').innerHTML=qs.map(q=>`<button type="button" class="tag" onclick="insertPrompt(this.textContent)">${esc(q)}</button>`).join('');
+  const ta=$('gText');try{const d=localStorage.getItem('guestDraft_'+inv.n+(inv.ev||''));if(d)ta.value=d;}catch(e){}
+  ta.addEventListener('input',()=>{pushHist();try{localStorage.setItem('guestDraft_'+inv.n+(inv.ev||''),ta.value);}catch(e){}});
+  gHist=[ta.value];
+}
+function pushHist(){const v=$('gText').value;if(gHist[gHist.length-1]!==v){gHist.push(v);if(gHist.length>200)gHist.shift();}}
+function undoText(){if(gHist.length<2){toast('אין מה לבטל');return;}gHist.pop();$('gText').value=gHist[gHist.length-1];}
+function clearText(){if(!$('gText').value||!confirm('לנקות את כל הטקסט?'))return;$('gText').value='';pushHist();$('gText').dispatchEvent(new Event('input'));}
+function fontSize(d){gFont=Math.max(14,Math.min(30,gFont+d));const ta=$('gText');ta.style.fontSize=gFont+'px';const lh=Math.round(gFont*1.9);ta.style.lineHeight=lh+'px';
+  ta.style.backgroundImage=`linear-gradient(to left,transparent 32px,var(--margin) 32px,var(--margin) 33px,transparent 33px),repeating-linear-gradient(to bottom,transparent 0 ${lh-1}px,var(--rule) ${lh-1}px ${lh}px)`;}
+function insertPrompt(q){const ta=$('gText');ta.value+=(ta.value&&!ta.value.endsWith('\n')?'\n\n':'')+q+': ';pushHist();ta.focus();ta.setSelectionRange(ta.value.length,ta.value.length);ta.dispatchEvent(new Event('input'));}
+function speak(t){
+  if(!('speechSynthesis' in window)){toast('הקראה לא נתמכת בדפדפן הזה');return;}
+  if(speechSynthesis.speaking){speechSynthesis.cancel();return;}if(!t.trim()){toast('אין עדיין מה להקריא');return;}
+  const u=new SpeechSynthesisUtterance(t);u.lang='he-IL';const v=speechSynthesis.getVoices().find(v=>/^(he|iw)/i.test(v.lang));if(v)u.voice=v;u.rate=.95;speechSynthesis.speak(u);
+}
+function speakInvite(){speak([$('gHello').textContent,$('gIntro').textContent,$('gExample').hidden?'':$('gExample').textContent,$('gQuestion').hidden?'':$('gQuestion').textContent].join('. '));}
+function speakText(){speak($('gText').value);}
+function toggleDictation(taId,btnId,stId){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition,btn=$(btnId),st=$(stId);
+  if(!SR){st.textContent='ההכתבה לא נתמכת בדפדפן הזה. אפשר ללחוץ על המיקרופון שבמקלדת של הטלפון ולדבר.';return;}
+  if(dictOn){recog.stop();return;}
+  recog=new SR();recog.lang='he-IL';recog.continuous=true;recog.interimResults=true;
+  const ta=$(taId);let base=ta.value;
+  const join=(a,b)=>a&&!/\s$/.test(a)?a+' '+b:a+b;
+  recog.onresult=e=>{let fin='',tmp='';for(let i=e.resultIndex;i<e.results.length;i++){const r=e.results[i];if(r.isFinal)fin+=r[0].transcript;else tmp+=r[0].transcript;}
+    if(fin){base=join(base,fin.trim());ta.value=base;ta.dispatchEvent(new Event('input'));}else ta.value=join(base,tmp);};
+  recog.onstart=()=>{dictOn=true;btn.classList.add('live');setBtn(btn,'stop','עצור הכתבה');st.textContent='מקשיב... דבר/י בחופשיות';};
+  recog.onend=()=>{dictOn=false;btn.classList.remove('live');setBtn(btn,'mic','הכתבה בקול');st.textContent='';ta.value=base;};
+  recog.onerror=e=>{st.textContent=e.error==='not-allowed'?'צריך לאשר גישה למיקרופון':'ההכתבה נעצרה. אפשר ללחוץ שוב';};
+  recog.start();
+}
+async function guestRec(){
+  const btn=$('gRecBtn'),tm=$('gRecTime');if(gRec&&gRec.state==='recording'){gRec.stop();return;}
+  try{const st=await navigator.mediaDevices.getUserMedia({audio:true});gRec=new MediaRecorder(st);gChunks=[];gRec.ondataavailable=e=>gChunks.push(e.data);
+    const t0=Date.now();gTimer=setInterval(()=>{tm.textContent=clock(Date.now()-t0);},500);
+    gRec.onstop=()=>{st.getTracks().forEach(t=>t.stop());clearInterval(gTimer);gAudio=new Blob(gChunks,{type:gRec.mimeType||'audio/webm'});
+      $('gAudioBox').innerHTML=`<audio controls src="${URL.createObjectURL(gAudio)}"></audio><div><button class="btn danger small" onclick="delGuestAudio()">${ico('trash')}מחק הקלטה</button></div>`;
+      btn.classList.remove('live');setBtn(btn,'rec','הקלט מחדש');};
+    gRec.start();btn.classList.add('live');setBtn(btn,'stop','עצור הקלטה');
+  }catch(e){toast('אין גישה למיקרופון. צריך לאשר בדפדפן');}
+}
+function delGuestAudio(){gAudio=null;$('gAudioBox').innerHTML='';$('gRecTime').textContent='';setBtn($('gRecBtn'),'rec','התחל הקלטה');}
+async function guestSend(){
+  const ti=$('gTitle').value.trim(),w=$('gWhen').value.trim(),x=$('gText').value.trim();
+  if(!x&&!gAudio){toast('כתוב/י משהו או הקלט/י קודם');return;}
+  const link=baseUrl()+'?import='+enc({f:G.n,ti,w,x,ev:G.ev||undefined});
+  const msg=`${G.o} שלום, ${G.ev?`הזווית שלי על "${G.ti}"`:'זיכרון לספר שלך'} מ${G.n}${ti&&!G.ev?`\n*${ti}*`:''}${w?` (${w})`:''}${x?'\n\n'+(x.length>1500?x.slice(0,1500)+'…':x):''}${gAudio?'\n\nצירפתי הקלטה קולית.':''}\n\nלהוספה לספר:\n${link}`;
+  if(gAudio){const ext=/mp4|aac/.test(gAudio.type)?'m4a':'webm';const file=new File([gAudio],`זיכרון-מ${G.n}.${ext}`,{type:gAudio.type});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],text:msg});guestDone();return;}catch(e){if(e.name==='AbortError')return;}}
+    const a=document.createElement('a');a.href=URL.createObjectURL(gAudio);a.download=file.name;document.body.appendChild(a);a.click();a.remove();toast('ההקלטה נשמרה בטלפון. צרף/י אותה בוואטסאפ');}
+  wa(G.op,msg);guestDone();
+}
+function guestDone(){try{localStorage.removeItem('guestDraft_'+G.n+(G.ev||''));}catch(e){}
+  $('gThanks').hidden=false;$('gThanksText').textContent=`הזיכרון בדרך ל${G.o}. רק לוודא שלחצת "שלח" בוואטסאפ.`;$('gThanks').scrollIntoView({behavior:'smooth',block:'center'});}
+function guestAnother(){['gTitle','gWhen','gText'].forEach(i=>$(i).value='');delGuestAudio();gHist=[''];$('gThanks').hidden=true;window.scrollTo(0,0);}
+
+/* ================= welcome (group start link) ================= */
+let W=null,wPick='';
+function startWelcome(inv){
+  W=inv;document.body.classList.add('guest');
+  document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id==='v-welcome'));
+  $('wHello').textContent=inv.g?`${inv.g}, ברוכים הבאים`:'ברוכים הבאים';
+  $('wIntro').textContent=`${inv.from?inv.from+' מזמין/ה אתכם':'אתם מוזמנים'} לפתוח ספר חיים. לכל אחד ספר משלו, וכל סיפור משותף נכתב מהזוויות של כל מי שהיה שם. עם השנים הספרים מתמלאים ונתפרים זה לזה.`;
+  if(inv.note){$('wNote').hidden=false;$('wNote').textContent=inv.note;}
+  $('wWho').innerHTML=(inv.m||[]).map(n=>`<button type="button" class="tag big" onclick="pickWho(this)">${esc(n)}</button>`).join('');
+}
+function pickWho(el){document.querySelectorAll('#wWho .tag').forEach(c=>c.classList.toggle('on',c===el));wPick=el.textContent;$('wName').value='';}
+function startMyBook(){
+  const me=($('wName').value.trim()||wPick).trim();if(!me){toast('בחר/י מי את/ה');return;}
+  if(!D.owner)D.owner=me;if(D.title==='ספר החיים')D.title='החיים שלי';
+  let c=W.g?D.circles.find(x=>x.name===W.g):null;
+  if(W.g&&!c){c={id:id(),name:W.g,color:COLORS[D.circles.length%COLORS.length]};D.circles.unshift(c);}
+  (W.m||[]).filter(n=>n!==me).forEach(n=>personFor(n,null,c?c.id:D.circles[0].id));
+  delete D.fresh;save();history.replaceState(null,'',baseUrl());W=null;applyTitle();
+  renderForm();if(c)$('fCircle').value=c.id;
+  startOnboard(2);
+}
+
+/* ================= onboarding ================= */
+const SUGGEST=['משפחה','חברים היום','חברי ילדות','חברי נעורים','עבודה','BFF','לימודים','שכנים','תנועת נוער','טיולים'];
+let obSel=new Set(),obExtra=[];
+function startOnboard(step){
+  show('onboard');$('ob1').hidden=step===2;$('ob2').hidden=step!==2;
+  if(step===2){D.circles.forEach(c=>obSel.add(c.name));renderObChips();}
+  else{$('obName').value=D.owner||'';setTimeout(()=>$('obName').focus(),50);}
+}
+function obNext(){const n=$('obName').value.trim();if(!n){toast('איך קוראים לך?');return;}D.owner=n;if(D.title==='ספר החיים')D.title='החיים שלי';save();applyTitle();startOnboard(2);}
+$('obName').addEventListener('keydown',e=>{if(e.key==='Enter')obNext();});
+function renderObChips(){
+  const all=[...new Set([...D.circles.map(c=>c.name),...SUGGEST,...obExtra])];
+  $('obChips').innerHTML=all.map(n=>`<button type="button" class="tag ${obSel.has(n)?'on':''}" aria-pressed="${obSel.has(n)}" onclick="obToggle(this.dataset.n)" data-n="${esc(n)}">${obSel.has(n)?ico('check'):''}${esc(n)}</button>`).join('');
+}
+function obToggle(n){obSel.has(n)?obSel.delete(n):obSel.add(n);renderObChips();}
+function obAdd(){const n=$('obCustom').value.trim();if(!n)return;obExtra.push(n);obSel.add(n);$('obCustom').value='';renderObChips();}
+$('obCustom').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();obAdd();}});
+function obFinish(){
+  if(!obSel.size){toast('בחר/י לפחות מעגל אחד');return;}
+  [...obSel].forEach(n=>{if(!D.circles.find(c=>c.name===n))D.circles.push({id:id(),name:n,color:COLORS[D.circles.length%COLORS.length]});});
+  delete D.fresh;save();document.body.classList.remove('guest');renderForm();show('map');toast('הספר מוכן. אפשר לכתוב את הסיפור הראשון');
+}
+
+/* ================= boot ================= */
+const QP=new URLSearchParams(location.search);
+applyTitle();renderForm();
+if(QP.get('invite')){try{startGuest(dec(QP.get('invite')));}catch(e){renderMap();toast('הקישור לא תקין');}}
+else if(QP.get('start')){try{startWelcome(dec(QP.get('start')));}catch(e){renderMap();toast('הקישור לא תקין');}}
+else{
+  renderMap();
+  if(QP.get('welcome')){history.replaceState(null,'',baseUrl());if(!D.owner)startOnboard(1);}
+  else if(QP.get('import')){try{openImport(dec(QP.get('import')));}catch(e){toast('קישור הזיכרון לא תקין');}}
+  else if(!D.stories.length&&!D.owner)startOnboard(1);
+}
+let rz;window.addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(()=>{if(curView==='map'&&!document.body.classList.contains('guest'))renderMap();},150);});
+</script>
+</body>
+</html>

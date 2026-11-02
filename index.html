@@ -171,8 +171,9 @@ details[open]>summary .chev{transform:rotate(90deg)}
 .excerpt{font:17.5px/1.8 var(--read);color:var(--ink);margin:0 0 8px;max-width:64ch;white-space:pre-wrap}
 .angles-line{display:inline-flex;align-items:center;gap:8px;font:14.5px var(--hand);color:var(--thread);background:none;border:0;padding:2px 0;cursor:pointer}
 .angles-line .ic{width:20px;height:20px}
-.invite-box{border:1px solid var(--rule);background:var(--paper-2);border-radius:4px;padding:4px 18px 16px;margin-bottom:24px}
-.invite-box summary{font:19px var(--display);font-weight:400;padding:12px 0 6px}
+.invite-box{margin:0 0 18px}
+.invite-box summary{font:600 15px var(--ui);color:var(--pen)}
+.invite-box[open]{background:var(--paper-2);padding:4px 18px 16px;border-radius:4px}
 
 /* ---------- event page ---------- */
 .back{margin-bottom:10px}
@@ -257,7 +258,25 @@ td .btn{margin:2px 0}
   transition:opacity .25s,transform .25s cubic-bezier(.2,.7,.2,1);pointer-events:none;z-index:40;max-width:90vw;text-align:center}
 .toast.on{opacity:1;transform:translate(-50%,0)}
 
+/* bigger on computers, so no one needs Ctrl+ */
+@media (min-width:900px){body{zoom:1.14}}
+@media (min-width:1300px){body{zoom:1.26}}
+.cover-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.help-btn{flex:none;display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(216,195,138,.45);color:var(--foil);background:transparent;
+  border-radius:20px;padding:6px 12px;font:600 14px var(--ui);cursor:pointer;margin-top:4px}
+.help-btn:hover{background:rgba(216,195,138,.1)}
+body.guest .help-btn{display:none}
+.ob h1{font-size:34px;margin-bottom:6px}
+.ob .lead{margin-bottom:6px}
+.ob .tags .tag{font-size:16px;padding:8px 16px}
+.ob-add{display:flex;gap:10px;align-items:flex-end;margin-top:10px}
+.ob-add input{flex:1}
+.quiet-tools{display:flex;gap:4px;justify-content:flex-start;margin:14px 0 2px}
+.quiet-tools .btn{padding:5px 10px}
+.missing-line{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin-top:20px;font:15px var(--hand);color:var(--pencil)}
+.page-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
 @media (max-width:640px){
+  .hide-sm{display:none}.help-btn{padding:7px}
   .cover{padding:18px 16px 0}
   .cover h1{font-size:25px}
   nav button{padding:10px 11px 11px;font-size:14px;gap:6px}
@@ -322,14 +341,15 @@ td .btn{margin:2px 0}
 </svg>
 
 <header class="cover">
-  <h1 id="bookTitle">ספר החיים</h1>
-  <div class="sub" id="bookOwner">הסיפורים שלי, מצטברים לאורך השנים</div>
+  <div class="cover-row">
+    <div><h1 id="bookTitle">ספר החיים</h1><div class="sub" id="bookOwner">הסיפורים שלי, מצטברים לאורך השנים</div></div>
+    <button class="help-btn" onclick="show('guide')" aria-label="איך זה עובד"><svg class="ic"><use href="#i-help"/></svg><span class="hide-sm">איך זה עובד</span></button>
+  </div>
   <nav aria-label="ניווט">
     <button class="on" data-v="map"><svg class="ic"><use href="#i-map"/></svg>מפה</button>
     <button data-v="write"><svg class="ic"><use href="#i-pen"/></svg>כתיבה</button>
     <button data-v="read"><svg class="ic"><use href="#i-book"/></svg>הספר</button>
     <button data-v="control"><svg class="ic"><use href="#i-desk"/></svg>מרכז שליטה</button>
-    <button data-v="guide"><svg class="ic"><use href="#i-help"/></svg>מדריך</button>
   </nav>
 </header>
 
@@ -337,91 +357,75 @@ td .btn{margin:2px 0}
 
 <!-- ===================== MAP ===================== -->
 <section class="view on" id="v-map">
-  <h2>המעגלים של החיים שלי</h2>
-  <p class="lead" id="mapLead">כל מעגל הוא חבורה מהחיים שלך. כל חוט הוא סיפור שחוויתם יחד. החוטים האדומים מחברים בין מעגלים שונים.</p>
+  <div class="page-head"><h2>המעגלים שלי</h2><span class="note" id="mapStats"></span></div>
   <div class="map-wrap"><svg id="constellation" role="img" aria-label="מפת המעגלים והחוטים"></svg></div>
-  <div class="map-legend" id="mapLegend"><span><b></b>סיפור משותף</span><span><b class="r"></b>גשר בין מעגלים</span><span id="mapStats"></span></div>
+  <div class="map-legend" id="mapLegend"><span><b></b>סיפור משותף</span><span><b class="r"></b>גשר בין מעגלים</span></div>
   <div id="mapEmpty" class="map-empty" hidden></div>
-  <div id="bridgesBox" hidden>
-    <hr class="rule">
-    <h3>הגשרים</h3>
-    <p class="note">סיפורים שבהם נפגשו אנשים ממעגלים שונים בחיים שלך.</p>
+  <details id="bridgesBox" hidden>
+    <summary><svg class="ic chev"><use href="#i-chev"/></svg><span id="bridgesT">גשרים בין מעגלים</span></summary>
     <ul class="bridges" id="bridges"></ul>
-  </div>
+  </details>
   <div class="actions noprint">
-    <button class="btn ghost small" onclick="openCirclesModal()"><svg class="ic"><use href="#i-circles"/></svg>ניהול מעגלים</button>
-    <button class="btn ghost small" onclick="openPeopleModal()"><svg class="ic"><use href="#i-people"/></svg>האנשים בספר</button>
+    <button class="btn ghost small" onclick="openCirclesModal()"><svg class="ic"><use href="#i-circles"/></svg>המעגלים</button>
+    <button class="btn ghost small" onclick="openPeopleModal()"><svg class="ic"><use href="#i-people"/></svg>האנשים</button>
   </div>
 </section>
 
 <!-- ===================== WRITE ===================== -->
 <section class="view" id="v-write">
   <h2 id="writeTitle">זיכרון חדש</h2>
-  <p class="note">גם שלוש מילים זה זיכרון. אפשר להרחיב אחר כך.</p>
-  <label for="fTitle">איך קוראים לסיפור הזה? (השם שאתם נותנים לו)</label>
-  <input id="fTitle" placeholder="הלילה של הטנדר">
-  <div class="grid3">
-    <div><label for="fWhen">מתי</label><input id="fWhen" placeholder="קיץ 2009"></div>
-    <div><label for="fPlace">איפה</label><input id="fPlace" placeholder="חוף הכנרת"></div>
-    <div><label for="fCircle">מעגל</label><select id="fCircle"></select></div>
-  </div>
+  <input id="fTitle" aria-label="שם הסיפור" placeholder="איך קוראים לסיפור? למשל: הלילה של הטנדר" style="font:20px var(--display);margin-top:8px">
   <span class="lbl">מי היה שם</span>
   <div class="tags" id="fPeople"></div>
-  <input id="fNewPerson" placeholder="עוד מישהו? כתוב/י שם ולחץ/י Enter" enterkeyhint="done">
+  <input id="fNewPerson" placeholder="+ עוד מישהו (שם ואז Enter)" enterkeyhint="done">
 
-  <div class="seg" role="group" aria-label="אופן כתיבה">
-    <button id="mFree" class="on" onclick="setMode('free')">כתיבה חופשית</button>
-    <button id="mArc" onclick="setMode('arc')">בנה את הסיפור</button>
+  <div class="quiet-tools">
+    <button class="btn link small" id="arcToggle" onclick="setMode(mode==='arc'?'free':'arc')"><svg class="ic"><use href="#i-sparkle"/></svg><span>בנה סיפור</span></button>
+    <button class="btn link small" id="fDictBtn" onclick="toggleDictation('fText','fDictBtn','fDictStatus')"><svg class="ic"><use href="#i-mic"/></svg><span>הכתבה</span></button>
+    <button class="btn link small" onclick="copyPrompt()"><svg class="ic"><use href="#i-copy"/></svg><span>ניסוח</span></button>
   </div>
   <div id="arcBox" hidden>
-    <p class="note">כמה מילים לכל שאלה מספיקות. בסוף הכלי מרכיב מהן טיוטה.</p>
     <ol class="arc">
-      <li><label for="a1">איך זה התחיל? מה היה המצב הרגיל</label><textarea id="a1" rows="2"></textarea></li>
+      <li><label for="a1">איך זה התחיל?</label><textarea id="a1" rows="2"></textarea></li>
       <li><label for="a2">ואז... מה השתבש, או מה הפתיע</label><textarea id="a2" rows="2"></textarea></li>
       <li><label for="a3">השיא: הרגע שכולם זוכרים</label><textarea id="a3" rows="2"></textarea></li>
       <li><label for="a4">איך זה נגמר</label><textarea id="a4" rows="2"></textarea></li>
       <li><label for="a5">ומה זה אומר עלינו היום</label><textarea id="a5" rows="2"></textarea></li>
     </ol>
-    <div class="actions"><button class="btn ghost" onclick="composeArc()"><svg class="ic"><use href="#i-pen"/></svg>הרכב מזה טיוטה</button></div>
-  </div>
-
-  <div class="tools">
-    <button class="btn ghost small" id="fDictBtn" onclick="toggleDictation('fText','fDictBtn','fDictStatus')"><svg class="ic"><use href="#i-mic"/></svg><span>הכתבה בקול</span></button>
-    <button class="btn ghost small" onclick="copyPrompt()"><svg class="ic"><use href="#i-sparkle"/></svg><span>הכן לי ניסוח</span></button>
+    <div class="actions"><button class="btn ghost small" onclick="composeArc()"><svg class="ic"><use href="#i-pen"/></svg>הרכב מזה טיוטה</button></div>
   </div>
   <div class="note" id="fDictStatus"></div>
-  <textarea id="fText" class="lined" rows="7" placeholder="ראשי פרקים, אנקדוטה, או ארבעה עמודים. מה שעולה."></textarea>
+  <textarea id="fText" class="lined" rows="7" placeholder="גם שלוש מילים זה זיכרון. אפשר להרחיב אחר כך."></textarea>
 
-  <details open>
-    <summary><svg class="ic chev"><use href="#i-chev"/></svg>פרטים שעושים סיפור</summary>
+  <details id="moreBox">
+    <summary><svg class="ic chev"><use href="#i-chev"/></svg>עוד פרטים</summary>
+    <div class="grid3">
+      <div><label for="fWhen">מתי</label><input id="fWhen" placeholder="קיץ 2009"></div>
+      <div><label for="fPlace">איפה</label><input id="fPlace" placeholder="חוף הכנרת"></div>
+      <div><label for="fCircle">מעגל</label><select id="fCircle"></select></div>
+    </div>
     <label for="fQuote">המשפט: מה מישהו אמר שם</label><input id="fQuote" placeholder="״רגע, מי לקח את המפתחות?״">
     <div class="grid2">
-      <div><label for="fDetail">הפרט הקטן: ריח, בגד, מה אכלתם</label><input id="fDetail" placeholder="שקית במבה מעוכה"></div>
+      <div><label for="fDetail">הפרט הקטן</label><input id="fDetail" placeholder="ריח, בגד, מה אכלתם"></div>
       <div><label for="fSong">השיר של הרגע</label><input id="fSong" placeholder="מה התנגן ברקע"></div>
     </div>
-  </details>
-  <details>
-    <summary><svg class="ic chev"><use href="#i-chev"/></svg>תמונה והקלטה</summary>
-    <label for="fImg">תמונה</label><input type="file" id="fImg" accept="image/*">
-    <span class="lbl">הקלטה</span>
-    <div class="rec-line"><button class="btn ghost small" id="recBtn" onclick="toggleRec()"><svg class="ic"><use href="#i-rec"/></svg><span>התחל הקלטה</span></button><span class="rec-time" id="recStatus"></span></div>
+    <div class="grid2">
+      <div><label for="fImg">תמונה</label><input type="file" id="fImg" accept="image/*"></div>
+      <div><span class="lbl">הקלטה</span><div class="rec-line"><button class="btn ghost small" id="recBtn" onclick="toggleRec()"><svg class="ic"><use href="#i-rec"/></svg><span>התחל הקלטה</span></button><span class="rec-time" id="recStatus"></span></div></div>
+    </div>
     <div class="preview" id="fPreview"></div>
-  </details>
-  <details>
-    <summary><svg class="ic chev"><use href="#i-chev"/></svg>הזיכרון הגיע ממישהו אחר?</summary>
-    <label for="fFrom">ממי (ריק = זה שלי)</label><input id="fFrom" placeholder="דני, החבר מהצבא">
+    <label for="fFrom">הזיכרון הגיע ממישהו אחר? (ממי)</label><input id="fFrom" placeholder="ריק = זה שלי">
   </details>
   <div class="actions">
     <button class="btn" onclick="saveStory()"><svg class="ic"><use href="#i-check"/></svg>שמור לספר</button>
-    <button class="btn ghost" onclick="resetForm()">נקה</button>
+    <button class="btn link" onclick="resetForm()">נקה</button>
   </div>
 </section>
 
 <!-- ===================== BOOK ===================== -->
 <section class="view" id="v-read">
   <details class="invite-box noprint" id="inviteBox">
-    <summary><svg class="ic chev"><use href="#i-chev"/></svg>הזמן מישהו לכתוב לספר</summary>
-    <p class="note">מי שמקבל פותח דף כתיבה פשוט: הקלדה, הכתבה בקול, הקלטה והקראה. הזיכרון חוזר אליך בוואטסאפ, ואת/ה מחליט/ה מה נכנס.</p>
+    <summary><svg class="ic chev"><use href="#i-chev"/></svg>הזמן מישהו לכתוב עליך</summary>
     <div class="grid2">
       <div><label for="iName">למי</label><input id="iName" placeholder="סבתא רותי"></div>
       <div><label for="iPhone">הטלפון שלו/ה</label><input id="iPhone" inputmode="tel" placeholder="052..."></div>
@@ -509,6 +513,24 @@ td .btn{margin:2px 0}
   <p class="note" style="text-align:center">הספר נשמר אצלך במכשיר. אין הרשמה ואין תשלום.</p>
 </section>
 
+<!-- ===================== ONBOARDING ===================== -->
+<section class="view ob" id="v-onboard">
+  <div id="ob1">
+    <h1>ספר החיים שלך</h1>
+    <p class="lead">סיפורים שנכתבים לאורך השנים, יחד עם מי שהיה שם.</p>
+    <label for="obName">איך קוראים לך?</label>
+    <input id="obName" placeholder="השם שלך" style="font-size:20px" enterkeyhint="next">
+    <div class="actions"><button class="btn wide" onclick="obNext()">המשך<svg class="ic"><use href="#i-chev"/></svg></button></div>
+  </div>
+  <div id="ob2" hidden>
+    <h1>מי המעגלים שלך?</h1>
+    <p class="lead">בחר/י כמה שרוצים, ותן/י להם כל שם. אפשר לשנות תמיד.</p>
+    <div class="tags" id="obChips"></div>
+    <div class="ob-add"><input id="obCustom" placeholder="מעגל משלי, למשל: החבר'ה מהשכונה" enterkeyhint="done"><button class="btn ghost small" onclick="obAdd()"><svg class="ic"><use href="#i-plus"/></svg>הוסף</button></div>
+    <div class="actions"><button class="btn wide" onclick="obFinish()"><svg class="ic"><use href="#i-book"/></svg>לספר שלי</button></div>
+  </div>
+</section>
+
 <!-- ===================== GUIDE ===================== -->
 <section class="view guide" id="v-guide">
   <div id="guideWelcome" hidden>
@@ -560,8 +582,7 @@ td .btn{margin:2px 0}
 
   <hr class="rule">
   <h3>הזמנה לפתוח ספר</h3>
-  <p class="note">לחבורה או לחבר. כל מי שמקבל בוחר מי הוא, והספר שלו נפתח עם מעגל החבורה ועם כל החברים בפנים.</p>
-  <label for="gName">שם החבורה או המעגל</label><input id="gName" placeholder="החבר'ה מהצופים">
+    <label for="gName">שם החבורה או המעגל</label><input id="gName" placeholder="החבר'ה מהצופים">
   <label for="gMembers">השמות, מופרדים בפסיקים</label><input id="gMembers" placeholder="דני, רוני, מיכל">
   <label for="gNote">מילה אישית (לא חובה)</label><input id="gNote" placeholder="יאללה, תתחילו מהשטויות של כיתה ט'">
   <div class="actions">
@@ -571,8 +592,7 @@ td .btn{margin:2px 0}
 
   <hr class="rule">
   <h3>שיתוף והדפסה</h3>
-  <p class="note">בחר/י מה לכלול: מעגלים שלמים או סיפורים בודדים.</p>
-  <div id="selTree"></div>
+    <div id="selTree"></div>
   <label class="chk" style="margin-top:12px"><input type="checkbox" id="selMedia" checked> לכלול תמונות והקלטות</label>
   <div class="actions">
     <button class="btn" onclick="shareDigital()"><svg class="ic"><use href="#i-file"/></svg>ספר דיגיטלי לשיתוף</button>
@@ -601,7 +621,7 @@ td .btn{margin:2px 0}
 <!-- ===================== SLIPS ===================== -->
 <div class="modal" id="mCircles" role="dialog" aria-modal="true" aria-labelledby="mCirclesT"><div class="slip">
   <h3 id="mCirclesT">המעגלים של הספר</h3>
-  <p class="note">שינוי שם וצבע, או מחיקה. מחיקת מעגל מעבירה את הסיפורים שלו למעגל אחר לבחירתך.</p>
+  
   <div id="circlesList"></div>
   <span class="lbl">מעגל חדש</span>
   <div class="row-item" style="border:0">
@@ -613,7 +633,7 @@ td .btn{margin:2px 0}
 </div></div>
 <div class="modal" id="mPeople" role="dialog" aria-modal="true" aria-labelledby="mPeopleT"><div class="slip">
   <h3 id="mPeopleT">האנשים בספר</h3>
-  <p class="note">לחיצה על שם פותחת את כל הסיפורים שלו. אפשר להעביר אדם למעגל אחר.</p>
+  
   <div id="peopleList"></div>
   <div class="actions"><button class="btn ghost" onclick="closeModals()">סגור</button></div>
 </div></div>
@@ -638,14 +658,15 @@ const COLORS=['--c1','--c2','--c3','--c4','--c5','--c6','--c7','--c8'];
 function id(){return Math.random().toString(36).slice(2,9);}
 function load(){
   try{const d=JSON.parse(localStorage.getItem(KEY));if(d&&d.circles)return d;}catch(e){}
-  return {title:'ספר החיים',owner:'',circles:[
-    {id:id(),name:'משפחה',color:'--c1'},{id:id(),name:'חברי ילדות',color:'--c2'},
-    {id:id(),name:'צבא',color:'--c3'},{id:id(),name:'עבודה',color:'--c4'}],people:[],stories:[],requests:[]};
+  return {title:'ספר החיים',owner:'',circles:[],people:[],stories:[],requests:[],fresh:true};
 }
 let D=load();
 // migrate older books
 D.v=5; if(!D.myId)D.myId='p'+id()+id(); D.requests=D.requests||[]; D.people=D.people||[];
 D.stories.forEach(s=>{if(!s.ev)s.ev=s.id;if(!s.people)s.people=[];});
+// v0.6: drop the old preset circles nobody used (no stories, no people)
+if(!D.cleanedPresets){const OLD=['משפחה','חברי ילדות','צבא','עבודה'];
+  D.circles=D.circles.filter(c=>!(OLD.includes(c.name)&&!D.stories.some(s=>s.circle===c.id)&&!D.people.some(p=>p.circle===c.id)));D.cleanedPresets=true;}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(D));return true;}catch(e){toast('לא הצלחתי לשמור: הזיכרון של הדפדפן מלא. כדאי להוריד תמונות גדולות ולגבות');return false;}}
 save();
 const esc=t=>String(t??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -692,6 +713,7 @@ function show(v){
   if(v!==curView){prevView=curView;curView=v;}
   document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
   document.querySelectorAll('.view').forEach(s=>s.classList.toggle('on',s.id==='v-'+v));
+  if(v==='onboard')document.body.classList.add('guest');else if(!G&&!W)document.body.classList.remove('guest');
   if(v==='map')renderMap();if(v==='write')renderForm();if(v==='read')renderBook();if(v==='control')renderControl();
   const pg=$('page');pg.classList.remove('turn');void pg.offsetWidth;pg.classList.add('turn');
   window.scrollTo(0,0);
@@ -712,6 +734,7 @@ function renderMap(){
   const cx=W/2,cy=H/2,n=D.circles.length;
   const Rx=Math.min(W/2-(narrow?64:110),narrow?999:360),Ry=H/2-(narrow?78:80);
   const pos={},cpos={};let out='';
+  if(!n){svg.setAttribute('viewBox',`0 0 ${W} 200`);svg.innerHTML=`<g class="me"><circle cx="${cx}" cy="100" r="24"/><text x="${cx}" y="105">${esc(D.owner||'אני')}</text></g>`;}
   D.circles.forEach((c,i)=>{
     const a=-Math.PI/2+i*2*Math.PI/Math.max(n,1);
     const x=n===1?cx:cx+Math.cos(a)*Rx,y=n===1?cy-Ry*.55:cy+Math.sin(a)*Ry;
@@ -720,9 +743,10 @@ function renderMap(){
     cpos[c.id]={x,y,rc,a};
     ppl.forEach((p,j)=>{const b=a+Math.PI/2+j*2*Math.PI/Math.max(ppl.length,1);const rr=ppl.length===1?0:rc*.62;pos[p.id]={x:x+Math.cos(b)*rr,y:y+Math.sin(b)*rr,cc:c.color};});
   });
+  if(!n){afterMap({});return;}
   // clusters
   D.circles.forEach(c=>{const{x,y,rc,a}=cpos[c.id];const cnt=groupEvents(D.stories.filter(s=>s.circle===c.id)).length;
-    const lx=x+Math.cos(a)*(rc+18),ly=y+Math.sin(a)*(rc+18)+(Math.sin(a)>.3?14:Math.sin(a)<-.3?-4:5);
+    const up=Math.sin(a)<-.2&&n>1;const lx=x,ly=up?y-rc-30:y+rc+24;
     out+=`<g class="cl" style="--cc:var(${c.color})" tabindex="0" role="button" aria-label="${esc(c.name)}" onclick="openCircle('${c.id}')" onkeydown="if(event.key==='Enter')openCircle('${c.id}')">
       <circle class="cl-disk" cx="${x}" cy="${y}" r="${rc}"/>
       <text class="cl-name" x="${lx}" y="${ly}">${esc(c.name)}</text>
@@ -746,15 +770,19 @@ function renderMap(){
       <circle cx="${P.x.toFixed(1)}" cy="${P.y.toFixed(1)}" r="${(4.5+Math.min(cnt,6)*.8).toFixed(1)}"/>${many?'':`<text x="${P.x.toFixed(1)}" y="${(P.y-10).toFixed(1)}">${esc(p.name)}</text>`}</g>`;});
   out+=`<g class="me"><circle cx="${cx}" cy="${cy}" r="${narrow?20:24}"/><text x="${cx}" y="${cy+5}">${esc(D.owner||'אני')}</text></g>`;
   svg.innerHTML=out;
+  afterMap(edges);
+}
+function afterMap(edges){
+  const svg=$('constellation');
   if(!sewn&&Object.keys(edges).length){svg.querySelectorAll('.thread').forEach(t=>t.style.setProperty('--len',Math.ceil(t.getTotalLength())));svg.classList.add('sewing');sewn=true;setTimeout(()=>svg.classList.remove('sewing'),3500);}
   // stats, empty state, bridges
   const evs=groupEvents(D.stories);
-  $('mapStats').textContent=evs.length?`${evs.length} סיפורים · ${D.people.length} אנשים · ${Object.keys(edges).length} חוטים`:'';
+  const nn=(k,one,many)=>k===1?one:k+' '+many;$('mapStats').textContent=evs.length?`${nn(evs.length,'סיפור אחד','סיפורים')} · ${nn(D.people.length,'אדם אחד','אנשים')}`:'';$('mapLegend').hidden=!Object.keys(edges).length;
   const empty=$('mapEmpty');
-  if(!D.stories.length){empty.hidden=false;empty.innerHTML=`המפה עוד בלי חוטים. כל סיפור שתכתוב/י עם אנשים יתפור אותם לכאן.<div class="actions" style="justify-content:center"><button class="btn" onclick="show('write')">${ico('pen')}לכתוב את הסיפור הראשון</button><button class="btn ghost" onclick="show('guide')">איך זה עובד</button></div>`;}
+  if(!D.stories.length){empty.hidden=false;empty.innerHTML=`כל סיפור שתכתוב/י עם אנשים יתפור אותם למפה.<div class="actions" style="justify-content:center"><button class="btn" onclick="show('write')">${ico('pen')}לכתוב את הסיפור הראשון</button></div>`;}
   else empty.hidden=true;
   const br=evs.map(e=>{const cs=[...new Set([e.circle,...evParticipants(e.angles).map(p=>personOf(p).circle)])].map(circleOf).filter(Boolean);return {e,cs};}).filter(x=>x.cs.length>1);
-  $('bridgesBox').hidden=!br.length;
+  $('bridgesBox').hidden=!br.length;$('bridgesT').textContent=`גשרים בין מעגלים (${br.length})`;
   $('bridges').innerHTML=br.map(({e,cs})=>`<li><button onclick="openEvent('${e.ev}')">${esc(e.title)}</button> מחבר את ${cs.map(c=>`<span style="color:var(${c.color})">${esc(c.name)}</span>`).join(cs.length>2?', ':' ו')}${e.when?` · <span class="note">${esc(e.when)}</span>`:''}</li>`).join('');
 }
 function storiesOfPerson(pid){const p=personOf(pid);return D.stories.filter(s=>s.people.includes(pid)||(p&&s.from===p.name));}
@@ -823,7 +851,7 @@ $('fNewPerson').addEventListener('keydown',e=>{
   e.target.value.split(/[,،]/).map(x=>x.trim()).filter(Boolean).forEach(n=>{const p=personFor(n,null,$('fCircle').value);if(p)selPeople.add(p.id);});
   save();e.target.value='';renderPeopleChips();
 });
-function setMode(m){mode=m;$('mFree').classList.toggle('on',m==='free');$('mArc').classList.toggle('on',m==='arc');$('arcBox').hidden=m!=='arc';}
+function setMode(m){mode=m;$('arcBox').hidden=m!=='arc';$('arcToggle').classList.toggle('on',m==='arc');}
 function composeArc(){
   const parts=['a1','a2','a3','a4','a5'].map(i=>$(i).value.trim()).filter(Boolean);
   if(!parts.length){toast('כתוב/י לפחות תשובה אחת');return;}
@@ -876,8 +904,9 @@ function saveStory(){
 }
 function resetForm(){editing=null;formEv=null;media={img:null,audio:null};selPeople=new Set();
   ['fTitle','fWhen','fPlace','fText','fFrom','fNewPerson','fQuote','fDetail','fSong','a1','a2','a3','a4','a5'].forEach(i=>$(i).value='');
-  circleTouched=false;$('fImg').value='';$('fPreview').innerHTML='';$('recStatus').textContent='';$('writeTitle').textContent='זיכרון חדש';setMode('free');renderPeopleChips();}
+  circleTouched=false;$('moreBox').open=false;$('fImg').value='';$('fPreview').innerHTML='';$('recStatus').textContent='';$('writeTitle').textContent='זיכרון חדש';setMode('free');renderPeopleChips();}
 function fillForm(s){
+  if(s.when||s.place||s.quote||s.detail||s.song||s.from||s.img||s.audio)$('moreBox').open=true;
   $('fTitle').value=s.title||'';$('fWhen').value=s.when||'';$('fPlace').value=s.place||'';if(circleOf(s.circle))$('fCircle').value=s.circle;
   $('fText').value=s.text||'';$('fFrom').value=s.from||'';$('fQuote').value=s.quote||'';$('fDetail').value=s.detail||'';$('fSong').value=s.song||'';
 }
@@ -961,12 +990,10 @@ function renderEvent(){
       ${ppl.length?`<div class="tags" style="margin-top:10px">${ppl.map(p=>`<button class="tag" style="--cc:${ccVar(circleOf(p.circle))}" onclick="openPerson('${p.id}')"><i></i>${esc(p.name)}</button>`).join('')}</div>`:''}
     </div>
     <div class="actions noprint">
-      <button class="btn" onclick="shareEvent('${EV}')">${ico('share')}שתף עם מי שהיה שם</button>
-      ${iWrote?'':`<button class="btn ghost" onclick="writeAngle('${EV}')">${ico('pen')}הוסף את הזווית שלי</button>`}
+      <button class="btn small" onclick="shareEvent('${EV}')">${ico('share')}שתף עם מי שהיה שם</button>
+      ${iWrote?'':`<button class="btn ghost small" onclick="writeAngle('${EV}')">${ico('pen')}הזווית שלי</button>`}
     </div>
-    ${(missing.length||!iWrote)?`<div class="missing noprint"><h3>עוד לא סיפרו</h3>
-      <p class="note">כל זווית חדשה מוסיפה לסיפור משהו שאחרים לא זכרו.</p>
-      <div class="who-row">${!iWrote?`<button class="btn small" onclick="writeAngle('${EV}')">${ico('pen')}אני</button>`:''}${missing.map(p=>`<button class="btn ghost small" onclick="requestAngle('${p.id}')">${ico('send')}בקש מ${esc(p.name)}</button>`).join('')}</div></div>`:''}
+    ${missing.length?`<div class="missing-line noprint">עוד לא סיפרו:${missing.map(p=>`<button class="btn link small" onclick="requestAngle('${p.id}')">${ico('send')}${esc(p.name)}</button>`).join('')}</div>`:''}
     ${A.length>1?`<div class="noprint" style="display:flex;flex-wrap:wrap;align-items:center;gap:6px 20px">
       <div class="seg" role="group" aria-label="תצוגה"><button class="${evMode==='stack'?'on':''}" onclick="evMode='stack';renderEvent()">אחת אחרי השנייה</button><button class="${evMode==='side'?'on':''}" onclick="evMode='side';renderEvent()">זו לצד זו</button></div>
       <label class="chk" style="margin:16px 0 0"><input type="checkbox" ${evUniq?'checked':''} onchange="evUniq=this.checked;renderEvent()"> סמן מה שרק אחד זכר</label></div>`:''}
@@ -1226,9 +1253,32 @@ function startMyBook(){
   let c=W.g?D.circles.find(x=>x.name===W.g):null;
   if(W.g&&!c){c={id:id(),name:W.g,color:COLORS[D.circles.length%COLORS.length]};D.circles.unshift(c);}
   (W.m||[]).filter(n=>n!==me).forEach(n=>personFor(n,null,c?c.id:D.circles[0].id));
-  save();history.replaceState(null,'',baseUrl());document.body.classList.remove('guest');applyTitle();
+  delete D.fresh;save();history.replaceState(null,'',baseUrl());W=null;applyTitle();
   renderForm();if(c)$('fCircle').value=c.id;
-  $('guideWelcome').hidden=false;show('guide');
+  startOnboard(2);
+}
+
+/* ================= onboarding ================= */
+const SUGGEST=['משפחה','חברים היום','חברי ילדות','חברי נעורים','עבודה','BFF','לימודים','שכנים','תנועת נוער','טיולים'];
+let obSel=new Set(),obExtra=[];
+function startOnboard(step){
+  show('onboard');$('ob1').hidden=step===2;$('ob2').hidden=step!==2;
+  if(step===2){D.circles.forEach(c=>obSel.add(c.name));renderObChips();}
+  else{$('obName').value=D.owner||'';setTimeout(()=>$('obName').focus(),50);}
+}
+function obNext(){const n=$('obName').value.trim();if(!n){toast('איך קוראים לך?');return;}D.owner=n;if(D.title==='ספר החיים')D.title='החיים שלי';save();applyTitle();startOnboard(2);}
+$('obName').addEventListener('keydown',e=>{if(e.key==='Enter')obNext();});
+function renderObChips(){
+  const all=[...new Set([...D.circles.map(c=>c.name),...SUGGEST,...obExtra])];
+  $('obChips').innerHTML=all.map(n=>`<button type="button" class="tag ${obSel.has(n)?'on':''}" aria-pressed="${obSel.has(n)}" onclick="obToggle(this.dataset.n)" data-n="${esc(n)}">${obSel.has(n)?ico('check'):''}${esc(n)}</button>`).join('');
+}
+function obToggle(n){obSel.has(n)?obSel.delete(n):obSel.add(n);renderObChips();}
+function obAdd(){const n=$('obCustom').value.trim();if(!n)return;obExtra.push(n);obSel.add(n);$('obCustom').value='';renderObChips();}
+$('obCustom').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();obAdd();}});
+function obFinish(){
+  if(!obSel.size){toast('בחר/י לפחות מעגל אחד');return;}
+  [...obSel].forEach(n=>{if(!D.circles.find(c=>c.name===n))D.circles.push({id:id(),name:n,color:COLORS[D.circles.length%COLORS.length]});});
+  delete D.fresh;save();document.body.classList.remove('guest');renderForm();show('map');toast('הספר מוכן. אפשר לכתוב את הסיפור הראשון');
 }
 
 /* ================= boot ================= */
@@ -1238,9 +1288,9 @@ if(QP.get('invite')){try{startGuest(dec(QP.get('invite')));}catch(e){renderMap()
 else if(QP.get('start')){try{startWelcome(dec(QP.get('start')));}catch(e){renderMap();toast('הקישור לא תקין');}}
 else{
   renderMap();
-  if(QP.get('welcome')){history.replaceState(null,'',baseUrl());$('guideWelcome').hidden=false;show('guide');}
+  if(QP.get('welcome')){history.replaceState(null,'',baseUrl());if(!D.owner)startOnboard(1);}
   else if(QP.get('import')){try{openImport(dec(QP.get('import')));}catch(e){toast('קישור הזיכרון לא תקין');}}
-  else if(!D.stories.length&&!D.owner)show('guide');
+  else if(!D.stories.length&&!D.owner)startOnboard(1);
 }
 let rz;window.addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(()=>{if(curView==='map'&&!document.body.classList.contains('guest'))renderMap();},150);});
 </script>
